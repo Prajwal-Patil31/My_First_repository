@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conceptual Idea of building ‘SNMP agent and manager application’. &mdash; Nginx_document 1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Documentation of understanding from the seminar-30/09/2023" href="seminardoc.html" />
+    <link rel="prev" title="How to Setup React.js from scratch" href="react.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Nginx_document
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="linux.html">Linux commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nginxdocument.html">Nginx documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git_tool.html">Git tool documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Snmpagent.html">SNMP Agent source code documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="react.html">How to Setup React.js from scratch</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Conceptual Idea of building ‘SNMP agent and manager application’.</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#architecture-according-to-c4-model">Architecture according to C4 model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step1">Step1:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step2">Step2:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3">Step 3:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step4">Step4:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step5">Step5:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step6">Step6:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="seminardoc.html">Documentation of understanding from the seminar-30/09/2023</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Nginx_document</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Conceptual Idea of building ‘SNMP agent and manager application’.</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/conceptual.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="conceptual-idea-of-building-snmp-agent-and-manager-application">
+<h1>Conceptual Idea of building ‘SNMP agent and manager application’.<a class="headerlink" href="#conceptual-idea-of-building-snmp-agent-and-manager-application" title="Permalink to this headline"></a></h1>
+<p><strong>Overview</strong></p>
+<p>This project involves building a Simple Network Management Protocol, including a Spring Boot backend, a React frontend, and an Electron.js desktop app. We start by creating a Spring Boot application that acts as an SNMP Agent and Manager. The Agent responds to network management requests, while the Manager handles communication with the frontend. We also set up a database to store SNMP data. The React frontend lets users input requests, and an Electron.js app provides a desktop interface. We test the system using Postman and ensure smooth communication between components. SNMP data is stored in the database.</p>
+<a class="reference internal image-reference" href="_images/1pro.jpg"><img alt="Alternative text" src="_images/1pro.jpg" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="_images/2pro.jpg"><img alt="Alternative text" src="_images/2pro.jpg" style="width: 600px;" /></a>
+<p><strong>Methodology or Approach</strong></p>
+<p>The methodology commences with the development of a Spring Boot application configured as an SNMP Simple Network Management Protocol Agent. This Agent is primed to accept SNMP queries, process them, and furnish responses, effectively acting as a network management system. Additionally, it possesses the capability to persistently store SNMP data in a designated database.</p>
+<p>Simultaneously, a relational database system, such as MySQL or PostgreSQL, is integrated into the architecture. This database serves as a repository for storing SNMP data collected by the Agent.</p>
+<p>Subsequently, two distinct user interfaces are constructed: a web-based React frontend and an Electron.js-powered desktop UI. These interfaces provide user-friendly access to the SNMP system, facilitating the input of SNMP queries and presenting SNMP data responses retrieved from the Agent.</p>
+<p>To validate the functionality of the system, comprehensive testing is conducted using Postman, a versatile API testing tool. This testing ensures that SNMP queries generate accurate responses and that data persistence in the database functions as intended.</p>
+<p>Ultimately, the deployment phase involves hosting the Spring Boot application as a web service while packaging and distributing the React frontend as a web application. The Electron.js UI is packaged and distributed as a cross-platform desktop application. This methodical approach combines the capabilities of Spring Boot, React, Electron.js, and SNMP to construct a robust SNMP management solution.</p>
+<section id="architecture-according-to-c4-model">
+<h2>Architecture according to C4 model<a class="headerlink" href="#architecture-according-to-c4-model" title="Permalink to this headline"></a></h2>
+<p><strong>System Context Diagram Level 1:</strong></p>
+<a class="reference internal image-reference" href="_images/3pro.jpg"><img alt="Alternative text" src="_images/3pro.jpg" style="width: 600px;" /></a>
+<ul class="simple">
+<li><p>User represents the end-user who interact with the SNMP management system through the React frontend and Electron.js.</p></li>
+<li><p>SNMP management system that includes the spring boot SNMP manager applications, the Database, the React Frontend, and the Electron.js.</p></li>
+<li><p>SNMP agent represents the SNMP agents that collect data from network devices.</p></li>
+</ul>
+<p><strong>Container Diagram Level 2:</strong></p>
+<a class="reference internal image-reference" href="_images/4pro.jpg"><img alt="Alternative text" src="_images/4pro.jpg" style="width: 600px;" /></a>
+<ul class="simple">
+<li><p>The web-based interface accessed through a web browser. Users input SNMP queries and view SNMP data.</p></li>
+<li><p>Spring boot SNMP manager system the backend application responsible for interacting with SNMP agents, processing SNMP queries, and handling data storage in the database.</p></li>
+</ul>
+<p><strong>Component Diagram Level 3:</strong></p>
+<a class="reference internal image-reference" href="_images/5pro.jpg"><img alt="Alternative text" src="_images/5pro.jpg" style="width: 600px;" /></a>
+<ul class="simple">
+<li><p>Website components within the React frontend, including an input form for SNMP queries and components to display SNMP data, responsible for communication with the Spring Boot SNMP Manager application.</p></li>
+<li><p>Spring boot SNMP manager system components within the Spring boot application, including SNMP protocol handling, data processing, and database access.</p></li>
+</ul>
+<p><strong>Dynamic diagram Level 4 - interaction:</strong></p>
+<a class="reference internal image-reference" href="_images/6pro.jpg"><img alt="Alternative text" src="_images/6pro.jpg" style="width: 800px;" /></a>
+<ul class="simple">
+<li><p>Data flows from the Users who interact with either the React frontend or the Electron.js.</p></li>
+<li><p>Users initiate HTTP requests carrying SNMP queries to either the React frontend or the Electron.js.</p></li>
+<li><p>These HTTP requests are forwarded to the Spring Boot SNMP Manager applications.</p></li>
+<li><p>The SNMP manager applications process SNMP queries, communicate with SNMP agents using SNMP protocol, and fetch data from the Database.</p></li>
+<li><p>Finally, the SNMP manager applications send back HTTP responses with the requested SNMP data to UI components, which display the data to users.</p></li>
+</ul>
+</section>
+<section id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline"></a></h2>
+<p><strong>Spring Boot</strong></p>
+</section>
+<section id="step1">
+<h2>Step1:<a class="headerlink" href="#step1" title="Permalink to this headline"></a></h2>
+<p><strong>Create Maven project</strong></p>
+<ul class="simple">
+<li><p>You can create a Maven-based Spring Boot project using the Spring Initializer web tool (<a class="reference external" href="https://start.spring.io/">https://start.spring.io/</a>) or by using your favorite integrated development environment (IDE) like Eclipse or IntelliJ IDEA.</p></li>
+</ul>
+</section>
+<section id="step2">
+<h2>Step2:<a class="headerlink" href="#step2" title="Permalink to this headline"></a></h2>
+<p><strong>Configure Maven Dependencies</strong></p>
+<ul class="simple">
+<li><p>Once you have your project set up, open the pom.xml file and add the required dependencies below are the references.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;dependencies&gt;
+&lt;!-- Spring Boot Starter Dependencies --&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;!-- PostgreSQL Database Driver --&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.postgresql&lt;/groupId&gt;
+&lt;artifactId&gt;postgresql&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;!-- Spring DevTools --&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+&lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;!-- SNMP4J Agent and Manager Libraries --&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.snmp4j&lt;/groupId&gt;
+&lt;artifactId&gt;snmp4j-agent&lt;/artifactId&gt;
+&lt;version&gt;2.7.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.snmp4j&lt;/groupId&gt;
+&lt;artifactId&gt;snmp4j&lt;/artifactId&gt;
+&lt;version&gt;3.5.1&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;/dependencies&gt;
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Dont forget to adjust the versions of SNMP4J and PostgreSQL driver according to your project requirements.</p></li>
+</ul>
+</section>
+<section id="step-3">
+<h2>Step 3:<a class="headerlink" href="#step-3" title="Permalink to this headline"></a></h2>
+<p><strong>Add configuration to application Properties</strong></p>
+<ul class="simple">
+<li><p>Add configurations in application property. You can find application property file easily by looking in to the below given folder structure.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- your-project-name/this is your root folder
+
+├─ .mvn/
+
+├─ .vscode/
+
+├─ src/
+
+│   ├─ main/
+
+│   │   ├─ java/
+
+│   │   ├─ resources/
+
+│   │   │   ├─ static/
+
+│   │   │   ├─ templates/
+
+│   │   │   └─ application.properties
+
+│   ├─ test/
+
+├─ target/
+
+├─ .gitignore
+
+├─ HELP.md
+
+├─ java_pid222897.hprof
+
+├─ mvnw
+
+├─ mvnw.cmd
+
+└─ pom.xml
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Here are some general configurations listed below.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spring</span><span class="o">.</span><span class="n">jpa</span><span class="o">.</span><span class="n">hibernate</span><span class="o">.</span><span class="n">ddl</span><span class="o">-</span><span class="n">auto</span><span class="o">=</span><span class="n">update</span>
+<span class="n">spring</span><span class="o">.</span><span class="n">datasource</span><span class="o">.</span><span class="n">url</span><span class="o">=</span><span class="n">jdbc</span><span class="p">:</span><span class="n">postgresql</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="p">(</span><span class="n">your</span> <span class="n">database</span> <span class="n">name</span><span class="p">)</span>
+<span class="n">spring</span><span class="o">.</span><span class="n">datasource</span><span class="o">.</span><span class="n">username</span><span class="o">=</span><span class="n">postgres</span>
+<span class="n">spring</span><span class="o">.</span><span class="n">datasource</span><span class="o">.</span><span class="n">password</span><span class="o">=</span><span class="n">root</span>
+<span class="n">spring</span><span class="o">.</span><span class="n">datasource</span><span class="o">.</span><span class="n">driver</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">postgresql</span><span class="o">.</span><span class="n">Driver</span>
+<span class="n">server</span><span class="o">.</span><span class="n">port</span><span class="o">=</span><span class="mi">5151</span><span class="p">(</span><span class="n">enter</span> <span class="n">your</span> <span class="n">port</span> <span class="n">number</span> <span class="k">as</span> <span class="n">you</span> <span class="n">wish</span><span class="p">)</span>
+<span class="c1"># server.address=192.168.21.198</span>
+</pre></div>
+</div>
+</section>
+<section id="step4">
+<h2>Step4:<a class="headerlink" href="#step4" title="Permalink to this headline"></a></h2>
+<p><strong>Write code for controller</strong></p>
+<ul class="simple">
+<li><p>Create controller folder under src and add (.java) file in it.Reffer below package structure to have an idea.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- src/
+
+├─ main/
+
+│   ├─ java/
+
+│   │   ├─ com/
+
+│   │   │   ├─ artifact_id/
+
+│   │   │   │   └─ your_project_name/
+
+│   │   │   │       ├─ controller/
+
+│   │   │   │       │   └─Controller.java
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>In controller create multiple restApi’s and multiple methods which will communicate with frontend operations.</p></li>
+<li><p>Here is the refference code snippets with explanation.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@RestController</span>
+<span class="nd">@CrossOrigin</span><span class="p">(</span><span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">)</span>
+<span class="n">public</span> <span class="k">class</span> <span class="nc">SpringController</span> <span class="p">{</span>
+<span class="nd">@Autowired</span>
+<span class="n">public</span> <span class="n">SpringRepo</span> <span class="n">springrepo</span><span class="p">;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Here in above i have used &#64;Restcontroller annotation.In short i will try to explain you what restcontroller does.Mainly restcontroller is used to make java class as controller class,which also handels HTTP requests and returns responses.The method inside this controller class will returns data to client.</p></li>
+<li><p>&#64;CrossOrigin(provode your web page url),is used in web applications mainly in Javascript, React.js. It allows web page from one domain to make request to diffrent domain’s servers.In simple allows communication between web page and a server located on a diffrent website.</p></li>
+<li><p>public class SpringController{, is the java class name and beginning of program.</p></li>
+<li><p>&#64;Autowired, it is basically placed on any method which injects dependencies into method from other class.</p></li>
+<li><p>public SpringRepo springrepo; is interface which was called from repository class and is autowired.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@PostMapping</span><span class="p">(</span><span class="s2">&quot;/user&quot;</span><span class="p">)</span>
+<span class="n">public</span> <span class="n">SpringModel</span> <span class="n">addNewuser</span><span class="p">(</span><span class="nd">@RequestBody</span> <span class="n">SpringModel</span> <span class="n">springmodel</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="k">return</span> <span class="n">springrepo</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">springmodel</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nd">@GetMapping</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">)</span>
+<span class="n">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">SpringModel</span><span class="o">&gt;</span> <span class="n">getAllUser</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="k">return</span> <span class="n">springrepo</span><span class="o">.</span><span class="n">findAll</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nd">@GetMapping</span><span class="p">(</span><span class="s2">&quot;/user/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">SpringModel</span><span class="o">&gt;</span> <span class="n">getUserbyId</span><span class="p">(</span><span class="nd">@PathVariable</span> <span class="n">Long</span> <span class="nb">id</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="k">return</span> <span class="n">springrepo</span><span class="o">.</span><span class="n">findById</span><span class="p">(</span><span class="nb">id</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nd">@PutMapping</span><span class="p">(</span><span class="s2">&quot;/user/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">updateUser</span><span class="p">(</span><span class="nd">@RequestBody</span> <span class="n">SpringModel</span> <span class="n">springmodels</span><span class="p">,</span> <span class="nd">@PathVariable</span> <span class="n">Long</span> <span class="nb">id</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="k">return</span> <span class="n">springrepo</span><span class="o">.</span><span class="n">findById</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">springmodel</span> <span class="o">-&gt;</span> <span class="p">{</span>
+<span class="n">springmodel</span><span class="o">.</span><span class="n">setAge</span><span class="p">(</span><span class="n">springmodels</span><span class="o">.</span><span class="n">getAge</span><span class="p">());</span>
+<span class="n">springmodel</span><span class="o">.</span><span class="n">setAddress</span><span class="p">(</span><span class="n">springmodels</span><span class="o">.</span><span class="n">getAddress</span><span class="p">());</span>
+<span class="n">springmodel</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="n">springmodels</span><span class="o">.</span><span class="n">getName</span><span class="p">());</span>
+<span class="k">return</span> <span class="n">springrepo</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">springmodels</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="p">}</span>
+<span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s2">&quot;/user/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">public</span> <span class="n">String</span> <span class="n">deleteUser</span><span class="p">(</span><span class="nd">@PathVariable</span> <span class="n">Long</span> <span class="nb">id</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="n">springrepo</span><span class="o">.</span><span class="n">deleteById</span><span class="p">(</span><span class="nb">id</span><span class="p">);</span>
+<span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;User with &quot;</span> <span class="o">+</span> <span class="nb">id</span> <span class="o">+</span> <span class="s2">&quot; has deleted successfully&quot;</span><span class="p">);</span>
+<span class="k">return</span> <span class="s2">&quot;User with &quot;</span> <span class="o">+</span> <span class="nb">id</span> <span class="o">+</span> <span class="s2">&quot; has deleted successfully&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Here are some methods which performs perticular operations. AddNewuser() method brings data from client and save it in database with help of &#64;Requestbody.</p></li>
+<li><p>&#64;PostMapping is used for provideing unique url for the method.</p></li>
+<li><p>.save method comes from JPA crud repository interface which allows us to save data of entity to database.</p></li>
+<li><p>GetAllUser() method is used to get the data of database.</p></li>
+<li><p>GetUserbyID() method is used to fetch user by id.</p></li>
+<li><p>UpdateUser() method is used to update the existing user.</p></li>
+<li><p>These all methods are provided by JPA crud repository.</p></li>
+</ul>
+</section>
+<section id="step5">
+<h2>Step5:<a class="headerlink" href="#step5" title="Permalink to this headline"></a></h2>
+<p><strong>Write code for Model</strong></p>
+<ul class="simple">
+<li><p>Create model folder under src and add (.java) file in it.Reffer below package structure to have an idea.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- src/
+
+├─ main/
+
+│   ├─ java/
+
+│   │   ├─ com/
+
+│   │   │   ├─ artifact_id/
+
+│   │   │   │   └─ your_project_name/
+
+│   │   │   │       ├─ controller/
+
+│   │   │   │       │   └─Controller.java
+
+|   |   |   |       ├─ model/
+
+|   |   |   |       |  └─Entity.java
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>In an entity class, you should include the necessary attributes variables that represent the characteristics or properties of the entity you are modeling. These attributes should be private to encapsulate the data and maintain control over their access. To allow other parts of your program to interact with these attributes, you typically generate getter and setter methods for each attribute. These methods provide a way to retrieve get and modify set the attribute values. Below is the reference code snippets provided with explaination.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@Entity</span>
+<span class="n">public</span> <span class="k">class</span> <span class="nc">SpringModel</span> <span class="p">{</span>
+<span class="nd">@Id</span>
+<span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">GenerationType</span><span class="o">.</span><span class="n">SEQUENCE</span><span class="p">)</span>
+<span class="n">private</span> <span class="n">Long</span> <span class="nb">id</span><span class="p">;</span>
+<span class="n">private</span> <span class="n">String</span> <span class="n">age</span><span class="p">;</span>
+<span class="n">private</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span>
+<span class="n">private</span> <span class="n">String</span> <span class="n">address</span><span class="p">;</span>
+
+<span class="n">public</span> <span class="n">Long</span> <span class="n">getId</span><span class="p">()</span> <span class="p">{</span>
+     <span class="k">return</span> <span class="nb">id</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">public</span> <span class="n">void</span> <span class="n">setId</span><span class="p">(</span><span class="n">Long</span> <span class="nb">id</span><span class="p">)</span> <span class="p">{</span>
+     <span class="n">this</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">public</span> <span class="n">String</span> <span class="n">getAge</span><span class="p">()</span> <span class="p">{</span>
+     <span class="k">return</span> <span class="n">age</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">public</span> <span class="n">void</span> <span class="n">setAge</span><span class="p">(</span><span class="n">String</span> <span class="n">age</span><span class="p">)</span> <span class="p">{</span>
+     <span class="n">this</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">public</span> <span class="n">String</span> <span class="n">getName</span><span class="p">()</span> <span class="p">{</span>
+     <span class="k">return</span> <span class="n">name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">public</span> <span class="n">void</span> <span class="n">setName</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+     <span class="n">this</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">public</span> <span class="n">String</span> <span class="n">getAddress</span><span class="p">()</span> <span class="p">{</span>
+     <span class="k">return</span> <span class="n">address</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">public</span> <span class="n">void</span> <span class="n">setAddress</span><span class="p">(</span><span class="n">String</span> <span class="n">address</span><span class="p">)</span> <span class="p">{</span>
+     <span class="n">this</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">address</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>&#64;Entity annotation represents that the name of the class will be the name of database,&#64;Entity belongs to jakarta.persistence.Entity package.</p></li>
+<li><p>&#64;Id annotation represents the primary key.On whichever variable we place &#64;Id it will act as primary key.Id belongs to jakarta package.</p></li>
+<li><p>&#64;GeneratedValue(strategy = GenerationType.SEQUENCE),this annotation need to be placed below id it will auto generate the id value instead of entering manually.It belongs to jakarta package.</p></li>
+<li><p>Below GeneratedValue,variables are declared, getters and setters methods are added  to read get and modify set attribute values.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">SpringModel</span><span class="p">(</span><span class="n">Long</span> <span class="nb">id</span><span class="p">,</span> <span class="n">String</span> <span class="n">age</span><span class="p">,</span> <span class="n">String</span> <span class="n">name</span><span class="p">,</span> <span class="n">String</span> <span class="n">address</span><span class="p">)</span> <span class="p">{</span>
+       <span class="n">this</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span><span class="p">;</span>
+       <span class="n">this</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span><span class="p">;</span>
+       <span class="n">this</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+       <span class="n">this</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">address</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Above code snippet is of generating constructer for initializing the object properties.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">SpringModel</span><span class="p">()</span> <span class="p">{</span>
+     <span class="nb">super</span><span class="p">();</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The above method is of generating default constructer to add instances of your entity with default values.</p></li>
+</ul>
+</section>
+<section id="step6">
+<h2>Step6:<a class="headerlink" href="#step6" title="Permalink to this headline"></a></h2>
+<p><strong>Write code for Repository</strong></p>
+<ul class="simple">
+<li><p>Create repository folder under src and add (.java) file in it.Reffer below package structure to have an idea.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- src/
+
+├─ main/
+
+│   ├─ java/
+
+│   │   ├─ com/
+
+│   │   │   ├─ artifact_id/
+
+│   │   │   │   └─ your_project_name/
+
+│   │   │   │       ├─ controller/
+
+│   │   │   │       │   └─Controller.java
+
+|   |   |   |       ├─ model/
+
+|   |   |   |       |  └─Entity.java
+
+|   |   |   |       ├─ repository/
+
+|   |   |   |       |  └─Repository.java
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>We make an interface where we define methods for basic database operations like saving, updating, deleting, and fetching data.</p></li>
+<li><p>We extend this interface with CrudRepository or JpaRepository provided by Spring, which gives us ready-made methods to work with.</p></li>
+<li><p>We specify our data model class and the type of ID it uses as generic parameters when extending the repository interface. This tells Spring which data to manage.</p></li>
+<li><p>In our controller class, we use the &#64;Autowired annotation to connect our repository. This way, we can easily use the pre-defined database operations in our controller methods.Below is the sample code provided for reference.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">interface</span> <span class="n">SpringRepo</span> <span class="n">extends</span> <span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">SpringModel</span><span class="p">,</span> <span class="n">Long</span><span class="o">&gt;</span>
+<span class="p">{</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>By following above methods you can complete spring boot project for database operations.</p></li>
+<li><p>Once the integration of the SNMP Agent and Manager is complete, the document will need further updates and enhancements to reflect this new functionality.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="react.html" class="btn btn-neutral float-left" title="How to Setup React.js from scratch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="seminardoc.html" class="btn btn-neutral float-right" title="Documentation of understanding from the seminar-30/09/2023" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 1.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
