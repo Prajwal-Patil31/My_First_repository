@@ -1,0 +1,46 @@
+--*******************************************************************
+--                       PERSON DETAILS
+--*******************************************************************
+MYSAMPLEMIB DEFINATION ::= BEGIN
+
+    IMPORTS
+     
+             MODULE-IDENTITY, OBJECT-TYPE
+             FROM SNMPv2c-SMI;
+    
+
+    MODULE-IDENTITY
+    
+    LAST-UPDATED "202308180000Z"
+    ORGANIZATION "Utl"
+    CONTACT-INFO "prajwal.patil@priyarajelectronics.com"
+    DESCRIPTION "Creating sample mib file."
+
+    REVISION "202308180000Z"
+    DESCRIPTION "Initial version"
+    ::= { enterprises 18036 }   
+
+myObjects OBJECT IDENTIFIER ::= { MySampleMIB 1 }
+
+personName OBJECT-TYPE
+    SYNTAX       DisplayString
+    MAX-ACCESS   read-write
+    STATUS       current
+    DESCRIPTION  "The name of a person is Abcd."
+    ::= { myObjects 1 }
+
+personAge OBJECT-TYPE
+    SYNTAX       Integer32
+    MAX-ACCESS   read-write
+    STATUS       current
+    DESCRIPTION  "The age of a person is 80."
+    ::= { myObjects 2 }
+
+personAddress OBJECT-TYPE
+    SYNTAX       DisplayString
+    MAX-ACCESS   read-write
+    STATUS       current
+    DESCRIPTION  "The address of a person Bengaluru."
+    ::= { myObjects 3 }
+
+ End 
