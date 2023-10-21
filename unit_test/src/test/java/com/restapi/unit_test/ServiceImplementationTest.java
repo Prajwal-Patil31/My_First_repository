@@ -26,7 +26,7 @@ public class ServiceImplementationTest {
     CountryRepository countryRepository;
     
     @InjectMocks
-    ServiceImplementation serviceImplementation;
+    private ServiceImplementation serviceImplementation;
   
     public List<Country> testCountries;
 
