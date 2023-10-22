@@ -10,8 +10,8 @@
   import com.restapi.unit_test.Repository.CountryRepository;
 
   @Service
-  @Component
-  public class ServiceImplementation implements ServiceInterface {
+  @Component 
+   public class ServiceImplementation implements ServiceInterface {
   @Autowired
   private CountryRepository countryRepository;
 
