@@ -82,6 +82,7 @@ public class MainControllerMvcTest
      .andDo(print());   
     }
     
+    @Test
     public void test_getCountryByName()
     {
         country=new Country(1, "Canada", "Toronto");
