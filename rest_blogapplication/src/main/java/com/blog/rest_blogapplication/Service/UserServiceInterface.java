@@ -1,22 +1,21 @@
 package com.blog.rest_blogapplication.Service;
 
 import java.util.List;
-
-import com.blog.rest_blogapplication.Model.User;
+import com.blog.rest_blogapplication.Payloads.UserDto;
 
 
 public interface UserServiceInterface
 {
-   public User createUser(User user);
+   public UserDto createUser(UserDto userDto);
    
-   public List<User> getAllUser();
+    public List<UserDto> getAllUser();
 
-   public User updateUser(User user);
+    public UserDto updateUser(UserDto userDto);
 
-   public void deleteUser(User user);
+    public void deleteUser(UserDto userDto);
 
-   public User getUserById(int id);
+    public UserDto getUserById(int id);
 
-   public User getByname(String name);
+    public UserDto getByname(String name);
 
 }

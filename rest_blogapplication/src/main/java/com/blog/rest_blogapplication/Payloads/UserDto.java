@@ -1,73 +1,82 @@
-// package com.blog.rest_blogapplication.Payloads;
+package com.blog.rest_blogapplication.Payloads;
 
-// import javax.persistence.Column;
-// import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
-// public class UserDto {
 
-// private int id;
-// private String name;
-// private String email;
-// private String password;
-// private String about;
+public class UserDto {
 
-// public UserDto(int id, String name, String email, String password, String about) {
-//     this.id = id;
-//     this.name = name;
-//     this.email = email;
-//     this.password = password;
-//     this.about = about;
-// }
+private int id;
 
-// @Override
-// public String toString() {
-//     return "UserDto [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", about=" + about
-//             + "]";
-// }
+@NotNull
+private String name;
 
-// public int getId() {
-//     return id;
-// }
+@Email
+private String email;
 
-// public void setId(int id) {
-//     this.id = id;
-// }
+@NotNull
+private String password;
 
-// public String getName() {
-//     return name;
-// }
+@NotNull
+private String about;
 
-// public void setName(String name) {
-//     this.name = name;
-// }
+public UserDto(int id, String name, String email, String password, String about) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.password = password;
+    this.about = about;
+}
 
-// public String getEmail() {
-//     return email;
-// }
+@Override
+public String toString() {
+    return "UserDto [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", about=" + about
+            + "]";
+}
 
-// public void setEmail(String email) {
-//     this.email = email;
-// }
+public int getId() {
+    return id;
+}
 
-// public String getPassword() {
-//     return password;
-// }
+public void setId(int id) {
+    this.id = id;
+}
 
-// public void setPassword(String password) {
-//     this.password = password;
-// }
+public String getName() {
+    return name;
+}
 
-// public String getAbout() {
-//     return about;
-// }
+public void setName(String name) {
+    this.name = name;
+}
 
-// public void setAbout(String about) {
-//     this.about = about;
-// }
+public String getEmail() {
+    return email;
+}
 
-// public UserDto()
-// {
-//     super();
-// }
+public void setEmail(String email) {
+    this.email = email;
+}
 
-// }
+public String getPassword() {
+    return password;
+}
+
+public void setPassword(String password) {
+    this.password = password;
+}
+
+public String getAbout() {
+    return about;
+}
+
+public void setAbout(String about) {
+    this.about = about;
+}
+
+public UserDto()
+{
+    super();
+}
+
+}
