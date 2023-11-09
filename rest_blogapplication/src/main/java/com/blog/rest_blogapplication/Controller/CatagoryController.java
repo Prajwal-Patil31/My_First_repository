@@ -1,5 +1,7 @@
 package com.blog.rest_blogapplication.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ public ResponseEntity<CatagoryDto> createCatagory(@RequestBody CatagoryDto catag
 try
 {
 catagoryDto=catagoryService.createCatagory(catagoryDto);
+System.out.println(catagoryDto);
 return new ResponseEntity<>(catagoryDto,HttpStatus.CREATED);
 }
 catch(Exception e)
@@ -31,4 +34,20 @@ catch(Exception e)
 return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
 }
 }
+
+@RequestMapping(path = "/catall",method = RequestMethod.GET)
+public ResponseEntity<List<CatagoryDto>> getAll()
+{
+    try
+    {
+    List<CatagoryDto> getall= catagoryService.getAllCatagory();
+    return new ResponseEntity<List<CatagoryDto>>(getall,HttpStatus.FOUND);
+    }
+    catch(Exception e)
+    {
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+
 }
