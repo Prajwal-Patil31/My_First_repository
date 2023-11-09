@@ -13,44 +13,62 @@ public class Catagory {
     @Column(name = "Catagory_id")
     private int id;
     @Column(name = "Catagory_title")
-    private String CatagoryTitle;
+    private String title;
     @Column(name = "Catagory_description")
-    private String Description;
+    private String description;
+
+    
 
     public int getId() {
         return id;
     }
 
+
+
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getCatagoryTitle() {
-        return CatagoryTitle;
+
+
+    public String getTitle() {
+        return title;
     }
 
-    public void setCatagoryTitle(String catagoryTitle) {
-        CatagoryTitle = catagoryTitle;
+
+
+    public void setTitle(String title) {
+        this.title = title;
     }
+
+
 
     public String getDescription() {
-        return Description;
+        return description;
     }
+
+
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
-    public Catagory(int id, String catagoryTitle, String description) {
+
+
+    public Catagory(int id, String title, String description) {
         this.id = id;
-        CatagoryTitle = catagoryTitle;
-        Description = description;
+        this.title = title;
+        this.description = description;
     }
+
+
 
     @Override
     public String toString() {
-        return "Catagory [id=" + id + ", CatagoryTitle=" + CatagoryTitle + ", Description=" + Description + "]";
+        return "Catagory [id=" + id + ", title=" + title + ", description=" + description + "]";
     }
+
+
 
     public Catagory()
     {

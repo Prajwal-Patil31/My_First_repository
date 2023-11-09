@@ -4,13 +4,17 @@ package com.blog.rest_blogapplication.Payloads;
 public class CatagoryDto 
 {
 private int id;
-private String Catagory_title;
-private String Catagory_description;
+private String title;
+private String description;
 
 
- public int getId() {
+ 
+
+public int getId() {
     return id;
 }
+
+
 
 
 public void setId(int id) {
@@ -18,38 +22,51 @@ public void setId(int id) {
 }
 
 
-public String getCatagory_title() {
-    return Catagory_title;
+
+
+public String getTitle() {
+    return title;
 }
 
 
-public void setCatagory_title(String catagory_title) {
-    Catagory_title = catagory_title;
+
+
+public void setTitle(String title) {
+    this.title = title;
 }
 
 
-public String getCatagory_description() {
-    return Catagory_description;
+
+
+public String getDescription() {
+    return description;
 }
 
 
-public void setCatagory_description(String catagory_description) {
-    Catagory_description = catagory_description;
+
+
+public void setDescription(String description) {
+    this.description = description;
 }
 
 
-public CatagoryDto(int id, String catagory_title, String catagory_description) {
+
+
+public CatagoryDto(int id, String title, String description) {
     this.id = id;
-    Catagory_title = catagory_title;
-    Catagory_description = catagory_description;
+    this.title = title;
+    this.description = description;
 }
+
+
 
 
 @Override
 public String toString() {
-    return "CatagoryDto [id=" + id + ", Catagory_title=" + Catagory_title + ", Catagory_description="
-            + Catagory_description + "]";
+    return "CatagoryDto [id=" + id + ", title=" + title + ", description=" + description + "]";
 }
+
+
 
 
 public CatagoryDto()
