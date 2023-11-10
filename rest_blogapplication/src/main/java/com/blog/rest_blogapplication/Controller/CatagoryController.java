@@ -1,6 +1,7 @@
 package com.blog.rest_blogapplication.Controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,15 +73,17 @@ public ResponseEntity<CatagoryDto> update(@PathVariable (value = "id") int id ,@
     try
     {
     CatagoryDto existingcatagory=catagoryService.getCatagoryById(id);
+    System.out.println("Existing catagory"+" "+existingcatagory);
     if(catagoryDto.getDescription() !=null && !catagoryDto.getDescription().isEmpty())
     {
-     existingcatagory.setDescription(catagoryDto.getDescription());
+    existingcatagory.setDescription(catagoryDto.getDescription());
     }
     if(catagoryDto.getTitle() !=null && !catagoryDto.getTitle().isEmpty())
     {
-        existingcatagory.setTitle(catagoryDto.getTitle());
+    existingcatagory.setTitle(catagoryDto.getTitle());
     }
     CatagoryDto updatedCatagory =catagoryService.updateCatagory(existingcatagory);
+    System.out.println("Updated catagory"+" "+updatedCatagory);
     return new ResponseEntity<CatagoryDto>(updatedCatagory,HttpStatus.OK);
     }
     catch(Exception e)
@@ -90,4 +93,21 @@ public ResponseEntity<CatagoryDto> update(@PathVariable (value = "id") int id ,@
     
 }
 
+@RequestMapping(path = "/catagory/{id}",method = RequestMethod.DELETE)
+public ResponseEntity<CatagoryDto> deletebyid(@PathVariable (value = "id") int id)
+{
+    CatagoryDto catagory=null;
+    try
+    {
+    catagory =catagoryService.getCatagoryById(id);
+    catagoryService.daleteCatagory(catagory);
+    System.out.println("Deleted user"+" "+catagory);
+    }
+    catch(NoSuchElementException e)
+    {
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<CatagoryDto>(catagory,HttpStatus.OK);
+    }
 }
+

@@ -13,9 +13,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Validated
 public class RestBlogapplicationApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RestBlogapplicationApplication.class, args);
-		System.out.println("Hello world testing application started");
+	public static void main(String[] args) 
+	{
+	SpringApplication.run(RestBlogapplicationApplication.class, args);
+	System.out.println("Hello world testing application started");
 	}
 
 	@Bean

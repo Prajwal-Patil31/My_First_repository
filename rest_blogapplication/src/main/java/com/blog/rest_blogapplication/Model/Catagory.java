@@ -1,8 +1,13 @@
 package com.blog.rest_blogapplication.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,10 +22,17 @@ public class Catagory {
     @Column(name = "Catagory_description")
     private String description;
 
-    
+    @OneToMany(mappedBy = "catagory", cascade = CascadeType.ALL)
+    private List<Post> posts= new ArrayList<>();   
 
     public int getId() {
         return id;
+    }
+
+
+
+    public Catagory(List<Post> posts) {
+        this.posts = posts;
     }
 
 
@@ -65,7 +77,7 @@ public class Catagory {
 
     @Override
     public String toString() {
-        return "Catagory [id=" + id + ", title=" + title + ", description=" + description + "]";
+        return "Catagory [id=" + id + ", title=" + title + ", description=" + description + ", posts=" + posts + "]";
     }
 
 
@@ -73,5 +85,17 @@ public class Catagory {
     public Catagory()
     {
         super();
+    }
+
+
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }
