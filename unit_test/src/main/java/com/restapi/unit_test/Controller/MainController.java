@@ -2,7 +2,6 @@ package com.restapi.unit_test.Controller;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.restapi.unit_test.Model.Country;
 import com.restapi.unit_test.Repository.CountryRepository;
 import com.restapi.unit_test.Service.ServiceImplementation;
 
 @RestController
-public class MainController {
+public class MainController 
+{
     
 @Autowired
 private ServiceImplementation serviceImplementation;
 
-
+ 
 @RequestMapping(path = "/countries",method = RequestMethod.GET)
 public ResponseEntity<List<Country>> getAllCountries()
 {

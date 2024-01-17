@@ -21,16 +21,16 @@
         return countries;
       }
   //method to add id one by one
-  public int getMaxId()
-  {
-      return countryRepository.findAll().size()+1;
-  }
-
+       public int getMaxId()
+      {
+        return countryRepository.findAll().size()+1;
+      }
       @Override
-      public Country addCountry(Country country) {
-          country.setId(getMaxId());
-          countryRepository.save(country);
-          return country;
+      public Country addCountry(Country country) 
+      {
+      country.setId(getMaxId());
+      countryRepository.save(country);
+      return country;
       }
 
       @Override

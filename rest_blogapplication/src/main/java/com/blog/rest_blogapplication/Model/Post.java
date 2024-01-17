@@ -1,5 +1,6 @@
 package com.blog.rest_blogapplication.Model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -16,19 +17,28 @@ public class Post {
     private int postid;
     private String title;
     private String imagename;
-    private Date   adddate;
+    private LocalDateTime   adddate;
     private String content;
 
-    @ManyToOne
-     @JoinColumn(name = "catagory_id")
-    private Catagory catagory;
-    
-    @ManyToOne
-    @JoinColumn(name = "User_id")
-    private User user;
 
-    public Post(String content) {
+    
+    @Override
+    public String toString() {
+        return "Post [postid=" + postid + ", title=" + title + ", imagename=" + imagename + ", adddate=" + adddate
+                + ", content=" + content + ", catagory=" + catagory + ", user=" + user + "]";
+    }
+
+
+
+    public Post(int postid, String title, String imagename, LocalDateTime adddate, String content, Catagory catagory,
+            User user) {
+        this.postid = postid;
+        this.title = title;
+        this.imagename = imagename;
+        this.adddate = adddate;
         this.content = content;
+        this.catagory = catagory;
+        this.user = user;
     }
 
 
@@ -69,38 +79,14 @@ public class Post {
 
 
 
-    public Date getAdddate() {
+    public LocalDateTime getAdddate() {
         return adddate;
     }
 
 
 
-    public void setAdddate(Date adddate) {
+    public void setAdddate(LocalDateTime adddate) {
         this.adddate = adddate;
-    }
-
-
-
-    public Post(int postid, String title, String imagename, Date adddate) {
-        this.postid = postid;
-        this.title = title;
-        this.imagename = imagename;
-        this.adddate = adddate;
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "Post [postid=" + postid + ", title=" + title + ", imagename=" + imagename + ", adddate=" + adddate
-                + ", content=" + content + "]";
-    }
-
-
-
-    public Post()
-    {
-        super();
     }
 
 
@@ -114,5 +100,46 @@ public class Post {
     public void setContent(String content) {
         this.content = content;
     }
+
+
+
+    public Catagory getCatagory() {
+        return catagory;
+    }
+
+
+
+    public void setCatagory(Catagory catagory) {
+        this.catagory = catagory;
+    }
+
+
+
+    public User getUser() {
+        return user;
+    }
+
+
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+
+    @ManyToOne
+     @JoinColumn(name = "catagory_id")
+    private Catagory catagory;
     
+    @ManyToOne
+    @JoinColumn(name = "User_id")
+    private User user;
+
+   
+
+    public Post()
+    {
+        super();
+    }
+
 }

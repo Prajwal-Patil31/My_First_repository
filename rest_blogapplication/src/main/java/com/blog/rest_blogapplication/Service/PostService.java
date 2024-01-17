@@ -1,12 +1,14 @@
 package com.blog.rest_blogapplication.Service;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import com.blog.rest_blogapplication.Model.Post;
@@ -35,10 +37,14 @@ private int getMaxid()
 return postRepository.findAll().size()+1;
 }
     
-private void currentDate()
+private LocalDateTime currentDate()
 {
-    SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    Date =new Date();
+ DateTimeFormatter formatter =DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+ LocalDateTime now =LocalDateTime.now();
+System.out.println("Current date and time"+" "+now.format(formatter));
+ return now;
+ 
+
 }
 
     //Converting from postdto to post
@@ -59,7 +65,7 @@ private void currentDate()
     public PostDto createPost(PostDto postDto) 
     {
     postDto.setPostid(getMaxid());
-    postDto.setAdddate(postDto.getAdddate());
+    postDto.setAdddate(currentDate());
     Post newPost=modelMapper.map(postDto, Post.class);
     postRepository.save(newPost);
     return postDto;
