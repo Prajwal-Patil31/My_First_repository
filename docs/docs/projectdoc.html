@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conceptual Idea of building ‘SNMP agent and manager application’. &mdash; Nginx_document 1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Nginx_document
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="linux.html">Linux commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nginxdocument.html">Nginx documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git_tool.html">Git tool documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Snmpagent.html">SNMP Agent source code documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="react.html">How to Setup React.js from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conceptual.html">Conceptual Idea of building ‘SNMP agent and manager application’.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seminardoc.html">Documentation of understanding from the seminar-30/09/2023</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Nginx_document</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Conceptual Idea of building ‘SNMP agent and manager application’.</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/projectdoc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="conceptual-idea-of-building-snmp-agent-and-manager-application">
+<h1>Conceptual Idea of building ‘SNMP agent and manager application’.<a class="headerlink" href="#conceptual-idea-of-building-snmp-agent-and-manager-application" title="Permalink to this headline"></a></h1>
+<ul class="simple">
+<li><p>Preparing a conceptual documentation with a brief explanation from initial stage to end stage of the project and implementation plan.</p></li>
+</ul>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline"></a></h2>
+<p><strong>SPRING MVC</strong></p>
+<a class="reference internal image-reference" href="_images/Architecture.jpg"><img alt="Alternative text" src="_images/Architecture.jpg" style="width: 500px;" /></a>
+<ul class="simple">
+<li><p>Spring is a framework of java ‘MVC’ stands for model, view, controller.Mainly we use of spring framework for loose coupling.</p></li>
+</ul>
+<p><strong>Model</strong></p>
+<ul class="simple">
+<li><p>The “model” in Spring MVC refers to the part of the application that manages data and business logic. It helps store and process information, making it available for the user interface.I think of it as the brain of a web app, handling data and operations behind the scenes to deliver a seamless user experience.</p></li>
+</ul>
+<p><strong>View</strong></p>
+<ul class="simple">
+<li><p>In Spring MVC, the “view” is responsible for presenting data to users in a web application. It’s like the visual part of a website, showing information and content to users in a user-friendly format. Views can be web pages, templates, or any interface element that displays data to users. Spring MVC helps connect the model and view to create dynamic and interactive web pages.</p></li>
+</ul>
+<p><strong>Controller</strong></p>
+<ul class="simple">
+<li><p>In Spring MVC, the “controller” acts as a traffic cop for a web application. It receives user requests, processes them, and decides how to respond. Controllers handle the logic for interacting with the model and determine which view to show to the user. I think of them as the middlemen that manage the flow of information and actions in a web application, ensuring everything runs smoothly.</p></li>
+</ul>
+<p><strong>IN the Beginning</strong></p>
+<ul class="simple">
+<li><p>I had created Spring boot application where, I had followed Spring MVC architecture.In Springboot project i had created multiple rest Api’s in the controller class,which handels thymeleaf pages which is also known as multipage application.Multipage application means creating multiple html pages and coardinating the path of those pages with controllers.</p></li>
+<li><p>In the view class i had created multiple html-thymeleaf pages for diffrent-differnt operations to perform.</p></li>
+<li><p>In Model class i have created 3 entities.Basically i had performed crud operations in the project.Where i could add the student,fetch all the student,delete the student by id,update the student by id.</p></li>
+<li><p>Later insted of performing the operations in Gui i started testing our rest Api’s by sending data in json format through Postma_Api.</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/postman.jpg"><img alt="Alternative text" src="_images/postman.jpg" style="width: 500px;" /></a>
+<ul class="simple">
+<li><p>In Postman_Api i had checked all the operations like adding the user,fetching the user,deleting the user through get,delete,post method.</p></li>
+<li><p>Then i had written code for Snmp agent with the help of snmp4j library. In which i could check the response of agent to manager through wireshark,Later i had also written code for Snmp manager through snmp4j-agent library.Now i could get the data and set the data in my project through agent and manager code.</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/snmp.jpg"><img alt="Alternative text" src="_images/snmp.jpg" style="width: 500px;" /></a>
+<p><strong>Next task</strong></p>
+<ul class="simple">
+<li><p>Next task is i have to create react.js application for frontend,insted of thymeleaf i need to connect my react application to spring boot project through crossorigin annotation or by learning some server configurations of react.Where i can set the data,fetch the data,update the data and delete the data.</p></li>
+<li><p>After completion of all these tasks we need to learn some concepts Electron.js which is framework to create desktop applications.In Electron.js i need to integrate whole code of spring boot and react.js and create one desktop application using electron.js.</p></li>
+</ul>
+<p><strong>Overview of our project</strong></p>
+<a class="reference internal image-reference" href="_images/final.jpg"><img alt="Alternative text" src="_images/final.jpg" style="width: 500px;" /></a>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 1.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
