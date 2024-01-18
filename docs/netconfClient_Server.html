@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building Netconf client application from scratch!! &mdash; Nginx_document 1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Documentation on the installation of Docker and hosting nginx documentation on the Docker container" href="docker.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Nginx_document
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="linux.html">Linux commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nginxdocument.html">Nginx documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git_tool.html">Git tool documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Snmpagent.html">SNMP Agent source code documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="react.html">How to Setup React.js from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conceptual.html">Conceptual Idea of building ‘SNMP agent and manager application’.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seminardoc.html">Documentation of understanding from the seminar-30/09/2023</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Documentation on the installation of Docker and hosting nginx documentation on the Docker container</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building Netconf client application from scratch!!</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#process-diagram">Process diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step1">Step1:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step2">Step2:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step3">Step3:</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Nginx_document</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Building Netconf client application from scratch!!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/netconfClient_Server.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="building-netconf-client-application-from-scratch">
+<h1>Building Netconf client application from scratch!!<a class="headerlink" href="#building-netconf-client-application-from-scratch" title="Permalink to this headline"></a></h1>
+<p><strong>Overview</strong></p>
+<p>The Netconf Server and Client applications are like two separate programs. The server uses Apache Mina to handle incoming connections from Netconf clients. It’s responsible for checking if the clients are allowed to connect, and it understands the rules of the Netconf language.The client wants to talk to the server, so it uses Apache Mina to establish a connection. The client tells the server who they are and what they want using the Netconf. The server waits for clients to visit, checks if they are authentication, and listens to Netconf messages. The client, on the other hand, says hello, and asks for specific information using the Netconf, like requesting configuration details. The server and client communicate using Netconf, and Apache Mina helps them understand each other and manage their messages.</p>
+<section id="process-diagram">
+<h2>Process diagram<a class="headerlink" href="#process-diagram" title="Permalink to this headline"></a></h2>
+<a class="reference internal image-reference" href="_images/NetconfClient.jpg"><img alt="Alternative text" src="_images/NetconfClient.jpg" style="width: 400px;" /></a>
+</section>
+<section id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline"></a></h2>
+<p><strong>Spring Boot Client application</strong></p>
+</section>
+<section id="step1">
+<h2>Step1:<a class="headerlink" href="#step1" title="Permalink to this headline"></a></h2>
+<p><strong>Create Maven project</strong></p>
+<ul class="simple">
+<li><p>You can create a Maven-based Spring Boot project using the Spring Initializer web tool (<a class="reference external" href="https://start.spring.io/">https://start.spring.io/</a>) or by using your favorite integrated development environment (IDE) like Eclipse or IntelliJ IDEA.</p></li>
+</ul>
+</section>
+<section id="step2">
+<h2>Step2:<a class="headerlink" href="#step2" title="Permalink to this headline"></a></h2>
+<p><strong>Configure Maven Dependencies</strong></p>
+<ul class="simple">
+<li><p>Once you have your project set up, open the pom.xml file and add the required dependencies below are the references.</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
+ <span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">mina</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+ <span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">mina</span><span class="o">-</span><span class="n">core</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+ <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">2.1.3</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="step3">
+<h2>Step3:<a class="headerlink" href="#step3" title="Permalink to this headline"></a></h2>
+<p><strong>Write code for Client applicaion</strong></p>
+<ul class="simple">
+<li><p>Under src add (.java) file in it.Reffer below package structure to have an idea.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- src/
+
+├─ main/
+
+│   ├─ java/
+
+│   │   ├─ com/
+
+│   │   │   ├─ artifact_id/
+
+│   │   │   │   └─ your_project_name/
+
+│   │   │   │        └─ClientNetconfApplication.java
+
+│   │   │   │        └─NetconfClientHandler.java
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Here is the refference code snippets</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">ClientnetconfApplication</span>
+<span class="p">{</span>
+ <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="ne">Exception</span>
+  <span class="p">{</span>
+   <span class="n">SpringApplication</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ClientnetconfApplication</span><span class="o">.</span><span class="n">class</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+   <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&quot;</span><span class="o">+</span><span class="s2">&quot; Netconf client application started &quot;</span><span class="o">+</span><span class="s2">&quot;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&quot;</span><span class="p">);</span>
+   <span class="n">String</span> <span class="n">serverAddress</span> <span class="o">=</span> <span class="s2">&quot;192.168.21.151&quot;</span><span class="p">;</span>
+   <span class="nb">int</span> <span class="n">serverPort</span> <span class="o">=</span> <span class="mi">830</span><span class="p">;</span>
+   <span class="n">IoConnector</span> <span class="n">connector</span> <span class="o">=</span> <span class="n">new</span> <span class="n">NioSocketConnector</span><span class="p">();</span>
+   <span class="n">connector</span><span class="o">.</span><span class="n">getFilterChain</span><span class="p">()</span><span class="o">.</span><span class="n">addLast</span><span class="p">(</span><span class="s2">&quot;codec&quot;</span><span class="p">,</span> <span class="n">new</span> <span class="n">ProtocolCodecFilter</span><span class="p">(</span><span class="n">new</span> <span class="n">TextLineCodecFactory</span><span class="p">()));</span>
+   <span class="n">connector</span><span class="o">.</span><span class="n">setHandler</span><span class="p">(</span><span class="n">new</span> <span class="n">NetconfClientHandler</span><span class="p">());</span>
+
+   <span class="o">//</span> <span class="n">This</span> <span class="ow">is</span> <span class="k">for</span> <span class="n">Connecting</span> <span class="n">to</span> <span class="n">Netconf</span> <span class="n">server</span>
+   <span class="n">ConnectFuture</span> <span class="n">future</span> <span class="o">=</span> <span class="n">connector</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">new</span> <span class="n">InetSocketAddress</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">,</span> <span class="n">serverPort</span><span class="p">));</span>
+   <span class="n">future</span><span class="o">.</span><span class="n">awaitUninterruptibly</span><span class="p">();</span>
+
+   <span class="o">//</span> <span class="n">Getting</span> <span class="n">a</span> <span class="n">session</span>
+   <span class="n">IoSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">getSession</span><span class="p">();</span>
+
+   <span class="o">//</span> <span class="n">Handle</span> <span class="n">authentication</span> <span class="ow">and</span> <span class="n">errors</span>
+   <span class="n">handleAuthentication</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+
+   <span class="o">//</span> <span class="n">Perform</span> <span class="n">Netconf</span> <span class="o">&lt;</span><span class="n">get</span><span class="o">&gt;</span> <span class="n">operation</span>
+   <span class="n">performNetconfGetConfigOperation</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+   <span class="n">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
+   <span class="o">//</span> <span class="n">Close</span> <span class="n">the</span> <span class="n">session</span> <span class="ow">and</span> <span class="n">connector</span> <span class="n">when</span> <span class="n">done</span>
+   <span class="n">session</span><span class="o">.</span><span class="n">closeNow</span><span class="p">()</span><span class="o">.</span><span class="n">awaitUninterruptibly</span><span class="p">();</span>
+   <span class="n">connector</span><span class="o">.</span><span class="n">dispose</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">private</span> <span class="n">static</span> <span class="n">void</span> <span class="n">handleAuthentication</span><span class="p">(</span><span class="n">IoSession</span> <span class="n">session</span><span class="p">)</span>
+    <span class="p">{</span>
+     <span class="k">try</span>
+        <span class="p">{</span>
+         <span class="o">//</span> <span class="n">Authenticate</span> <span class="n">using</span> <span class="n">username</span> <span class="ow">and</span> <span class="n">password</span>
+         <span class="n">String</span> <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;admin&quot;</span><span class="p">;</span><span class="o">//</span><span class="n">server</span> <span class="n">user</span> <span class="n">name</span>
+         <span class="n">String</span> <span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;utl&quot;</span><span class="p">;</span><span class="o">//</span><span class="n">server</span> <span class="n">password</span>
+         <span class="n">String</span> <span class="n">authenticationMessage</span> <span class="o">=</span> <span class="s2">&quot;&lt;rpc message-id=</span><span class="se">\&quot;</span><span class="s2">2</span><span class="se">\&quot;</span><span class="s2"> xmlns=</span><span class="se">\&quot;</span><span class="s2">urn:ietf:params:xml:ns:netconf:base:1.0</span><span class="se">\&quot;</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                        <span class="s2">&quot;    &lt;hello&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                        <span class="s2">&quot;        &lt;capabilities&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                        <span class="s2">&quot;            &lt;capability&gt;urn:ietf:params:netconf:base:1.0&lt;/capability&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                        <span class="s2">&quot;        &lt;/capabilities&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                        <span class="s2">&quot;        &lt;session-id&gt;1&lt;/session-id&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                        <span class="s2">&quot;        &lt;username&gt;&quot;</span> <span class="o">+</span> <span class="n">username</span> <span class="o">+</span> <span class="s2">&quot;&lt;/username&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                        <span class="s2">&quot;        &lt;password&gt;&quot;</span> <span class="o">+</span> <span class="n">password</span> <span class="o">+</span> <span class="s2">&quot;&lt;/password&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                        <span class="s2">&quot;    &lt;/hello&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                        <span class="s2">&quot;&lt;/rpc&gt;&quot;</span><span class="p">;</span>
+
+       <span class="n">session</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">authenticationMessage</span><span class="p">);</span>
+        <span class="p">}</span>
+         <span class="n">catch</span> <span class="p">(</span><span class="ne">Exception</span> <span class="n">e</span><span class="p">)</span>
+         <span class="p">{</span>
+          <span class="n">System</span><span class="o">.</span><span class="n">err</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Authentication failed: &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="p">());</span>
+          <span class="n">e</span><span class="o">.</span><span class="n">printStackTrace</span><span class="p">();</span>
+          <span class="n">session</span><span class="o">.</span><span class="n">closeNow</span><span class="p">();</span>
+           <span class="p">}</span>
+            <span class="p">}</span>
+             <span class="n">private</span> <span class="n">static</span> <span class="n">void</span> <span class="n">performNetconfGetConfigOperation</span><span class="p">(</span><span class="n">IoSession</span> <span class="n">session</span><span class="p">)</span>
+             <span class="p">{</span>
+              <span class="k">try</span>
+               <span class="p">{</span>
+                <span class="o">//</span> <span class="n">Create</span> <span class="n">a</span> <span class="n">Netconf</span> <span class="o">&lt;</span><span class="n">get</span><span class="o">-</span><span class="n">config</span><span class="o">&gt;</span> <span class="n">operation</span>
+                <span class="n">String</span> <span class="n">getConfigOperation</span> <span class="o">=</span> <span class="s2">&quot;&lt;rpc message-id=</span><span class="se">\&quot;</span><span class="s2">1</span><span class="se">\&quot;</span><span class="s2"> xmlns=</span><span class="se">\&quot;</span><span class="s2">urn:ietf:params:xml:ns:netconf:base:1.0</span><span class="se">\&quot;</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;    &lt;get-config&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;        &lt;source&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;            &lt;running/&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;               &lt;/source&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;                &lt;filter&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;                 &lt;person-details xmlns=</span><span class="se">\&quot;</span><span class="s2">urn:example:person-details</span><span class="se">\&quot;</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;                &lt;name&gt;Prajwal&lt;/name&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;                &lt;age&gt;23&lt;/age&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;                &lt;address&gt;Bangalore&lt;/address&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;            &lt;/person-details&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;        &lt;/filter&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;    &lt;/get-config&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                       <span class="s2">&quot;&lt;/rpc&gt;&quot;</span><span class="p">;</span>
+
+               <span class="o">//</span> <span class="n">Log</span> <span class="n">the</span> <span class="n">Netconf</span> <span class="n">operation</span> <span class="n">before</span> <span class="n">sending</span>
+              <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Sending Netconf &lt;get-config&gt; operation:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">getConfigOperation</span><span class="p">);</span>
+
+             <span class="o">//</span> <span class="n">Send</span> <span class="n">the</span> <span class="n">Netconf</span> <span class="o">&lt;</span><span class="n">get</span><span class="o">-</span><span class="n">config</span><span class="o">&gt;</span> <span class="n">operation</span> <span class="n">to</span> <span class="n">the</span> <span class="n">server</span>
+             <span class="n">session</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">getConfigOperation</span><span class="p">);</span>
+             <span class="p">}</span>
+              <span class="n">catch</span> <span class="p">(</span><span class="ne">Exception</span> <span class="n">e</span><span class="p">)</span>
+               <span class="p">{</span>
+                <span class="n">System</span><span class="o">.</span><span class="n">err</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Failed to perform Netconf &lt;get-config&gt; operation: &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="p">());</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">printStackTrace</span><span class="p">();</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">closeNow</span><span class="p">();</span>
+                <span class="p">}</span>
+                 <span class="p">}</span>
+                  <span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">NetconfClientHandler</span> <span class="n">extends</span> <span class="n">IoHandlerAdapter</span>
+<span class="p">{</span>
+<span class="nd">@Override</span>
+<span class="n">public</span> <span class="n">void</span> <span class="n">sessionOpened</span><span class="p">(</span><span class="n">IoSession</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+
+<span class="p">}</span>
+<span class="nd">@Override</span>
+<span class="n">public</span> <span class="n">void</span> <span class="n">messageReceived</span><span class="p">(</span><span class="n">IoSession</span> <span class="n">session</span><span class="p">,</span> <span class="n">Object</span> <span class="n">message</span><span class="p">)</span>
+<span class="p">{</span>
+ <span class="n">String</span> <span class="n">receivedMessage</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">toString</span><span class="p">();</span>
+ <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Received message from server: &quot;</span> <span class="o">+</span> <span class="n">receivedMessage</span><span class="p">);</span>
+ <span class="o">//</span> <span class="n">Handle</span> <span class="n">the</span> <span class="n">received</span> <span class="n">Netconf</span> <span class="n">message</span> <span class="n">here</span> <span class="k">if</span> <span class="n">required</span>
+ <span class="n">processNetconfResponse</span><span class="p">(</span><span class="n">receivedMessage</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">private</span> <span class="n">void</span> <span class="n">processNetconfResponse</span><span class="p">(</span><span class="n">String</span> <span class="n">netconfResponse</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="o">//</span> <span class="n">Log</span> <span class="n">the</span> <span class="n">received</span> <span class="n">Netconf</span> <span class="n">response</span>
+ <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Processing Netconf response: &quot;</span> <span class="o">+</span> <span class="n">netconfResponse</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nd">@Override</span>
+<span class="n">public</span> <span class="n">void</span> <span class="n">exceptionCaught</span><span class="p">(</span><span class="n">IoSession</span> <span class="n">session</span><span class="p">,</span> <span class="n">Throwable</span> <span class="n">cause</span><span class="p">)</span>
+<span class="p">{</span>
+ <span class="n">System</span><span class="o">.</span><span class="n">err</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Exception caught: &quot;</span> <span class="o">+</span> <span class="n">cause</span><span class="o">.</span><span class="n">getMessage</span><span class="p">());</span>
+ <span class="n">cause</span><span class="o">.</span><span class="n">printStackTrace</span><span class="p">();</span>
+ <span class="n">session</span><span class="o">.</span><span class="n">closeNow</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Below is the refference output that you can check</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Netconf client application started &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span>
+<span class="go">Sending Netconf &lt;get-config&gt; operation:</span>
+<span class="go">&lt;rpc message-id=&quot;1&quot; xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;</span>
+<span class="go"> &lt;get-config&gt;</span>
+<span class="go">     &lt;source&gt;</span>
+<span class="go">         &lt;running/&gt;</span>
+<span class="go">            &lt;/source&gt;</span>
+<span class="go">             &lt;filter&gt;</span>
+<span class="go">              &lt;person-details xmlns=&quot;urn:example:person-details&quot;&gt;</span>
+<span class="go">             &lt;name&gt;Prajwal&lt;/name&gt;</span>
+<span class="go">             &lt;age&gt;23&lt;/age&gt;</span>
+<span class="go">             &lt;address&gt;Bangalore&lt;/address&gt;</span>
+<span class="go">         &lt;/person-details&gt;</span>
+<span class="go">     &lt;/filter&gt;</span>
+<span class="go"> &lt;/get-config&gt;</span>
+<span class="go"> &lt;/rpc&gt;</span>
+<span class="go">Received message from server: Welcome to the Netconf Server! You are connected.</span>
+<span class="go">Processing Netconf response: Welcome to the Netconf Server! You are connected.</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>By following above methods you can complete spring boot project for netconf client operations.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="docker.html" class="btn btn-neutral float-left" title="Documentation on the installation of Docker and hosting nginx documentation on the Docker container" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 1.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
