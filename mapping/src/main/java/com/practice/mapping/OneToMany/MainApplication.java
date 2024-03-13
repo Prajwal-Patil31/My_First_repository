@@ -1,24 +1,21 @@
 package com.practice.mapping.OneToMany;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class MainApplication 
 {
-     
 @Autowired
-private StudentRepository studentRepository;    
+private StudentService studentService;
 
-   
-public Student sToringStudent()
+@RequestMapping(path = "/addStudent",method = RequestMethod.POST)
+public Student addStudent()
 {
-    Student student = new Student();
-    student.setStudentId(1);
-    student.setStudentName("Prajwal Patil");
-    student.setAbout("Employee");
-    studentRepository.save(student);
-    return student;
+    return studentService.addStudent();
 }
 
 }

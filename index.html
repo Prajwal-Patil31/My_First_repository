@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="container">
+        <form id="loginForm">
+            <h2 class="loginHead">Login</h2>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" placeholder="Enter Email">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter Password">
+            <input type="submit" value="Login">
+            <div id="warning" class="warning" ></div>
+        </form>
+    </div>
+
+    <script type="module">
+        let username = "admin";
+        let adminpassword = "admin";
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get input values
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var warning = document.getElementById('warning');
+
+            // Check if email and password are empty
+            if (email.trim() === '' || password.trim() === '') {
+                warning.style.display = 'block'; // Display warning
+                warning.innerHTML = "Please Enter All Details"
+            } else if (email !== username || password !== adminpassword) {
+
+                warning.innerHTML = "Please Enter correct Information"
+            }
+            else {
+
+                window.location.href = "./Home.html"
+            }
+        });
+    </script>
+</body>
+
+</html>

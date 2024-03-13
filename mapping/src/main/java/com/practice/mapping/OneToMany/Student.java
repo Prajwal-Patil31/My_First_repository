@@ -1,5 +1,6 @@
 package com.practice.mapping.OneToMany;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -17,7 +18,7 @@ public class Student
 
                               
                                                     //Situation one student has only one laptop and one laptop will be related to one student only So, we will make one reference variable 
-@OneToOne(mappedBy = "student")                      //By this we will inform database that we are making one to one mapping   
+@OneToOne(mappedBy = "student",cascade = CascadeType.ALL)                      //By this we will inform database that we are making one to one mapping   
 private Laptops laptop;                              //Now in this table we will get one foreign key in this laptops column
                                                     //- will be foreign key. Now whenever you create student that students laptops id will be stored in this column.
                                                    //This type of mapping is called as unidirection if we get student we can fetch his laptops. 
