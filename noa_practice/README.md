@@ -112,11 +112,6 @@ Developer settings ==> Personal access tokens ==> Tokens ==> Generate new toke
 
 * Then, in your terminal clone the repository and pull all the branches and with below command do add remote repository.
 
-* Example in between access token is added with repository url 
-```
-git remote set-url origin https://Prajwal-Patil31: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@github.com/Prajwal-Patil31/My_First_repository.git
-
-```
 * Syntax 
 
 ```
