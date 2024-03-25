@@ -1,0 +1,36 @@
+.noPBS {
+	padding: '0';
+	padding-top: '0';
+	padding-bottom: '0';
+	border: '0px';
+	border-radius: '0px';
+	border-left: '0px';
+	border-right: '0px';
+	box-shadow: 'none';
+	border: '0px';
+}
+
+.priFgnd {
+	background: '#dfe6ec';
+}
+
+.priBgnd {
+	background: '#f5f6f8';
+}
+
+.noPBSpriFgnd {
+	padding: '0';
+	padding-top: '0';
+	padding-bottom: '0';
+	border: '0px';
+	border-radius: '0px';
+	border-left: '0px';
+	border-right: '0px';
+	box-shadow: 'none';
+	border: '0px';
+	background: '#dfe6ec';
+}
+
+ .thinScroll body::-webkit-scrollbar {
+   width: '3px';
+ }

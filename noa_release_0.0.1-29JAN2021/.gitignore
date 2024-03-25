@@ -1,0 +1,13 @@
+node_modules
+target
+.settings
+.vscode
+*.eot
+*.svg
+*.ttf
+.classpath
+.project
+package-lock.json
+**/bundle.js
+**/bundle.js.map
+.VSCodeCounter
