@@ -112,13 +112,6 @@ Developer settings ==> Personal access tokens ==> Tokens ==> Generate new toke
 
 * Then, in your terminal clone the repository and pull all the branches and with below command do add remote repository.
 
-* sisnt 
-
-```
-git remote set-url origin https://your_github_username:<your_personal_access_token>@github.com/Prajwal-Patil31/My_First_repository.git
-
-```
-
 * Then you can add the files, commit with below command.
 
 ```
