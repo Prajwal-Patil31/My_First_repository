@@ -171,15 +171,6 @@ git merge origin/Development
 ```
 * You will see this output.
 
-```
-Updating 8762e16..1456496
-Fast-forward
- HELP.md                                             |  20 ++++++++++++++++++++
- .../noa_practice/NoaPracticeApplicationTests.class  | Bin 0 -> 570 bytes
- 2 files changed, 20 insertions(+)
- create mode 100644 HELP.md
- create mode 100644 target/test-classes/com/practice/noa_practice/NoaPracticeApplicationTests.class
-```
 * Now, you can push.
 
 ```
