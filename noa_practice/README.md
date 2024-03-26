@@ -108,7 +108,7 @@ Developer settings ==> Personal access tokens ==> Tokens ==> Generate new toke
 * After generating you will get page like below.
 
 
-![Alt text](Readme_Images/github2.png "github repository image")
+<!--![Alt text](Readme_Images/github2.png "github repository image")-->
 
 * Then, in your terminal clone the repository and pull all the branches and with below command do add remote repository.
 
