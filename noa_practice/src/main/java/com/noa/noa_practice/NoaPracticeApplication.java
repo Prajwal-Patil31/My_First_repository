@@ -8,6 +8,7 @@ public class NoaPracticeApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(NoaPracticeApplication.class, args);
+		System.out.println("Hello java");
 	}
 
 }
