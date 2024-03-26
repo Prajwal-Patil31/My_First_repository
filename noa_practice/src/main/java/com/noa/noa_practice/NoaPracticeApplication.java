@@ -1,14 +1,16 @@
 package com.noa.noa_practice;
 
+import org.apache.logging.log4j.LogManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import org.apache.logging.log4j.Logger;
 @SpringBootApplication
 public class NoaPracticeApplication {
-
-	public static void main(String[] args) {
+static Logger logger = LogManager.getLogger(NoaPracticeApplication.class); 
+	public static void main(String[] args) 
+	{
 		SpringApplication.run(NoaPracticeApplication.class, args);
-		System.out.println("Hello java");
+		logger.info("Application Started");
 	}
 
 }

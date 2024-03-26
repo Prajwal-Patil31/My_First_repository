@@ -168,3 +168,36 @@ git merge origin/Development
 ``
 Note: If you delete something you should pull the branch and do checkout and add, commit and push.
 ``
+
+``
+<----------------------Starting Project---------------------------------->
+``
+# This application is built on JAVA jdk 1.8
+
+### * I am using log4j in this project 
+* To use log4j first you will have to download two dependency from maven repository one is Log4j-core and another one is log4j-api.
+
+* Below are the reference for log4j dependency.
+
+```
+<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.17.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-api</artifactId>
+    <version>2.17.1</version>
+    </dependency>
+
+```
+
+* We will have to use these import statements otherwise you will end up with errors.
+
+```
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+```

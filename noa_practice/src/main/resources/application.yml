@@ -1,0 +1,91 @@
+
+server:
+  port: 5050
+
+#Configuration for only PostgreSQL (Tested:working)
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/noapractice
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+
+
+
+
+
+# I have commented because I am unable to use two databases. Below I will add configuration of a single database.
+# spring:
+#   datasource:
+#     h2:
+#       url: jdbc:h2:mem:testdb
+#       driverClassName: org.h2.Driver
+#       username: sa
+#       password: 
+#     postgres:
+#       url: jdbc:postgresql://localhost:5432/noapractice
+#       username: postgres
+#       password: root
+#       driver-class-name: org.postgresql.Driver
+
+#   jpa:
+#     database-platform: org.hibernate.dialect.H2Dialect
+#     hibernate:
+#       ddl-auto: update
+
+#   h2:
+#     console:
+#       enabled: true
+
+
+
+
+#If incase we are using mysql
+# server:
+#   port: 5050
+
+# spring:
+#   datasource:
+#     h2:
+#       url: jdbc:h2:mem:testdb
+#       driverClassName: org.h2.Driver
+#       username: sa
+#       password: 
+#     mysql:
+#       url: jdbc:mysql://localhost:3306/restapi11
+#       username: your_mysql_username
+#       password: your_mysql_password
+#       driver-class-name: com.mysql.cj.jdbc.Driver
+
+#   jpa:
+#     database-platform: org.hibernate.dialect.MySQLDialect
+#     hibernate:
+#       ddl-auto: update
+
+#   h2:
+#     console:
+#       enabled: true
+
+
+
+
+ #------------------------------------------------------#   
+#Configuration only for h2-database
+# spring:
+#   datasource:
+#     url: jdbc:h2:mem:testdb
+#     driverClassName: org.h2.Driver
+#     username: sa
+#     password: 
+#   jpa:
+#     database-platform: org.hibernate.dialect.H2Dialect
+#     hibernate:
+#       ddl-auto: update
+#   h2:
+#     console:
+#       enabled: true
