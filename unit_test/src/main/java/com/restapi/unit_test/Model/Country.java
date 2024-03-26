@@ -1,5 +1,7 @@
 package com.restapi.unit_test.Model;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -7,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Countries")
-public class Country {
+public class Country extends RepresentationModel<Country>{
 
     @Id
     @Column(name = "ID")

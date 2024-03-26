@@ -10,7 +10,8 @@ import io.swagger.v3.oas.annotations.info.Info;
 @OpenAPIDefinition(info = @Info(title = "Unit testing", version = "2.0", description = "testing"))
 public class UnitTestApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 		SpringApplication.run(UnitTestApplication.class, args);
 	}
 

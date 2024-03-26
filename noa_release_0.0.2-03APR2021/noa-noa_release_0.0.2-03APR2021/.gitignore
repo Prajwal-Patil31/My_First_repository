@@ -1,0 +1,14 @@
+.logs
+cache
+node_modules
+target
+.settings
+.vscode
+.classpath
+.project
+docs
+package-lock.json
+**/bundle.js
+**/bundle.js.map
+.VSCodeCounter
+segmented-journal

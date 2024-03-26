@@ -1,0 +1,70 @@
+{
+  "name": "noa",
+  "version": "0.0.1",
+  "description": "Network Orchestration & Automation",
+  "repository": {
+    "type": "git",
+    "url": "git@repo.nexarlabs.com:utl/noa.git"
+  },
+  "keywords": [
+    "utl",
+    "noa",
+    "ems",
+    "nms",
+    "naas"
+  ],
+  "author": "Kusaram Devineni",
+  "license": "",
+  "bugs": {
+    "url": "http://repo.nexarlabs.com/utl/noa/issues"
+  },
+  "homepage": "http://repo.nexarlabs.com/utl/noa",
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "css-loader": "^3.4.2",
+    "file-loader": "^5.1.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-addons-update": "^15.6.2",
+    "react-dom": "^16.8.6",
+    "react-item-select": "^1.0.2",
+    "react-notifications": "^1.7.2",
+    "react-notifications-component": "^3.0.3",
+    "react-router-dom": "^5.1.2",
+    "resolve-url-loader": "^3.1.1",
+    "rest": "^1.3.1",
+    "rsuite": "^4.8.8",
+    "rsuite-notification": "^3.0.4",
+    "semantic-ui-calendar-react": "^0.15.3",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.85.0",
+    "sockjs-client": "^1.0.3",
+    "stompjs": "^2.3.3",
+    "style-loader": "^1.1.3",
+    "styled-components": "^5.0.0",
+    "url-loader": "^3.0.0"
+  },
+  "scripts": {
+    "watch": "webpack --watch -d"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-flow": "^7.12.1",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react",
+      "@babel/preset-flow"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  }
+}
