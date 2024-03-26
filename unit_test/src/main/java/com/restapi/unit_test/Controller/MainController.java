@@ -17,7 +17,7 @@ import com.restapi.unit_test.Model.Country;
 import com.restapi.unit_test.Repository.CountryRepository;
 import com.restapi.unit_test.Service.ServiceImplementation;
 
-@RestController
+@RestController //is needed to run swagger
 public class MainController {
     
 @Autowired
