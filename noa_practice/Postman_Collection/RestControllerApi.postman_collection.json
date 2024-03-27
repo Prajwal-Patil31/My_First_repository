@@ -1,0 +1,73 @@
+{
+	"info": {
+		"_postman_id": "c5ec326e-47c2-4c1c-bf7b-02707aa6f262",
+		"name": "RestControllerApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29154941"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 1,\n  \"name\": \"Prajwal Patil\",\n  \"email\": \"prajwalmp31@gmail.com\",\n  \"password\": \"abcd1234\",\n  \"about\": \"good\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5050/api/users/createuser"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:5050/api/users/getall"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:5050/api/users/5"
+			},
+			"response": []
+		},
+		{
+			"name": "Update user",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"about\": \"Dynamic\",\n  \"email\": \"prajwal.patil@priyarajaelectronics.com\",\n  \"id\": 5,\n  \"name\": \"Prajwal Patil\",\n  \"password\": \"King@0678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5050/api/users/5"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user by Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:5050/api/users/6"
+			},
+			"response": []
+		}
+	]
+}

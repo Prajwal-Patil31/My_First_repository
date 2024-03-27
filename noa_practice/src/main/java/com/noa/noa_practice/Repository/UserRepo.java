@@ -5,8 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.noa.noa_practice.Model.User;
 
+/**
+ * This interface represents a repository for User entities, providing CRUD operations.
+ */
 @Repository
-public interface UserRepo extends JpaRepository<User,Integer>
-{
+public interface UserRepo extends JpaRepository<User, Integer> {
     
 }

@@ -201,3 +201,31 @@ Note: If you delete something you should pull the branch and do checkout and add
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 ```
+
+## Using JavaDocs 
+
+* I am using JavaDocs in this project to use java docs you will first have to add plugin of javadocs inside plugins in your pom file, which i had given below. 
+
+```
+ <plugin>
+	 <groupId>org.apache.maven.plugins</groupId>
+	   <artifactId>maven-javadoc-plugin</artifactId>
+     <version>3.6.0</version>
+ </plugin>
+
+```
+* Later you will have to write comment for each of the class in proper javadocs format.
+
+* Then in your terminal type below command to generate javadocs.
+
+
+``mvn javadoc:javadoc
+``
+* Once successfully generated you will find your javadocs generated in below mentioned path.
+
+``target/site/apidocs
+``
+
+``
+Note: No need to worry if you modify the code and run the same mvn javadocs:javadocs command it will overwrite the existing code and add new modified one.
+``
