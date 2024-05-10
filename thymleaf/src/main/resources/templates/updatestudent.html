@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add new Student</title>
+</head>
+<body>
+    <div align="center">
+        <h1>Student Database</h1>
+        <h2>Update Student</h2>
+        <form th:action="@{/saveStudent}" th:object="${student}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+            <input type="text" th:field ="*{name}">
+            <input type="text" th:field ="*{lastname}">
+            <button type="submit">Update Student</button>
+        </form>
+        <hr>
+        <a th:href="@{/}">Back to Student List</a>
+    </div>
+</body>
+</html>

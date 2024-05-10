@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thymeleaf Testing Standalone Application</title>
+</head>
+<body>
+    <div align="center">
+        <a th:href = "@{/newStudentForm}"> Add Student</a>
+        <h1>Student List</h1>
+    </div>
+    <center>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Student Last Name</th>
+            </tr>
+        </thead>
+    </center>
+        <tbody>
+            <!-- Iterate over the list of students using th:each -->
+            <tr th:each="student : ${liststudents}">
+                <td th:text="${student.id}"></td> <!-- Note: Use 'id' instead of 'Id' -->
+                <td th:text="${student.name}"></td>
+                <td th:text="${student.lastname}"></td>
+                <td><a th:href="@{/showFormForUpdate/{id}(id=${student.id})}">Update</a></td>
+                <td><a th:href="@{/deleteStudent/{id}(id=${student.id})}">Delete</a></td>
+
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
