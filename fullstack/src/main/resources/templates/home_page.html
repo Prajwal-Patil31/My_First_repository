@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullstack Application</title>
+</head>
+<body>
+<div th:insert="~(parts/navigation :: navigation)"></div>
+<h1>This is home page</h1>
+<form method="get" action="/books">
+<input name="login" type="text" placeholder="Enter Login">
+<input name="email" type="email" placeholder="Enter email">
+<input type="submit" value="show books">
+</form>
+<div th:insert= "~{paths/footer :: footer }"></div>
+</body>
+</html>
