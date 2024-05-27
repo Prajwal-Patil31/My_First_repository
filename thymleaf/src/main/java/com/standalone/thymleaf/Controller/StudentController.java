@@ -42,6 +42,7 @@ public String saveStudent(@ModelAttribute("student") Student student)
     studentServiceImpl.addStudent(student);
     return "redirect:/";
 }
+
 @RequestMapping(path = "/showFormForUpdate/{id}", method=RequestMethod.GET)
 public String showFormForUpdate(@PathVariable (value = "id") Integer id, Model model)
 {
