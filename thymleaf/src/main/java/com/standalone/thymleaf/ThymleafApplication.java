@@ -4,11 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ThymleafApplication {
+public class ThymleafApplication
+{
 
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 		SpringApplication.run(ThymleafApplication.class, args);
-		System.out.println("Helllo testing for thymleaf");
+		System.out.println("Hello testing for thymleaf");
 	}
 
 }

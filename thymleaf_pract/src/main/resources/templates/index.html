@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thymeleaf </title>
+</head>
+<body>
+   <h1>Hello thymleaf</h1>
+   
+   <!--
+   <h2>Simple variable expression</h2> 
+   <div> ID : <span th:text="${myEmp.id}"></span></div>
+   <div>Name : <span th:text="${myEmp.name}"></span></div>
+   <div>Mobile : <span th:text="${myEmp.mob}"></span></div>
+   -->
+  
+   
+   <h2>Selection Variable</h2>
+   <div th:object="${myEmp}">
+    <p>ID : <span th:text="*{id}"></span></p>
+    <p>Name : <span th:text="*{name}"></span></p>
+    <p>Mob : <span th:text="*{mob}"></span></p>
+   </div>
+   
+
+
+</body>
+</html>

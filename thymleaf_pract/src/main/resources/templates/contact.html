@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thymleaf Contact</title>
+</head>
+<body>
+    
+   <h2>Link URL</h2>
+   <a href="#" th:href= "@{/}">Home</a> <br>
+   <!--Through PathVariable its hard coded-->
+   <a href="#" th:href= "@{/emp/12}">Get employee ID</a> <br>
+   <!--Now its dynamic -->
+   <a href="#" th:href= "@{/emp/{idEmp}(idEmp=${idEmp})}">Get dynamic emp ID</a> <br>
+    <!--Through Query String-->
+   <a href="#" th:href= "@{/emp(idE=${idEmp})}">Get Employee 3</a> <br>
+   
+
+
+</body>
+</html>

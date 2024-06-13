@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thymeleaf Testing Standalone Application</title>
+</head>
+<body>
+    <h1>Going to iterate... </h1>
+    <!--To iterate in thymleaf-->
+        <!--Need to put loop and run-->
+        <h1 th:text="${list}"></h1><!--This is direct printing -->
+        <ul>
+            <li th:each= "Item_names:${list}">
+                <span th:text="${Item_names}"></span>
+            </li>
+        </ul>
+   <!---->
+</body>
+</html>
