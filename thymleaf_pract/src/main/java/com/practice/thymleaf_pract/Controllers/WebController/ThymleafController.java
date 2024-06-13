@@ -2,7 +2,6 @@ package com.practice.thymleaf_pract.Controllers.WebController;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,6 +44,12 @@ public class ThymleafController
     @RequestMapping(path = "/emp", method=RequestMethod.GET)
     public String queryhandler(@RequestParam("idE") Integer id)
     {
-    return " Your Employee 3 : "+id;
+       return " Your Employee 3 : "+id;
     }
+    
+   @RequestMapping(path = "/msg", method=RequestMethod.GET)
+   public String msgVariable()    
+   {
+    return "message";
+   }
 }
