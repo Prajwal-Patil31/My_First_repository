@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditional Rendering</title>
+</head>
+<body>
+    <h1>Conditional expressions</h1>
+
+    <h2>If-Then</h2>
+    <div th:text="${empSal.salary > 20000} ? 'Great' "></div>
+    <div th:text="${empSal.salary > 26000} ? 'False' "></div>
+
+   <h3>If-Then-Else</h3>
+   <div th:text="${empSal.salary > 20000 ? 'Great' : 'Fine'}"></div>
+   <div th:text="${empSal.salary > 22000 ? 'Hi' : 'Bye'}"></div>
+
+   <h3>If-Unless</h3>
+   <div th:if="${empSal.salary > 20000}">Great</div>
+   <div th:unless="${empSal.salary > 26000}">False</div>
+
+</body>
+</html>

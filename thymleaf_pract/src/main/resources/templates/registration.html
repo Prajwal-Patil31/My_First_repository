@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data binding with Thymeleaf</title>
+</head>
+<body>
+    <h1>Data binding</h1>
+    <form th:action="@{/saveEmp}" th:object="${empObject}" method="post">
+        Employee ID     : <input type="text" th:field="*{id}"/> <br>
+        Employee Name   : <input type="text" th:field="*{name}"/> <br>
+        Employee Mob    : <input type="text" th:field="*{mob}"/> <br>
+        Employee Salary : <input type="text" th:field="*{salary}"/> <br>
+        <input type="submit" value="Register" />
+    </form>
+</body>
+</html>

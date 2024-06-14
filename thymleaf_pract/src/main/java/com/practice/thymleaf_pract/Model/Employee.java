@@ -4,6 +4,11 @@ public class Employee {
     private int id;
     private String name;
     private String mob;
+    private double salary;
+    
+    public Employee(double salary) {
+        this.salary = salary;
+    }
     public int getId() {
         return id;
     }
@@ -29,10 +34,16 @@ public class Employee {
     }
     @Override
     public String toString() {
-        return "Employee [id=" + id + ", name=" + name + ", mob=" + mob + "]";
+        return "Employee [id=" + id + ", name=" + name + ", mob=" + mob + ", salary=" + salary + "]";
     }
     public Employee()
     {
         super();
+    }
+    public double getSalary() {
+        return salary;
+    }
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
 }

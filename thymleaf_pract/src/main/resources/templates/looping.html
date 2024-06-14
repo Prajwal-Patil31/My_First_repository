@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Looping </title>
+</head>
+<body>
+    
+    <center>
+        <h1>Looping Expressions</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Emp ID</th>
+                    <th>Employee Name</th>
+                    <th>Mob</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+ 
+    </center>
+     <tbody>
+        <tr th:each= "emp:${empList}">
+            <td th:text="${emp.id}"></td>
+            <td th:text="${emp.name}"></td>
+            <td th:text="${emp.mob}"></td>
+            <td th:text="${emp.salary}"></td>
+        </tr>
+     </tbody>
+    </table>
+</body>
+</html>

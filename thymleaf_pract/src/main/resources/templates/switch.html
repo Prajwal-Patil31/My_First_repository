@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Switch cases</title>
+</head>
+<body>
+    <h1>Switch Case</h1>
+    <div th:switch= "${empShas.name}">
+        <p th:case= "Shashank">Hello Shashank</p>
+        <p th:case= "Sneha">Hello Sneha</p>
+        <p th:case= "Yogesh">Hello Yogesh</p>
+        <p th:case= "Pavan">Hello Pavan</p>
+        <p th:case= "*">Default</p>
+    </div>
+</body>
+</html>
