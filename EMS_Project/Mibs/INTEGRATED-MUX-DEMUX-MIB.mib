@@ -1,0 +1,591 @@
+--*****************************************************************************
+--				UTL INTEGRATED MUX DEMUX MIB
+--*****************************************************************************
+
+INTEGRATED-MUX-DEMUX-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+		RowStatus				FROM STANDARD-MIB
+
+		DisplayString				FROM RFC1213-MIB       
+
+		OBJECT-IDENTITY, 
+		NOTIFICATION-TYPE, 
+		MODULE-IDENTITY, 
+		Integer32, 
+		Unsigned32, 
+		IpAddress, 
+		TimeTicks				FROM SNMPv2-SMI
+
+		OBJECT-TYPE				FROM RFC-1212
+
+		MODULE-COMPLIANCE, 
+		OBJECT-GROUP, 
+		NOTIFICATION-GROUP			FROM SNMPv2-CONF
+		
+		node, 
+		rack, 
+		subRack, 
+		slot 					FROM SCC-MIB
+
+		enterprises 				FROM RFC1155-SMI		
+
+	;
+
+	utl   	MODULE-IDENTITY
+		LAST-UPDATED    	"1807130630Z"
+		ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+		CONTACT-INFO    	"Website: http://www.utlindia.com."                                           
+		DESCRIPTION     	"MIB module for UTL DWDM."
+		REVISION 	    	"1807130630Z"
+
+		DESCRIPTION    	 	"MIB module for INTEGRATED MUX DEMUX Card."
+
+		::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+		STATUS  current
+
+		DESCRIPTION "UTL R and D."
+
+		::= { utl 1 }
+
+	dwdm 				OBJECT IDENTIFIER	::=   { utlrnd 1 }
+	indus 				OBJECT IDENTIFIER	::=   { dwdm 1 }
+	integratedMuxDemux 			OBJECT IDENTIFIER 	::=   { indus 186 }
+
+	integratedMuxDemuxCardGeneralDetails 	OBJECT IDENTIFIER 	::=   { integratedMuxDemux 1 }
+	integratedMuxDemuxConfiguration 		OBJECT IDENTIFIER 	::=   { integratedMuxDemux 2 }
+
+--*****************************************************************************
+--			INTEGRATED MUX DEMUX CARD GENERAL DETAILS
+--*****************************************************************************
+
+	integratedMuxDemuxCardGeneralDetailsTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF IntegratedMuxDemuxCardGeneralDetailsEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+
+		DESCRIPTION
+		 " we can get INTEGRATED MUX DEMUX card general details "
+
+		::= { integratedMuxDemuxCardGeneralDetails 1 }
+
+	integratedMuxDemuxCardGeneralDetailsEntry OBJECT-TYPE
+		SYNTAX  	IntegratedMuxDemuxCardGeneralDetailsEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot and integratedMuxDemuxInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, integratedMuxDemuxInterface }
+
+		::= { integratedMuxDemuxCardGeneralDetailsTable 1 }
+
+	IntegratedMuxDemuxCardGeneralDetailsEntry ::=
+		SEQUENCE {
+				integratedMuxDemuxInterface					INTEGER,
+				integratedMuxDemuxEepromCardId					INTEGER,
+				integratedMuxDemuxEepromCardName					DisplayString,
+				integratedMuxDemuxEepromPartCode					DisplayString,
+				integratedMuxDemuxEepromCardSerialNumber				DisplayString,
+				integratedMuxDemuxEepromHardwareExternalReleaseVersion		DisplayString,
+				integratedMuxDemuxSoftwareExternalReleaseVersion			DisplayString,
+				integratedMuxDemuxEepromHardwareInternalReleaseVersion		DisplayString,
+				integratedMuxDemuxSoftwareInternalReleaseVersion			DisplayString,
+				integratedMuxDemuxEepromCardUidNumber				DisplayString,
+				integratedMuxDemuxEepromCardEUI48Number				DisplayString,
+				integratedMuxDemuxEepromCardEUI64Number				DisplayString,
+				integratedMuxDemuxInstallationDate					DisplayString,
+				integratedMuxDemuxCommissionDate					DisplayString,
+				integratedMuxDemuxCardRunningTime					DisplayString,
+				integratedMuxDemuxCardRestartCount					INTEGER,
+				integratedMuxDemuxCardDirection				INTEGER,
+				integratedMuxDemuxCardGeneralDetailsTableRowStatus			RowStatus
+			}	
+	
+	integratedMuxDemuxInterface 	OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+		DESCRIPTION	
+			"integrated mux demux interface number, should be 0 always"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 1 }
+
+	integratedMuxDemuxEepromCardId OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " Tells the card ID of the INTEGRATED MUX DEMUX card, present in the EEPROM "
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 2 }
+
+	integratedMuxDemuxEepromCardName OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the card name of the INTEGRATED MUX DEMUX card, present in the EEPROM "
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 3 }
+
+	integratedMuxDemuxEepromPartCode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the part code of the INTEGRATED MUX DEMUX card, present in the EEPROM "
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 4 }
+
+	integratedMuxDemuxEepromCardSerialNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " This property get / set the information about INTEGRATED MUX DEMUX 
+		 Card's Serial Number.
+		-----------------------------
+		Values:
+		eg: 123456
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 5 }
+
+	integratedMuxDemuxEepromHardwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware External Release Version. This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product.
+		-----------------------------
+		Value:
+		eg: 0.1
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 6 }
+
+	integratedMuxDemuxSoftwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software External Release Version.  This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product.
+		-----------------------------
+		Value:
+		eg: 0.1
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 7 }
+
+	integratedMuxDemuxEepromHardwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware Internal Release Version. This detail 
+		 is used for development purposes only. It differs from the external 
+		 hardware version.
+		-----------------------------
+		Value:
+		eg: 4.1
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 8 }
+
+	integratedMuxDemuxSoftwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software Internal Release Version.  This detail 
+		 is used for development purposes only. It differs from the external 
+		 software version.
+		-----------------------------
+		Value:
+		eg: 5.1
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 9 }
+
+	integratedMuxDemuxEepromCardUidNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card Unique Identifier It is a 4 byte address used to 
+		 uniquely identify a card.
+		------------------------------
+		Value:
+	      	eg: 12345678
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 10 }
+
+	integratedMuxDemuxEepromCardEUI48Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-48 Number. It’s a 6 byte address used to 
+		 uniquely identify a card.
+		-----------------------------
+		Value:
+	      	eg: 0004A3123456
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 11 }
+
+	integratedMuxDemuxEepromCardEUI64Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-64 Number. It’s a 8 byte address
+		used to uniquely identify a card.
+		-----------------------------
+		Value:
+	      	eg: 0004A31234567890
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 12 }	
+	
+	integratedMuxDemuxInstallationDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get/set the card's installation date in dd/mm/yyyy format.
+		-----------------------------
+		Value:
+	      	eg: 12/03/2016
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 13 }
+
+	integratedMuxDemuxCommissionDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get/set the card's commission date in  dd/mm/yyyy format.
+		-----------------------------
+		Value:
+	      	eg: 20/03/2016
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 14 }
+
+	integratedMuxDemuxCardRunningTime OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the duration of time for which the card is operational/running.
+		-----------------------------
+		Values:
+	      	eg: 3d 2h 1m
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 15 }
+	
+	integratedMuxDemuxCardRestartCount OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the number of times the card has been soft reset. This value 
+		 will get reset to 0 on factory reset.
+		-----------------------------
+		Values:
+	      	eg: 10
+		-----------------------------"
+
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 16 }
+
+	integratedMuxDemuxCardDirection	OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  	current
+		DESCRIPTION	
+		" to get Integrated Mux Demux card Direction.
+		-----------------------------
+		Values:
+		1 - Direction 1
+		2 - Direction 2
+		3 - Direction 3
+		4 - Direction 4
+		-----------------------------"
+		::= { integratedMuxDemuxCardGeneralDetailsEntry 17 }
+		
+	integratedMuxDemuxCardGeneralDetailsTableRowStatus OBJECT-TYPE
+	      SYNTAX      RowStatus
+	      MAX-ACCESS  read-write
+	      STATUS      current
+	      DESCRIPTION
+		      "	This is MIB realted property,
+			NOT to be considered as a card property"
+	      ::= { integratedMuxDemuxCardGeneralDetailsEntry 18 }		
+		
+--*****************************************************************************
+--			INTEGRATED MUX DEMUX CONFIGURATION
+--***************************************************************************** 
+
+	integratedMuxDemuxConfigurationTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF IntegratedMuxDemuxConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " we can get INTEGRATED MUX DEMUX configuration details "
+
+		::= { integratedMuxDemuxConfiguration 1 }
+
+		integratedMuxDemuxConfigurationEntry OBJECT-TYPE
+		SYNTAX  	IntegratedMuxDemuxConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION  
+		 "Enter node rack, subrack, slot and integratedMuxDemuxInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, integratedMuxDemuxInterface }
+
+		::= { integratedMuxDemuxConfigurationTable 1 }
+
+	IntegratedMuxDemuxConfigurationEntry ::= 
+		SEQUENCE {
+
+				integratedMuxDemuxSoftReset							INTEGER,	
+				integratedMuxDemuxCardSoftwareUpgrade				 		DisplayString,	
+				integratedMuxDemuxSystemTimeAndRtcTime						DisplayString,
+				integratedMuxDemuxSyncRtcWithNtpServer						DisplayString,
+				integratedMuxDemuxSyncRtcWithSystemTime						INTEGER,
+				integratedMuxDemuxSyncSystemTimeWithNtpServer					DisplayString,
+				integratedMuxDemuxUpdateGivenTimeIntoRtc					DisplayString,
+				integratedMuxDemuxUpdateGivenTimeIntoSystem					DisplayString,
+				integratedMuxDemuxConfigurationTableRowStatus					RowStatus
+			}
+
+	integratedMuxDemuxSoftReset OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		"Valid only as a SET command.
+		Reboots the Card, Reconfigures the Card 
+		i.e All Configuration Parameter	like Laser State,
+		thresholds, operating mode & gain will be restored to 
+		previous state.
+		-----------------------------
+		Values:
+		Dont care, any value
+		eg: 0
+		-----------------------------"
+
+		::= { integratedMuxDemuxConfigurationEntry 1 }	
+
+	integratedMuxDemuxCardSoftwareUpgrade OBJECT-TYPE		 
+		SYNTAX  DisplayString
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION
+			"Valid only as SET command.
+			This property upgrades the software of the Integrated-Mux-Demux card
+			It takes the path of the software release as
+			a value
+			-----------------------------
+			integratedMuxDemuxInterfaceNumber: 0
+			-----------------------------
+			Values:
+			eg: /root/home/rel-2.0.0.tar.gz
+			-----------------------------"
+		::= { integratedMuxDemuxConfigurationEntry 2 }				
+
+  	integratedMuxDemuxSystemTimeAndRtcTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-only
+  		STATUS  		current
+  		DESCRIPTION	 	" get the system time and time value present in RTC.
+  						-----------------------------
+						Interface : 0
+						-----------------------------"
+						
+  		::= { integratedMuxDemuxConfigurationEntry 3 }
+  		
+  	integratedMuxDemuxSyncRtcWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"When we want to manually sync the time value
+  						present in RTC with the NTP server
+  						we can use this OID. We can provide NTP server
+  						ip address as a value to this OID and the time
+  						will be synced to that particular server. 
+  						If we are not providing NTP server IP address 
+  						then the system will be synced with the NTP server 
+  						which is already been registered with card. 
+  						If both are absent then error message will be returned.
+  						-----------------------------
+						Interface : 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 10.254.254.254
+							
+						If we don't want to provide NTP server address, then no
+						need to pass any value. 
+						---------------------------"
+  						
+  		::= { integratedMuxDemuxConfigurationEntry 4 }
+  		
+  	integratedMuxDemuxSyncRtcWithSystemTime	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in RTC with the time value in linux kernel
+  						we can use this OID. With this set operation, 
+  						the time available with linux kernel will be updated
+  						into RTC. The value should be :
+  						1"
+  						
+  		::= { integratedMuxDemuxConfigurationEntry 5 }
+
+	integratedMuxDemuxSyncSystemTimeWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+					present in linux kernel with the NTP server
+					we can use this OID. We can provide NTP server
+					ip address as a value to this OID and the time
+					will be synced to that particular server. 
+					If we are not providing NTP server IP address 
+					then the system will be synced with the NTP server 
+					which is already been registered with card. 
+					If both are absent then error message will be returned
+					-----------------------------
+						Interface : 0
+					-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 10.254.254.254
+						
+						If we don't want to provide NTP server address then no
+						need to pass any value. 
+					---------------------------"
+  						
+  		::= { integratedMuxDemuxConfigurationEntry 6 }
+
+  	integratedMuxDemuxUpdateGivenTimeIntoRtc	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update RTC time
+  						with the user provided time, we can use this OID.
+  						With OID we need to provide time value which we
+  						want to update in RTC.
+  						-----------------------------
+						Interface : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD HH:MM:SS
+						
+						Example: 2019-03-31 15:20:44
+						---------------------------"
+						
+  		::= { integratedMuxDemuxConfigurationEntry 7 }
+
+  		  		
+  	integratedMuxDemuxUpdateGivenTimeIntoSystem	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update system time
+  						with the user provided time, we can use this OID.
+  						With OID we need to provide time value which we
+  						want to update in the system.
+  						-----------------------------
+						Interface : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2019-03-31 15:20:44
+						---------------------------"
+						
+  		::= { integratedMuxDemuxConfigurationEntry 8 }
+
+	integratedMuxDemuxConfigurationTableRowStatus OBJECT-TYPE
+		SYNTAX      RowStatus
+		MAX-ACCESS  read-write
+		STATUS      current
+		DESCRIPTION
+		 "This is MIB related property, NOT to be considered as a card property"
+
+		::= { integratedMuxDemuxConfigurationEntry 9 }
+
+--***************************************************************************** 
+		
+	snmpcurrentGroup OBJECT-GROUP
+		OBJECTS {
+				integratedMuxDemuxInterface,
+				integratedMuxDemuxEepromCardId,
+				integratedMuxDemuxEepromCardName,
+				integratedMuxDemuxEepromPartCode,
+				integratedMuxDemuxEepromCardSerialNumber,
+				integratedMuxDemuxEepromHardwareExternalReleaseVersion,
+				integratedMuxDemuxSoftwareExternalReleaseVersion,
+				integratedMuxDemuxEepromHardwareInternalReleaseVersion,
+				integratedMuxDemuxSoftwareInternalReleaseVersion,
+				integratedMuxDemuxEepromCardUidNumber,
+				integratedMuxDemuxEepromCardEUI48Number,
+				integratedMuxDemuxEepromCardEUI64Number,
+				integratedMuxDemuxInstallationDate,
+				integratedMuxDemuxCommissionDate,
+				integratedMuxDemuxCardRunningTime,
+				integratedMuxDemuxCardRestartCount,
+				integratedMuxDemuxCardDirection,
+				integratedMuxDemuxCardGeneralDetailsTableRowStatus,
+				integratedMuxDemuxSoftReset,
+				integratedMuxDemuxCardSoftwareUpgrade,				
+				integratedMuxDemuxSystemTimeAndRtcTime,
+				integratedMuxDemuxSyncRtcWithNtpServer,
+				integratedMuxDemuxSyncRtcWithSystemTime,
+				integratedMuxDemuxSyncSystemTimeWithNtpServer,
+				integratedMuxDemuxUpdateGivenTimeIntoRtc,
+				integratedMuxDemuxUpdateGivenTimeIntoSystem,
+				integratedMuxDemuxConfigurationTableRowStatus
+			}
+		STATUS	current
+
+		DESCRIPTION
+		"A collection of objects from RFC 1213 made current by this MIB module."
+
+		::= { utlrnd 2 }
+	
+END

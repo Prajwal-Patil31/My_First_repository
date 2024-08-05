@@ -1,0 +1,5 @@
+{omtp11tPlusCardGeneralDetailsTable, {galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_configuration_query,[[1,3,6,1,4,1,18036,1,1,1,72,1,1,1]]}}.
+{omtp11tPlusConfigurationTable, {galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_configuration_query,[[1,3,6,1,4,1,18036,1,1,1,72,2,1,1]]}}.	
+{omtp11tPlusAlarmQueryTable, {galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_alarm_query,[[1,3,6,1,4,1,18036,1,1,1,72,3,1,1,1]]}}.	
+{omtp11tPlusPerformanceTable, {galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_performance_query,[[1,3,6,1,4,1,18036,1,1,1,72,4,1,1]]}}.
+{omtp11tPlusDiagnosticsTable, {galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_configuration_query, [[1,3,6,1,4,1,18036,1,1,1,72,5,1,1]]}}.

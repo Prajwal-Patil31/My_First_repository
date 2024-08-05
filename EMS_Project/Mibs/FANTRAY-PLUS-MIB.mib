@@ -1,0 +1,335 @@
+--*****************************************************************************
+--				UTL FANTRAY PLUS MIB
+--*****************************************************************************
+
+FANTRAY-PLUS-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+        	RowStatus      			FROM STANDARD-MIB
+        	
+		DisplayString  			FROM RFC1213-MIB       
+			
+    		OBJECT-IDENTITY, 
+    		NOTIFICATION-TYPE, 
+    		MODULE-IDENTITY, 
+    		Integer32, 
+    		Unsigned32,
+    		IpAddress,
+    		TimeTicks			FROM SNMPv2-SMI
+    		
+	 	OBJECT-TYPE    			FROM RFC-1212
+	 		
+		MODULE-COMPLIANCE, 
+		OBJECT-GROUP, 
+		NOTIFICATION-GROUP		FROM SNMPv2-CONF
+			
+		node, 
+		rack, 
+		subRack, 
+		slot 				FROM SCC-MIB
+
+		enterprises 			FROM RFC1155-SMI		
+
+	;
+
+	utl   	MODULE-IDENTITY
+	
+		LAST-UPDATED    	"1807130630Z"
+		ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+		CONTACT-INFO    	"Website: http://www.utlindia.com."                                           
+		DESCRIPTION     	"MIB module for UTL DWDM."
+		REVISION 	    	"1807130630Z"
+		DESCRIPTION    	 	"MIB module for FANTRAY Card."
+            
+            	::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+		STATUS  current
+
+		DESCRIPTION "UTL R and D."
+
+		::= { utl 1 }
+
+	dwdm 				OBJECT IDENTIFIER	::=   { utlrnd 1 }
+	indus 				OBJECT IDENTIFIER	::=   { dwdm 1 }
+	fanTrayPlus 			OBJECT IDENTIFIER	::=   { indus 66 }
+
+	fanTrayPlusConfiguration	OBJECT IDENTIFIER	::=   { fanTrayPlus 1 }	
+	fanTrayPlusAlarm 		OBJECT IDENTIFIER	::=   { fanTrayPlus 2 }
+
+	fanTrayPlusAlarmQuery 		OBJECT IDENTIFIER 	::=   { fanTrayPlusAlarm 1 }
+	fanTrayPlusAlarmNotification	OBJECT IDENTIFIER 	::=   { fanTrayPlusAlarm 2 }
+
+--*****************************************************************************
+--			FANTRAY PLUS CARD CONFIGURATION
+--*****************************************************************************
+	
+	fanTrayPlusConfigurationTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF FanTrayPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " For Get or Set FanTray Plus's configuration."
+		
+		::= { fanTrayPlusConfiguration 1 }
+              
+    	fanTrayPlusConfigurationEntry OBJECT-TYPE
+		SYNTAX  	FanTrayPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " Enter SCU's node rack, subrack, slot numbers"
+		
+		INDEX	{ node, rack, subRack, slot }
+
+		::= { fanTrayPlusConfigurationTable 1 }
+	
+	FanTrayPlusConfigurationEntry ::= 
+		SEQUENCE {
+				fanTrayPlusSwitchFanTray	 	INTEGER,
+				fanTrayPlusConfigurationTableRowStatus	RowStatus
+			}
+		
+	fanTrayPlusSwitchFanTray OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " To switch between Normal and Redundant Fan Tray.
+		NOTE : Use SCU's node, rack, subrack and slot number."
+
+		::= { fanTrayPlusConfigurationEntry 1 }
+
+	fanTrayPlusConfigurationTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              ::= { fanTrayPlusConfigurationEntry 2 }
+		
+--*****************************************************************************
+--				FANTRAY PLUS ALARMS
+--*****************************************************************************  
+
+	fanTrayPlusAlarmQueryTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF FanTrayPlusAlarmQueryEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		" we can get alarm details of the system"
+		
+		::= { fanTrayPlusAlarmQuery 1 }
+              
+	fanTrayPlusAlarmQueryEntry OBJECT-TYPE
+		SYNTAX  	FanTrayPlusAlarmQueryEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " Enter SCU's node rack, subrack, slot numbers"
+			
+		INDEX	{ node, rack, subRack, slot, fanTrayPlusNumber, fanTrayPlusFanNumber }
+
+		::= { fanTrayPlusAlarmQueryTable 1 }
+	
+	FanTrayPlusAlarmQueryEntry ::= 
+		SEQUENCE {
+				fanTrayPlusNumber					INTEGER,
+				fanTrayPlusFanNumber					INTEGER,
+				fanTrayPlusPresenceAbsenceNotification 			DisplayString,
+				fanTrayPlusFanPresenceAbsenceInTrayNotification		DisplayString,
+				fanTrayPlusActiveFanTrayNotification	 		DisplayString,
+				fanTrayPlusAlarmQueryTableRowStatus			RowStatus
+			}
+              
+	fanTrayPlusNumber OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " Fan Tray Number, 1 - Normal Fan Tray, 2 - Redundant Fan tray "
+
+		::= { fanTrayPlusAlarmQueryEntry 1 }
+              
+	fanTrayPlusFanNumber OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " Fan number, possible values : 1,2,3 "
+	
+		::= { fanTrayPlusAlarmQueryEntry 2 } 
+              
+	fanTrayPlusPresenceAbsenceNotification OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+			"Informs whether the requested Fantray is present or absent. 
+			-----------------------------
+			NOTE : Use SCU's node, rack, subrack and slot number.
+			For properties which do not apply on any interface,
+			the interface number must be passed as 0
+			fanTrayPlusNumber:
+			1 - Normal Fantray
+			2 - Redundant Fantray
+			fanTrayPlusFanNumber: 0
+			-----------------------------
+			Values :
+			If Alarm is Present - Date and Time Stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+			Meaning: Fantray is absent
+			
+			If Alarm is Absent - 0
+			Meaning: Fantray is present
+			-----------------------------"
+
+		::= { fanTrayPlusAlarmQueryEntry 3 }	              
+                      
+	fanTrayPlusFanPresenceAbsenceInTrayNotification OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+			"Informs the number of operational fans in the requested
+			Fantray. The result of three interfaces collectively
+			represent a single meaning
+			Eg1: If the alarm is present for 1.1, 1.2, 1.3 it
+			means 3 fans are faulty in the Normal Fantray
+			Eg2: If the alarm is present for 1.1 it
+			means only one fan is faulty in the Normal Fantray
+			-----------------------------
+			NOTE : Use SCU's node, rack, subrack and slot number.
+			fanTrayPlusNumber:
+			1 - Normal Fantray
+			2 - Redundant Fantray
+			fanTrayPlusFanNumber:
+			1, 2 or 3 - Number of operational fans
+			-----------------------------
+			Values :
+			If Alarm is Present - Date and Time Stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+			
+			If Alarm is Absent - 0
+			-----------------------------"
+
+		::= { fanTrayPlusAlarmQueryEntry 4 }	              
+                      
+	fanTrayPlusActiveFanTrayNotification OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+		DESCRIPTION
+		 	"Informs the current operational Fantray amongst the
+		 	Normal and Redundant Fantray
+			Eg1: If the alarm is present for interface 1.0 it means
+			that the Normal Fantray is active(operational)
+			Eg1: If the alarm is absent for interface 1.0 it means
+			that the Normal Fantray is in-active(non-operational)
+			-----------------------------
+			NOTE : Use SCU's node, rack, subrack and slot number.
+			fanTrayPlusNumber:
+			1 - Normal Fantray
+			2 - Redundant Fantray
+			fanTrayPlusFanNumber: 0
+			-----------------------------
+			Values :
+			If Alarm is Present - Date and Time Stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+			Meaning: Fantray is active
+			
+			If Alarm is Absent - 0
+			Meaning: Fantray is in-active
+			-----------------------------"
+
+		::= { fanTrayPlusAlarmQueryEntry 5 }
+		
+	fanTrayPlusAlarmQueryTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              ::= { fanTrayPlusAlarmQueryEntry 6 }
+              	
+--*****************************************************************************
+--		 	 FAN PLUS Alarm Notification Table
+--*****************************************************************************   
+
+	fanTrayPlusPresenceAbsenceNotificationTrap NOTIFICATION-TYPE
+		OBJECTS  { fanTrayPlusPresenceAbsenceNotification
+			}
+		STATUS	current
+
+		DESCRIPTION
+		 " This traps is for Fan tray Presence/Absence notifiaction Status."
+
+		::= { fanTrayPlusAlarmNotification 1 }
+              
+	fanTrayPlusFanPresenceAbsenceInTrayNotificationTrap NOTIFICATION-TYPE
+		OBJECTS  { fanTrayPlusFanPresenceAbsenceInTrayNotification
+			}
+		STATUS	current
+
+		DESCRIPTION
+		 " This traps is for Fan Presence/Absence notification Status."
+
+		::= { fanTrayPlusAlarmNotification 2 }              
+              
+	fanTrayPlusActiveFanTrayNotificationTrap NOTIFICATION-TYPE
+		OBJECTS  { fanTrayPlusActiveFanTrayNotification
+			}
+		STATUS	current
+
+		DESCRIPTION
+		 " This traps indicates active Fan tray notification."
+
+		::= { fanTrayPlusAlarmNotification 3 } 
+
+--***************************************************************************** 
+
+	snmpCurrentNotificationsGroup NOTIFICATION-GROUP
+		NOTIFICATIONS	{ 
+					fanTrayPlusPresenceAbsenceNotificationTrap,
+					fanTrayPlusFanPresenceAbsenceInTrayNotificationTrap,
+					fanTrayPlusActiveFanTrayNotificationTrap
+				}
+		STATUS	current
+
+		DESCRIPTION
+		 " The UTL DWDM current notifications group "
+
+		::= { fanTrayPlus 3 } 
+
+--***************************************************************************** 
+  	  
+	snmpcurrentGroup OBJECT-GROUP
+		OBJECTS {	
+				fanTrayPlusSwitchFanTray,
+				fanTrayPlusNumber,
+				fanTrayPlusFanNumber,
+				fanTrayPlusConfigurationTableRowStatus,
+				fanTrayPlusPresenceAbsenceNotification,
+				fanTrayPlusFanPresenceAbsenceInTrayNotification,
+				fanTrayPlusActiveFanTrayNotification,
+				fanTrayPlusAlarmQueryTableRowStatus
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " A collection of objects from RFC 1213 made current by this MIB module."
+
+		::= { utlrnd 2 }
+	
+END	

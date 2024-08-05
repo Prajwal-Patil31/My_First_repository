@@ -1,0 +1,2042 @@
+--*****************************************************************************
+--					UTL MANTIS PLUS MIB
+--*****************************************************************************
+
+MANTIS-PLUS-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+		RowStatus			FROM STANDARD-MIB
+
+		DisplayString			FROM RFC1213-MIB       
+
+		OBJECT-IDENTITY, 
+		NOTIFICATION-TYPE, 
+		MODULE-IDENTITY, 
+		Integer32, 
+		Unsigned32, 
+		IpAddress, 
+		TimeTicks			FROM SNMPv2-SMI
+
+		OBJECT-TYPE			FROM RFC-1212
+
+		MODULE-COMPLIANCE, 
+		OBJECT-GROUP, 
+		NOTIFICATION-GROUP		FROM SNMPv2-CONF
+		
+		node, 
+		rack, 
+		subRack, 
+		slot 				FROM SCC-MIB
+
+		enterprises 			FROM RFC1155-SMI		
+	;
+
+	utl   MODULE-IDENTITY
+            LAST-UPDATED    	"1807130630Z"
+            ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+            CONTACT-INFO    	"Website: http://www.utlindia.com."                                           
+            DESCRIPTION     	"MIB module for UTL 2U DWDM."
+            REVISION 	    	"1807130630Z"
+            DESCRIPTION    	 "MIB module for mantis Card."
+            ::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+            STATUS  current
+            DESCRIPTION "UTL R and D."
+            ::= { utl 1 }
+
+	dwdm 				OBJECT IDENTIFIER	::=   { utlrnd 1 }
+	indus				OBJECT IDENTIFIER	::=   { dwdm 1 }
+	mantisPlus 			OBJECT IDENTIFIER 	::=   { indus 191 }
+
+	mantisPlusCardGeneralDetails 	OBJECT IDENTIFIER 	::=   { mantisPlus 1 }	
+	mantisPlusConfiguration 	OBJECT IDENTIFIER 	::=   { mantisPlus 2 }
+	mantisPlusAlarm 		OBJECT IDENTIFIER 	::=   { mantisPlus 3 }
+	mantisPlusPerformance 		OBJECT IDENTIFIER 	::=   { mantisPlus 4 }
+
+	mantisPlusAlarmQuery 		OBJECT IDENTIFIER 	::=   { mantisPlusAlarm 1 }	
+	mantisPlusAlarmsNotification 	OBJECT IDENTIFIER 	::=   { mantisPlusAlarm 2 }	
+	
+--*****************************************************************************
+--			MANTIS PLUS CARD GENERAL DETAILS
+--*****************************************************************************	
+
+	mantisPlusCardGeneralDetailsTable OBJECT-TYPE
+			SYNTAX  SEQUENCE OF  MantisPlusCardGeneralDetailsTableEntry
+			MAX-ACCESS  not-accessible
+	      	STATUS  current
+	      	DESCRIPTION
+					"we can set/get card details "
+	      	::= { mantisPlusCardGeneralDetails 1 }
+		
+	mantisPlusCardGeneralDetailsTableEntry OBJECT-TYPE
+			SYNTAX  MantisPlusCardGeneralDetailsTableEntry 
+			MAX-ACCESS  not-accessible
+			STATUS  current
+			DESCRIPTION 
+        			""
+				INDEX   { node, rack , subRack , slot ,mantisPlusDirectionNo, mantisPlusPortType, mantisPlusChannelNo }
+				::= { mantisPlusCardGeneralDetailsTable 1 }
+
+	MantisPlusCardGeneralDetailsTableEntry  ::= 
+		SEQUENCE 
+		{
+			mantisPlusDirectionNo	 				INTEGER,
+			mantisPlusPortType					INTEGER,
+			mantisPlusChannelNo					INTEGER,
+			mantisPlusEepromCardId					INTEGER,
+			mantisPlusEepromCardName				DisplayString,
+			mantisPlusEepromPartCode				DisplayString,
+			mantisPlusEepromCardSerialNumber			DisplayString,
+			mantisPlusEepromHardwareExternalReleaseVersion		DisplayString,
+			mantisPlusSoftwareExternalReleaseVersion		DisplayString,
+			mantisPlusEepromHardwareInternalReleaseVersion		DisplayString,
+			mantisPlusSoftwareInternalReleaseVersion		DisplayString,
+			mantisPlusEepromCardUidNumber				DisplayString,
+			mantisPlusEepromCardEui48Number				DisplayString,
+			mantisPlusEepromCardEui64Number				DisplayString,
+			mantisPlusCardRootFileSystemVersion			DisplayString,
+			mantisPlusCardInstallationDate				DisplayString,
+			mantisPlusCardCommissionDate				DisplayString,
+			mantisPlusCardRunningTime				DisplayString,
+			mantisPlusCardRestartCount				INTEGER,
+			mantisPlusBackPlaneCommunication			DisplayString,
+			mantisPlusConsoleCommunication				DisplayString,
+			mantisPlusChannelsSupported				INTEGER,
+			mantisPlusPortsSupported				INTEGER,
+			mantisPlusDirection					INTEGER,
+			mantisPlusCardGeneralDetailsTableRowStatus		RowStatus
+		}
+
+
+	mantisPlusDirectionNo OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  not-accessible
+		STATUS  current
+		DESCRIPTION
+				"Set direction number of the Mantis Plus Card, Maximum Direction Supports Upto 9,
+			possible Values : 1 to 4"
+
+			::= { mantisPlusCardGeneralDetailsTableEntry 1 }
+
+	mantisPlusPortType OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  not-accessible
+		STATUS  current
+		DESCRIPTION
+				"set wss module direction type, Either it may be Input or Output Type.
+			possible values : 1 -> Input Type , 2 -> Output Type "
+
+			::= { mantisPlusCardGeneralDetailsTableEntry 2 }
+
+	mantisPlusChannelNo  OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  not-accessible
+		STATUS  current
+		DESCRIPTION
+				"set channel number,
+			possible Values : 1 to 80"
+
+			::= { mantisPlusCardGeneralDetailsTableEntry 3 }
+
+	mantisPlusEepromCardId OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card id from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 2 "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 4 }
+              
+	mantisPlusEepromCardName OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card name from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : mantisPlus "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 5 }
+
+	mantisPlusEepromPartCode OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card part code from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : mantisPlus "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 6 }
+
+	mantisPlusEepromCardSerialNumber OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" This property get / set the information about MANTIS 
+				 Card's Serial Number.
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : UTL-NFS-A-09-16-MANTISPLUS-12345 "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 7 }
+
+	mantisPlusEepromHardwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card Hardware Exernal release version from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 1.0 "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 8 }
+
+	mantisPlusSoftwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card Software Exernal release version from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 2.0 "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 9 }
+
+	mantisPlusEepromHardwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card Hardware Internal release version from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 1.0 "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 10 }
+
+	mantisPlusSoftwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card Software Internal release version from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 2.0 "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 11 }
+
+	mantisPlusEepromCardUidNumber OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card Uid number from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values :  "
+			::= {  mantisPlusCardGeneralDetailsTableEntry 12 }
+
+	mantisPlusEepromCardEui48Number OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card Eui48 number from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values :  "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 13 }
+
+	mantisPlusEepromCardEui64Number OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card Eui64 number from EEPROM,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values :  "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 14 }
+			
+	mantisPlusCardRootFileSystemVersion OBJECT-TYPE		 
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS current
+		DESCRIPTION
+			"Tells the Card's Root File System Version
+			-----------------------------
+			mantisPlusDirectionNo	: 0
+			mantisPlusPortType	: 0
+			mantisPlusChannelNo	: 0
+			-----------------------------
+			Value:
+		      	eg: 8
+			-----------------------------"
+		::= { mantisPlusCardGeneralDetailsTableEntry 15 }
+
+	mantisPlusCardInstallationDate OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"
+			To get the card's installation date in dd/mm/yyyy format,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			--------------------------------- 
+			"
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 24 }
+
+	mantisPlusCardCommissionDate OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"
+			To get the card's Commission date in dd/mm/yyyy format,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------  
+			"
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 25 }
+
+	mantisPlusCardRunningTime OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+			" 
+			To get the duration of time for which the card is operational/running.
+			Value eg: 3d 2h 1m
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			"
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 26 }
+
+	mantisPlusCardRestartCount OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card Restart Count,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			"
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 27 }
+
+	mantisPlusBackPlaneCommunication OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card BackPlane Communication value,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : rs232 "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 35 }
+
+	mantisPlusConsoleCommunication OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get card Console Communication value,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : Ethernet "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 36 }
+
+
+	mantisPlusChannelsSupported OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get channels supported by the mantisPlus Card ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Value :  80 "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 37 }
+
+	mantisPlusPortsSupported OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get ports supported by the mantisPlus Card  ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Value :  4  "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 38 }
+
+	mantisPlusDirection	OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get direction number of mantisPlus card ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Value : 1 to 4 "
+
+			::= {  mantisPlusCardGeneralDetailsTableEntry 39 }
+
+	mantisPlusCardGeneralDetailsTableRowStatus OBJECT-TYPE
+		SYNTAX		RowStatus
+		MAX-ACCESS	read-write
+		STATUS		current
+		DESCRIPTION
+			"This is MIB realted property,
+			NOT to be considered as a card property"
+
+			::= { mantisPlusCardGeneralDetailsTableEntry 40 }
+			
+--*****************************************************************************
+--		 	 CONFIGURATION Table
+--*****************************************************************************              
+              
+
+	mantisPlusCardConfigurationTable OBJECT-TYPE
+		SYNTAX  SEQUENCE OF  MantisPlusCardConfigurationTableEntry
+		MAX-ACCESS  not-accessible
+		STATUS  current
+		DESCRIPTION
+				"we can set/get channel configuration "
+
+			::= { mantisPlusConfiguration 1 }
+
+	mantisPlusCardConfigurationTableEntry OBJECT-TYPE
+		SYNTAX  MantisPlusCardConfigurationTableEntry 
+		MAX-ACCESS  not-accessible
+		STATUS  current
+		DESCRIPTION 
+				""
+			INDEX   { node, rack , subRack , slot , mantisPlusDirectionNo, mantisPlusPortType, mantisPlusChannelNo }
+			::= { mantisPlusCardConfigurationTable 1 }
+	
+	MantisPlusCardConfigurationTableEntry  ::= 
+		SEQUENCE 
+		{
+			mantisPlusChannelPort 					INTEGER,
+			mantisPlusChannelState 					INTEGER,
+			mantisPlusAttenuation 					DisplayString,
+			mantisPlusWssInputVoltageOfModule			DisplayString,
+			mantisPlusWssTemperatureOfModule			DisplayString,
+			mantisPlusMinValidAttn					DisplayString,
+			mantisPlusMaxValidAttn					DisplayString,
+			mantisPlusChannelMode 					INTEGER,
+			mantisPlusTargetPower					DisplayString,
+			mantisPlusStepSize					DisplayString,
+			mantisPlusStepDelay	 				DisplayString,
+			mantisPlusPowerTolerance	 			DisplayString,
+			mantisPlusInsertionLossCorrectionVal			DisplayString,
+			mantisPlusMinValidPower					DisplayString,
+			mantisPlusMaxValidPower					DisplayString,
+			mantisPlusAlarmInhibitVal    				DisplayString,
+			mantisPlusCardSoftwareUpgrade				DisplayString,
+			mantisPlusCardSoftReset					DisplayString,
+			mantisPlusCardDefaultFactoryReset			DisplayString,
+			mantisPlusFactChannelPort				INTEGER,
+			mantisPlusFactChannelState				INTEGER,
+			mantisPlusFactAttenuation				DisplayString,
+			mantisPlusFactChannelMode				INTEGER,
+			mantisPlusFactStepSize					DisplayString,
+			mantisPlusFactStepDelay					DisplayString,
+			mantisPlusFactPowerTolerance				DisplayString,
+			mantisPlusFactInsertionLossCorrectionVal		DisplayString,
+			mantisPlusFactMinValidAttenuation			DisplayString,
+			mantisPlusFactMaxValidAttenuation			DisplayString,
+			mantisPlusFactMinValidPower				DisplayString,
+			mantisPlusFactMaxValidPower				DisplayString,
+			mantisPlusFactMinStepSize				DisplayString,
+			mantisPlusFactMaxStepSize				DisplayString,
+			mantisPlusFactMinStepDelay				DisplayString,
+			mantisPlusFactMaxStepDelay				DisplayString,
+			mantisPlusFactMaxPowerTolerance				DisplayString,
+			mantisPlusFactMaxInsertionLossCorrectionVal		DisplayString,
+			mantisPlusFactCardType					DisplayString,
+			mantisPlusWssElectricalPowerOutofRangeInhibit		INTEGER,
+			mantisPlusWssTemperatureOutofRangeInhibit		INTEGER,
+			mantisPlusWssCommunicationErrorInhibit			INTEGER,
+			mantisPlusGpioExpanderChipErrorInhibit			INTEGER,
+			mantisPlusOcmCommunicationErrorInhibit			INTEGER,
+			mantisPlusChannelPowerAlarmStateInhibit			INTEGER,
+			mantisPlusWssElectricalPowerOutofRangeSeverity		DisplayString,
+			mantisPlusWssTemperatureOutofRangeSeverity		DisplayString,
+			mantisPlusWssCommunicationErrorSeverity			DisplayString,
+			mantisPlusGpioExpanderChipErrorSeverity			DisplayString,
+			mantisPlusOcmCommunicationErrorSeverity			DisplayString,
+			mantisPlusChannelPowerAlarmStateSeverity		DisplayString,
+			mantisPlusSyncSystemTimeWithNtpServer				DisplayString,
+			mantisPlusSyncRtcWithNtpServer						DisplayString,
+			mantisPlusSyncRtcWithSystemTime						DisplayString,
+			mantisPlusUpdateGivenTimeIntoSystem					DisplayString,
+			mantisPlusUpdateGivenTimeIntoRtc					DisplayString,
+			mantisPlusSystemTimeAndRtcTime						DisplayString,
+			mantisPlusConfigurationTableRowStatus			RowStatus
+		}
+
+	mantisPlusChannelPort OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"set/get channel Port, switching channel from one port to another port 
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1-80
+			---------------------------------
+			possible Values : 1 to 4"
+
+			::= {  mantisPlusCardConfigurationTableEntry 1 }
+
+
+	mantisPlusChannelState OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"set/get channel State, channel blocking and unblocking
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1-80
+			---------------------------------
+			possible Values : 0 -> Channel Block, 1 -> Channel Un-Block"
+
+			::= {  mantisPlusCardConfigurationTableEntry 2 }
+
+	mantisPlusAttenuation OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"set/get attenuation of a channel,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1-80
+			---------------------------------
+			possible Values : 0.0 to 15.0  "
+
+			::= {  mantisPlusCardConfigurationTableEntry 3 }
+
+	mantisPlusWssInputVoltageOfModule  OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+				"get wss Input Voltage Of Module,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : 4.8"
+
+			::= { mantisPlusCardConfigurationTableEntry 4 }
+		
+	mantisPlusWssTemperatureOfModule   OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+				"get wss Temperature Of Module,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Values :  -5 to +65"
+
+			::= { mantisPlusCardConfigurationTableEntry 5 }
+
+
+	mantisPlusMinValidAttn OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get minimum valid attinuation,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  0 "
+
+			::= { mantisPlusCardConfigurationTableEntry 6 }
+
+	mantisPlusMaxValidAttn OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get maximum valid Attinuation,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  15 "
+
+			::= { mantisPlusCardConfigurationTableEntry 7 }
+
+	mantisPlusChannelMode OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"set/get channel Mode,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1-80
+			---------------------------------
+			possible Values : 0 -> Attenuation Mode , 1 -> Power Mode "
+
+			::= {  mantisPlusCardConfigurationTableEntry 11 }
+
+	mantisPlusTargetPower OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"set/get target Power of a channel, Target Power can be Set only when channel is in Power Mode.
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1-80
+			---------------------------------
+			possible Values : -40 to +4 "
+
+			::= {  mantisPlusCardConfigurationTableEntry 12 }
+   
+
+	mantisPlusStepSize OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION
+				"get/set step Size,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Values : 0.1 to 2.0"
+
+			::= { mantisPlusCardConfigurationTableEntry 13 }
+
+	mantisPlusStepDelay OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION
+				"get/set step Delay ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Values : 1.0 to 2.0"
+
+			::= { mantisPlusCardConfigurationTableEntry 14 }
+
+	mantisPlusPowerTolerance OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION
+				"get/set power Tolerance ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Values : 0 to 2.0"
+
+			::= { mantisPlusCardConfigurationTableEntry 15 }
+
+
+	mantisPlusInsertionLossCorrectionVal OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION
+				"get/set insertion Loss Correction Value,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Values : 0 to 4"
+
+			::= { mantisPlusCardConfigurationTableEntry 16 }
+
+	mantisPlusMinValidPower  OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get minimum valid power ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  -40 "
+
+			::= { mantisPlusCardConfigurationTableEntry 17 }
+           
+	mantisPlusMaxValidPower OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get maximum valid power ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  4 "
+
+			::= {  mantisPlusCardConfigurationTableEntry 18 }
+
+   	mantisPlusAlarmInhibitVal   OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"set/get alarm Inhibit Value,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : enable or disable"
+
+			::= {  mantisPlusCardConfigurationTableEntry 19 }  
+
+	mantisPlusCardSoftwareUpgrade OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"set software upgrade for mantis plus ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  /home/root/anand/rel-2.tar.gz "
+
+			::= {  mantisPlusCardConfigurationTableEntry 30 }
+
+
+	mantisPlusCardSoftReset OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"set soft reset of card ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  1 "
+
+			::= {  mantisPlusCardConfigurationTableEntry 31 }
+           
+	mantisPlusCardDefaultFactoryReset OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				"restore all configuration values to defaulut factory values,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  1 "
+
+			::= {  mantisPlusCardConfigurationTableEntry 32 }
+
+	mantisPlusFactChannelPort OBJECT-TYPE
+		SYNTAX  INTEGER 
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory channel port Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  1 -> Port"
+
+			::= { mantisPlusCardConfigurationTableEntry 33 }
+
+	mantisPlusFactChannelState OBJECT-TYPE
+		SYNTAX  INTEGER 
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory channel state Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  0 -> Channel Blocked "
+
+			::= { mantisPlusCardConfigurationTableEntry 34 }
+
+	mantisPlusFactAttenuation OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255)) 
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory attenuation Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  25.5  "
+
+			::= { mantisPlusCardConfigurationTableEntry 35 }
+
+	mantisPlusFactChannelMode OBJECT-TYPE
+		SYNTAX  INTEGER 
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory channel mode Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  0 -> Attenuation Mode "
+	
+			::= { mantisPlusCardConfigurationTableEntry 36 }
+
+	mantisPlusFactStepSize OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory step size Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  1 "
+
+			::= { mantisPlusCardConfigurationTableEntry 37 }
+
+	mantisPlusFactStepDelay OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory step delay Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  1 "
+
+			::= { mantisPlusCardConfigurationTableEntry 38 }
+
+	mantisPlusFactPowerTolerance OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory power tolerance Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  1 "
+
+			::= { mantisPlusCardConfigurationTableEntry 39 }
+
+
+	mantisPlusFactInsertionLossCorrectionVal OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory insertion loss correction Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  4 "
+
+			::= { mantisPlusCardConfigurationTableEntry 40 }
+
+	mantisPlusFactMinValidAttenuation OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory minimum valid attenuation Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  0 "
+
+			::= { mantisPlusCardConfigurationTableEntry 41 }
+
+	mantisPlusFactMaxValidAttenuation OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory maximum valid attenuation Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  15 "
+
+			::= { mantisPlusCardConfigurationTableEntry 42 }
+
+	mantisPlusFactMinValidPower OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory minimum valid power Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  -40  "
+
+			::= { mantisPlusCardConfigurationTableEntry 43 }
+
+	mantisPlusFactMaxValidPower OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory maximum valid power Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  4 " 
+
+			::= { mantisPlusCardConfigurationTableEntry 44 }
+
+	mantisPlusFactMinStepSize OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory minimum step size Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  0.1 "
+
+			::= { mantisPlusCardConfigurationTableEntry 45 }
+
+	mantisPlusFactMaxStepSize OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory maximum step size Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  2 "
+
+			::= { mantisPlusCardConfigurationTableEntry 46 }
+
+	mantisPlusFactMinStepDelay OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory minimum step Delay Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  0.1 "
+
+			::= { mantisPlusCardConfigurationTableEntry 47 }
+
+	mantisPlusFactMaxStepDelay OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory maximum step Delay Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  2  "
+
+			::= { mantisPlusCardConfigurationTableEntry 48 }
+
+	mantisPlusFactMaxPowerTolerance OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory maximum power tolerance Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  2 "
+
+			::= { mantisPlusCardConfigurationTableEntry 49 }
+
+	mantisPlusFactMaxInsertionLossCorrectionVal OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory maximum insertion loss correction Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  4 "
+
+			::= { mantisPlusCardConfigurationTableEntry 50 }
+           
+     mantisPlusFactCardType  OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get factory card type Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 0
+			mantisPlusPortType		: 0
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value :  directionbox "
+
+			::= { mantisPlusCardConfigurationTableEntry 51 }
+
+	mantisPlusWssElectricalPowerOutofRangeInhibit	OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get wssElectricalPowerOutofRangeInhibit Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : 0 -> disable or 1 -> enable"
+
+			::= { mantisPlusCardConfigurationTableEntry 65 }
+
+
+	mantisPlusWssTemperatureOutofRangeInhibit	OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get wssTemperatureOutofRangeInhibit Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : 0 -> disable or 1 -> enable"
+
+			::= { mantisPlusCardConfigurationTableEntry 66 }
+
+
+	mantisPlusWssCommunicationErrorInhibit	OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get wssCommunicationErrorInhibit Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : 0 -> disable or 1 -> enable"
+
+			::= { mantisPlusCardConfigurationTableEntry 67 }
+
+
+	mantisPlusGpioExpanderChipErrorInhibit	OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get gpioExpanderChipErrorInhibit Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : 0 -> disable or 1 -> enable"
+
+			::= { mantisPlusCardConfigurationTableEntry 68 }
+
+
+	mantisPlusOcmCommunicationErrorInhibit	OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get ocmCommunicationErrorInhibit Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : 0 -> disable or 1 -> enable"
+
+			::= { mantisPlusCardConfigurationTableEntry 69 }
+
+
+	mantisPlusChannelPowerAlarmStateInhibit	OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get channelPowerAlarmStateInhibit Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1-80
+			---------------------------------
+			possible Value : 0 -> disable or 1 -> enable"
+
+			::= { mantisPlusCardConfigurationTableEntry 70 }
+
+
+  	mantisPlusWssElectricalPowerOutofRangeSeverity	OBJECT-TYPE
+		SYNTAX	DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get wssElectricalPowerOutofRangeSeverity Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : critical or major or minor"
+
+			::= { mantisPlusCardConfigurationTableEntry 81 }
+
+
+  	mantisPlusWssTemperatureOutofRangeSeverity	OBJECT-TYPE
+		SYNTAX	DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get wssTemperatureOutofRangeSeverity Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : critical or major or minor"
+
+			::= { mantisPlusCardConfigurationTableEntry 82 }              
+
+
+	mantisPlusWssCommunicationErrorSeverity	OBJECT-TYPE
+		SYNTAX	DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get wssCommunicationErrorSeverity Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : critical or major or minor"
+
+			::= { mantisPlusCardConfigurationTableEntry 83 }              
+
+
+	mantisPlusGpioExpanderChipErrorSeverity	OBJECT-TYPE
+		SYNTAX	DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get gpioExpanderChipErrorSeverity Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : critical or major or minor"
+
+			::= { mantisPlusCardConfigurationTableEntry 84 }              
+
+	mantisPlusOcmCommunicationErrorSeverity	OBJECT-TYPE
+		SYNTAX	DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get ocmCommunicationErrorSeverity Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			possible Value : critical or major or minor"
+
+			::= { mantisPlusCardConfigurationTableEntry 85 }
+
+	mantisPlusChannelPowerAlarmStateSeverity	OBJECT-TYPE
+		SYNTAX	DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-write
+		STATUS  current
+		DESCRIPTION
+				" set/get channelPowerAlarmStateSeverity Value ,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1-80
+			---------------------------------
+			possible Value : critical or major or minor"
+
+			::= { mantisPlusCardConfigurationTableEntry 86 }
+
+	mantisPlusSyncSystemTimeWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+					present in linux kernel with the NTP server
+					we can use this OID. We can provide NTP server
+					ip address as a value to this OID and the time
+					will be synced to that ilarticular server. 
+					If we are not providing NTP server IP address 
+					then the system will be synced with the NTP server 
+					which is already been registered with card. 
+					If both are absent then error message will be returned
+					-----------------------------
+						mantisPlusDirectionNo 	: 0
+						mantisPlusPortType	: 0
+						mantisPlusChannelNo	: 0
+					-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+						
+						If we don't want to provide NTP server address then no
+						need to pass any value. 
+					---------------------------"
+  						
+  		::= { mantisPlusCardConfigurationTableEntry 95 }
+  		
+  	mantisPlusSyncRtcWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in RTC with the NTP server
+  						we can use this OID. We can provide NTP server
+  						ip address as a value to this OID and the time
+  						will be synced to that particular server. 
+  						If we are not providing NTP server IP address 
+  						then the system will be synced with the NTP server 
+  						which is already been registered with card. 
+  						If both are absent then error message will be returned.
+  						-----------------------------
+						mantisPlusDirectionNo 	: 0
+						mantisPlusPortType	: 0
+						mantisPlusChannelNo	: 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+							
+						If we don't want to provide NTP server address, then no
+						need to ilass any value. 
+						---------------------------"
+  						
+  		::= { mantisPlusCardConfigurationTableEntry 96 }
+  		
+  	mantisPlusSyncRtcWithSystemTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+					present in RTC with the time value in linux kernel
+					we can use this OID. With this set operation, 
+					the time available with linux kernel will be updated
+					into RTC. It is not required to provide any value for 
+					this operation
+					-----------------------------
+					mantisPlusDirectionNo 	: 0
+					mantisPlusPortType	: 0
+					mantisPlusChannelNo	: 0
+					-----------------------------"
+  						
+  		::= { mantisPlusCardConfigurationTableEntry 97 }
+  		
+  	mantisPlusUpdateGivenTimeIntoSystem	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update system time
+					with the user provided time, we can use this OID.
+					With OID we need to provide time value which we
+					want to update in the system.
+					-----------------------------
+					mantisPlusDirectionNo 	: 0
+					mantisPlusPortType	: 0
+					mantisPlusChannelNo	: 0
+					-----------------------------
+					Value should be of given format:
+					YYYY-MM-DD H:M:S
+						
+					Example: 2017-10-31 15:20:44
+					---------------------------"
+						
+  		::= { mantisPlusCardConfigurationTableEntry 98 }
+  		
+  	mantisPlusUpdateGivenTimeIntoRtc	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update RTC time
+					with the user provided time, we can use this OID.
+					With OID we need to provide time value which we
+					want to update in RTC.
+					-----------------------------
+					mantisPlusDirectionNo 	: 0
+					mantisPlusPortType	: 0
+					mantisPlusChannelNo	: 0
+					-----------------------------
+					Value should be of given format:
+					YYYY-MM-DD H:M:S
+						
+					Example: 2017-10-31 15:20:44
+					---------------------------"
+						
+  		::= { mantisPlusCardConfigurationTableEntry 99 }
+  		
+  	mantisPlusSystemTimeAndRtcTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-only
+  		STATUS  		current
+  		DESCRIPTION	 	" get the system time and time value present in RTC.
+					-----------------------------
+					mantisPlusDirectionNo 	: 0
+					mantisPlusPortType	: 0
+					mantisPlusChannelNo	: 0
+					-----------------------------"
+						
+  		::= { mantisPlusCardConfigurationTableEntry 100 }
+
+	mantisPlusConfigurationTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+             		::= { mantisPlusCardConfigurationTableEntry 110 }
+             		
+             		
+
+           
+--*****************************************************************************
+--		 	 ALARM Table
+--*****************************************************************************              
+              
+	mantisPlusAlarmQueryTable OBJECT-TYPE
+		SYNTAX  SEQUENCE OF MantisPlusAlarmQueryEntry
+		MAX-ACCESS  not-accessible
+		STATUS  current
+		DESCRIPTION
+				"we can get alarm status "
+	
+		::= { mantisPlusAlarmQuery 1 }
+
+	mantisPlusAlarmQueryEntry OBJECT-TYPE
+		SYNTAX  MantisPlusAlarmQueryEntry
+		MAX-ACCESS  not-accessible
+		STATUS  current
+		DESCRIPTION 
+				""
+			INDEX   { node, rack , subRack , slot ,mantisPlusDirectionNo, mantisPlusPortType, mantisPlusChannelNo }
+			::= { mantisPlusAlarmQueryTable 1 }
+	
+	MantisPlusAlarmQueryEntry ::= 
+		SEQUENCE 
+		{
+			mantisPlusWssElectricalPowerOutofRange		DisplayString,
+			mantisPlusWssTemperatureOutofRange		DisplayString,
+			mantisPlusWssCommunicationError			DisplayString,
+			mantisPlusGpioExpanderChipError			DisplayString,
+			mantisPlusOcmCommunicationError			DisplayString,
+			mantisPlusChannelPowerAlarmState		DisplayString,
+			mantisPlusAlarmQueryTableRowStatus		RowStatus
+		}
+	
+
+	mantisPlusWssElectricalPowerOutofRange OBJECT-TYPE
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get wss Electrical Power Out of Range Alarm Value,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 0 -> Alarm Absent, 1 -> Alarm Present "
+
+			::= { mantisPlusAlarmQueryEntry 1 }
+              
+ 	mantisPlusWssTemperatureOutofRange OBJECT-TYPE
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get wss Temperature Out of Range Alarm Value,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Values :
+			If Alarm is Present - Date and Time Stamp
+			    	eg:2017-5-18,9:47:20.0,+5:30
+			If Alarm is Absent  - 0 "
+	
+			::= { mantisPlusAlarmQueryEntry 2 }     
+              
+	mantisPlusWssCommunicationError OBJECT-TYPE
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get wss Communication Error Alarm Value,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Values :
+			If Alarm is Present - Date and Time Stamp
+			    	eg:2017-5-18,9:47:20.0,+5:30
+			If Alarm is Absent  - 0 "
+
+			::= { mantisPlusAlarmQueryEntry 3 }    
+           
+              
+	mantisPlusGpioExpanderChipError OBJECT-TYPE
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get gpio Expander Chip Error Alarm Value,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Values :
+			If Alarm is Present - Date and Time Stamp
+			    	eg:2017-5-18,9:47:20.0,+5:30
+			If Alarm is Absent  - 0 "
+
+			::= { mantisPlusAlarmQueryEntry 4 }            
+             
+   	mantisPlusOcmCommunicationError OBJECT-TYPE
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get ocm Communication Error Alarm Value,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Values :
+			If Alarm is Present - Date and Time Stamp
+			    	eg:2017-5-18,9:47:20.0,+5:30
+			If Alarm is Absent  - 0 "
+
+			::= { mantisPlusAlarmQueryEntry 5 } 
+              
+	mantisPlusChannelPowerAlarmState OBJECT-TYPE
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get channel Power Alarm State Alarm Value,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1-80
+			---------------------------------
+			Values :
+			If Alarm is Present - Date and Time Stamp
+			    	eg:2017-5-18,9:47:20.0,+5:30
+			If Alarm is Absent  - 0 "
+
+			::= { mantisPlusAlarmQueryEntry 6 }
+
+	mantisPlusAlarmQueryTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              		::= { mantisPlusAlarmQueryEntry 7 }
+   
+        
+--*****************************************************************************
+--		 	 PERFORMANCE Table
+--*****************************************************************************                         
+                            
+     
+  	mantisPlusPerformanceQueryTable OBJECT-TYPE
+		SYNTAX  SEQUENCE OF MantisPlusPerformanceQueryEntry
+		MAX-ACCESS  not-accessible
+		STATUS  current
+		DESCRIPTION
+				"we can get card performance"
+
+		::= { mantisPlusPerformance 1 }
+
+	mantisPlusPerformanceQueryEntry OBJECT-TYPE
+		SYNTAX  MantisPlusPerformanceQueryEntry
+		MAX-ACCESS  not-accessible
+		STATUS  current
+		DESCRIPTION 
+				""
+
+			INDEX   { node, rack , subRack , slot, mantisPlusDirectionNo, mantisPlusPortType, mantisPlusChannelNo }
+			::= { mantisPlusPerformanceQueryTable 1 }
+
+	MantisPlusPerformanceQueryEntry ::= 
+		SEQUENCE 
+		{
+			mantisPlusCurrentPower			DisplayString,
+			mantisPlusWavelength			DisplayString,
+			mantisPlusFrequency			DisplayString,
+			mantisPlusCompositePower	 	DisplayString,
+			mantisPlusAveragePower	 		DisplayString,
+			mantisPlusMaxPower	 		DisplayString,
+			mantisPlusMinPower		 	DisplayString,
+			mantisPlusPowerDiff	 		DisplayString,
+			mantisPlusMaxPowerChNo	 		INTEGER,
+			mantisPlusMinPowerChNo	 		INTEGER,
+			mantisPlusChannelsPresent	 	INTEGER,
+			mantisPlusPresenceStatus	 	INTEGER,
+			mantisPlusPerformanceTableRowStatus	RowStatus
+			
+		}
+	
+	mantisPlusCurrentPower OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get current Power of a Channel, 
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1 to 80
+			---------------------------------
+			Possible Values : -10 "
+
+			::= { mantisPlusPerformanceQueryEntry 1 } 
+
+	mantisPlusWavelength OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get wavelength of a Channel, 
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1-80
+			---------------------------------
+			Possible Values : 1529.94 "
+
+			::= {  mantisPlusPerformanceQueryEntry 2 }
+
+	mantisPlusFrequency OBJECT-TYPE
+		SYNTAX  DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get frequency of a Channel, 
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1 to 80
+			---------------------------------
+			Possible Values : 191.6 "
+
+			::= {  mantisPlusPerformanceQueryEntry 3 }
+              
+	mantisPlusCompositePower OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+				"get composite Power Value,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 2 "	
+
+			::= { mantisPlusPerformanceQueryEntry 4 }
+
+	mantisPlusAveragePower OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+				"get average Power Value
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 1 "
+
+		::= { mantisPlusPerformanceQueryEntry 5 }
+
+	mantisPlusMaxPower OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+				"get maximum power of a Channel, 
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : + 4 "
+
+			::= { mantisPlusPerformanceQueryEntry 6 }
+
+	mantisPlusMinPower OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+				"get minimum power of a Channel, 
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : -40 "
+
+			::= { mantisPlusPerformanceQueryEntry 7 }
+
+	mantisPlusPowerDiff OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+				"get power difference between minimum and maximum power values
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 50 dB "
+
+		::= { mantisPlusPerformanceQueryEntry 8 }         
+	
+	mantisPlusMaxPowerChNo OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get Channel Number of maximum Power , 
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 1 to 80 "
+
+			::= { mantisPlusPerformanceQueryEntry 9 }               
+
+	mantisPlusMinPowerChNo OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get Channel Number of minimum Power , 
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 1 to 80 "
+			::= { mantisPlusPerformanceQueryEntry 10 }              
+
+      			           
+	mantisPlusChannelsPresent OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get Number of channels Present in the Card , 
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 0
+			---------------------------------
+			Possible Values : 1 to 80 "
+
+			::= {  mantisPlusPerformanceQueryEntry 11 }  	
+              
+	mantisPlusPresenceStatus   OBJECT-TYPE
+		SYNTAX  INTEGER
+		MAX-ACCESS  read-only
+		STATUS  current
+		DESCRIPTION
+				"get particular channel Presence Status,
+			---------------------------------
+			mantisPlusDirectionNo : 1
+			mantisPlusPortType		: 2
+			mantisPlusChannelNo	: 1  to 80
+			---------------------------------
+			Possible Values : 0 -> Channel Absent, 1 -> Channel Present "
+
+			::= {  mantisPlusPerformanceQueryEntry 12 }
+
+
+	mantisPlusPerformanceTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              		::= { mantisPlusPerformanceQueryEntry 13 } 
+ 
+ --*****************************************************************************
+--		 	 MANTIS PLUS Alarm Notification Table
+--***************************************************************************** 
+
+	mantisPlusWssElectricalPowerOutofRangeTrap NOTIFICATION-TYPE
+		OBJECTS { mantisPlusWssElectricalPowerOutofRange
+		}
+		STATUS  current
+		DESCRIPTION
+				"This traps is sent when wss Electrical Power Out of Range alarm state changes"
+	
+			::= { mantisPlusAlarmsNotification 1 }
+              
+	mantisPlusWssTemperatureOutofRangeTrap NOTIFICATION-TYPE
+		OBJECTS { mantisPlusWssTemperatureOutofRange
+		}
+		STATUS  current
+		DESCRIPTION
+				"This traps is sent when wss Temperature out of Range alarm state changes"
+
+			::= { mantisPlusAlarmsNotification 2 }              
+
+              
+	mantisPlusWssCommunicationErrorTrap NOTIFICATION-TYPE
+		OBJECTS { mantisPlusWssCommunicationError
+		}
+		STATUS  current
+		DESCRIPTION
+				"This traps is sent when wss Communication Error alarm state changes"
+
+			::= { mantisPlusAlarmsNotification 3 } 
+        
+              
+	mantisPlusGpioExpanderChipErrorTrap NOTIFICATION-TYPE
+		OBJECTS { mantisPlusGpioExpanderChipError
+		}
+		STATUS  current
+		DESCRIPTION
+				"This traps is sent when gpio Expander Chip Error alarm state changes"
+
+			::= { mantisPlusAlarmsNotification 4 } 
+
+     
+	mantisPlusOcmCommunicationErrorTrap NOTIFICATION-TYPE
+		OBJECTS { mantisPlusOcmCommunicationError
+		}
+		STATUS  current
+		DESCRIPTION
+				"This traps is sent when ocm Communication Error alarm state changes"
+
+			::= { mantisPlusAlarmsNotification 5 } 
+        
+              
+	mantisPlusChannelPowerAlarmStateTrap NOTIFICATION-TYPE
+		OBJECTS { mantisPlusChannelPowerAlarmState
+		}
+		STATUS  current
+		DESCRIPTION
+				"This traps is sent when channel Power Alarm State alarm state changes"
+
+			::= { mantisPlusAlarmsNotification 6 }                                           
+   
+--*****************************************************************************
+     		                     
+	snmpCurrentNotificationsGroup NOTIFICATION-GROUP
+		NOTIFICATIONS 
+		{ 
+			mantisPlusWssElectricalPowerOutofRangeTrap, 
+			mantisPlusWssTemperatureOutofRangeTrap, 
+			mantisPlusWssCommunicationErrorTrap, 	
+			mantisPlusGpioExpanderChipErrorTrap, 
+			mantisPlusOcmCommunicationErrorTrap, 
+			mantisPlusChannelPowerAlarmStateTrap
+		}
+
+		STATUS current
+		DESCRIPTION
+				"The UTL DWDM current notifications group"
+			::= { mantisPlus 5 }
+ 
+--*****************************************************************************
+     
+	snmpcurrentGroup OBJECT-GROUP
+		OBJECTS
+		{
+			mantisPlusDirectionNo,
+			mantisPlusPortType,
+			mantisPlusChannelNo,
+			mantisPlusEepromCardId,
+			mantisPlusEepromCardName,
+			mantisPlusEepromPartCode,
+			mantisPlusEepromCardSerialNumber,
+			mantisPlusEepromHardwareExternalReleaseVersion,
+			mantisPlusSoftwareExternalReleaseVersion,
+			mantisPlusEepromHardwareInternalReleaseVersion,
+			mantisPlusSoftwareInternalReleaseVersion,
+			mantisPlusEepromCardUidNumber,
+			mantisPlusEepromCardEui48Number,
+			mantisPlusEepromCardEui64Number,
+			mantisPlusCardRootFileSystemVersion,
+			mantisPlusCardInstallationDate,
+			mantisPlusCardCommissionDate,
+			mantisPlusCardRunningTime,
+			mantisPlusCardRestartCount,
+			mantisPlusBackPlaneCommunication,
+			mantisPlusConsoleCommunication,
+			mantisPlusChannelsSupported,
+			mantisPlusPortsSupported,
+			mantisPlusDirection,
+			mantisPlusCardGeneralDetailsTableRowStatus,
+			mantisPlusChannelPort,
+			mantisPlusChannelState,
+			mantisPlusAttenuation,
+			mantisPlusWssInputVoltageOfModule,
+			mantisPlusWssTemperatureOfModule,
+			mantisPlusMinValidAttn,
+			mantisPlusMaxValidAttn,
+			mantisPlusChannelMode,
+			mantisPlusTargetPower,
+			mantisPlusStepSize,
+			mantisPlusStepDelay,
+			mantisPlusPowerTolerance,
+			mantisPlusInsertionLossCorrectionVal,
+			mantisPlusMinValidPower,
+			mantisPlusMaxValidPower,
+			mantisPlusAlarmInhibitVal,
+			mantisPlusCardSoftwareUpgrade,
+			mantisPlusCardSoftReset,
+			mantisPlusCardDefaultFactoryReset,
+			mantisPlusFactChannelPort,
+			mantisPlusFactChannelState,
+			mantisPlusFactAttenuation,
+			mantisPlusFactChannelMode,
+			mantisPlusFactStepSize,
+			mantisPlusFactStepDelay,
+			mantisPlusFactPowerTolerance,
+			mantisPlusFactInsertionLossCorrectionVal,
+			mantisPlusFactMinValidAttenuation,
+			mantisPlusFactMaxValidAttenuation,
+			mantisPlusFactMinValidPower,
+			mantisPlusFactMaxValidPower,
+			mantisPlusFactMinStepSize,
+			mantisPlusFactMaxStepSize,
+			mantisPlusFactMinStepDelay,
+			mantisPlusFactMaxStepDelay,
+			mantisPlusFactMaxPowerTolerance,
+			mantisPlusFactMaxInsertionLossCorrectionVal,
+			mantisPlusFactCardType,
+			mantisPlusWssElectricalPowerOutofRangeInhibit,
+			mantisPlusWssTemperatureOutofRangeInhibit,
+			mantisPlusWssCommunicationErrorInhibit,
+			mantisPlusGpioExpanderChipErrorInhibit,
+			mantisPlusOcmCommunicationErrorInhibit,
+			mantisPlusChannelPowerAlarmStateInhibit,
+			mantisPlusWssElectricalPowerOutofRangeSeverity,
+			mantisPlusWssTemperatureOutofRangeSeverity,
+			mantisPlusWssCommunicationErrorSeverity,
+			mantisPlusGpioExpanderChipErrorSeverity,
+			mantisPlusOcmCommunicationErrorSeverity,
+			mantisPlusChannelPowerAlarmStateSeverity,
+			mantisPlusConfigurationTableRowStatus,
+			mantisPlusWssElectricalPowerOutofRange,
+			mantisPlusWssTemperatureOutofRange,
+			mantisPlusWssCommunicationError,
+			mantisPlusGpioExpanderChipError,
+			mantisPlusOcmCommunicationError,
+			mantisPlusChannelPowerAlarmState,
+			mantisPlusAlarmQueryTableRowStatus,
+			mantisPlusCurrentPower,
+			mantisPlusWavelength,
+			mantisPlusFrequency,
+			mantisPlusCompositePower,
+			mantisPlusAveragePower,
+			mantisPlusMaxPower,
+			mantisPlusMinPower,
+			mantisPlusPowerDiff,
+			mantisPlusMaxPowerChNo,
+			mantisPlusMinPowerChNo,
+			mantisPlusChannelsPresent,
+			mantisPlusPresenceStatus,
+			mantisPlusSyncSystemTimeWithNtpServer,
+			mantisPlusSyncRtcWithNtpServer,
+			mantisPlusSyncRtcWithSystemTime,
+			mantisPlusUpdateGivenTimeIntoSystem,
+			mantisPlusUpdateGivenTimeIntoRtc,
+			mantisPlusSystemTimeAndRtcTime,
+			mantisPlusPerformanceTableRowStatus
+		}
+
+		STATUS  current
+		DESCRIPTION
+				"A collection of objects from RFC 1213 made current by this MIB module."
+			::= { utlrnd 2 }
+
+END	

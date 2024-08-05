@@ -1,0 +1,4095 @@
+--*****************************************************************************
+--				UTL BA EDFA PLUS MIB
+--*****************************************************************************
+
+BAEDFA-PLUS-MIB DEFINITIONS ::= BEGIN
+
+		IMPORTS
+		RowStatus			FROM STANDARD-MIB
+
+		DisplayString			FROM RFC1213-MIB
+
+		OBJECT-IDENTITY, 
+		NOTIFICATION-TYPE, 
+		MODULE-IDENTITY, 
+		Integer32, 
+		Unsigned32, 
+		IpAddress, 
+		TimeTicks			FROM SNMPv2-SMI
+
+		OBJECT-TYPE			FROM RFC-1212
+
+		MODULE-COMPLIANCE, 
+		OBJECT-GROUP, 
+		NOTIFICATION-GROUP		FROM SNMPv2-CONF
+		
+		node, 
+		rack, 
+		subRack, 
+		slot 				FROM SCC-MIB
+
+		enterprises 			FROM RFC1155-SMI		
+
+	;
+
+	utl   	MODULE-IDENTITY
+		LAST-UPDATED		"1807130630Z"
+		ORGANIZATION		"United Telecoms Limited, Bangalore-560048."
+		CONTACT-INFO		"Website: http://www.utlindia.com."
+		DESCRIPTION		"MIB module for UTL DWDM."
+		REVISION 		"1807130630Z"
+
+		DESCRIPTION		"MIB module for BA EDFA Plus Card."
+
+		::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+		STATUS  current
+
+		DESCRIPTION "UTL R and D."
+
+		::= { utl 1 }
+
+	dwdm				OBJECT IDENTIFIER	::=   { utlrnd 1 }
+	indus				OBJECT IDENTIFIER	::=   { dwdm 1 }
+	baEdfaPlus			OBJECT IDENTIFIER 	::=   { indus 131 }
+
+	baEdfaPlusCardGeneralDetails	OBJECT IDENTIFIER 	::=   { baEdfaPlus 1 }
+	baEdfaPlusConfiguration		OBJECT IDENTIFIER 	::=   { baEdfaPlus 2 }
+	baEdfaPlusAlarm			OBJECT IDENTIFIER 	::=   { baEdfaPlus 3 }
+	baEdfaPlusPerformance		OBJECT IDENTIFIER 	::=   { baEdfaPlus 4 }	
+
+	baEdfaPlusAlarmQuery		OBJECT IDENTIFIER 	::=   { baEdfaPlusAlarm 1 }
+	baEdfaPlusAlarmNotification	OBJECT IDENTIFIER 	::=   { baEdfaPlusAlarm 2 }
+
+--*****************************************************************************
+--			BA EDFA PLUS CARD GENERAL DETAILS
+--*****************************************************************************
+
+	baEdfaPlusCardGeneralDetailsTable OBJECT-TYPE 
+		SYNTAX 		SEQUENCE OF BaEdfaPlusCardGeneralDetailsEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+
+		DESCRIPTION
+		 " we can get BA EDFA PLUS card general details "
+
+		::= { baEdfaPlusCardGeneralDetails 1 }
+
+	baEdfaPlusCardGeneralDetailsEntry OBJECT-TYPE
+		SYNTAX  	BaEdfaPlusCardGeneralDetailsEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot and baEdfaPlusInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, baEdfaPlusInterface }
+		::= { baEdfaPlusCardGeneralDetailsTable 1 }
+
+	BaEdfaPlusCardGeneralDetailsEntry ::=
+		SEQUENCE {
+				baEdfaPlusInterface							INTEGER,
+				baEdfaPlusEepromCardId							INTEGER,
+				baEdfaPlusEepromCardName						DisplayString,
+				baEdfaPlusEepromPartCode						DisplayString,
+				baEdfaPlusEepromCardSerialNumber					DisplayString,
+				baEdfaPlusEepromHardwareExternalReleaseVersion				DisplayString,
+				baEdfaPlusSoftwareExternalReleaseVersion				DisplayString,
+				baEdfaPlusEepromHardwareInternalReleaseVersion				DisplayString,
+				baEdfaPlusSoftwareInternalReleaseVersion				DisplayString,
+				baEdfaPlusEepromCardUidNumber						DisplayString,
+				baEdfaPlusEepromCardEUI48Number						DisplayString,
+				baEdfaPlusEepromCardEUI64Number						DisplayString,
+				baEdfaPlusCardRootFileSystemVersion					DisplayString,
+				baEdfaPlusInstallationDate						DisplayString,
+				baEdfaPlusCommissionDate						DisplayString,
+				baEdfaPlusCardRunningTime						DisplayString,
+				baEdfaPlusCardRestartCount						INTEGER,
+				baEdfaPlusModuleVendorName						DisplayString,
+				baEdfaPlusModuleSerialNumber						DisplayString,
+				baEdfaPlusNumberOfChannelsSupported					INTEGER,
+				baEdfaPlusNumberOfPumpSupported						INTEGER,
+				baEdfaPlusMaxGainSupported						DisplayString,
+				baEdfaPlusSaturationOutputPowerSupported				DisplayString,
+				baEdfaPlusMidStageAccessSupport						INTEGER,
+				baEdfaPlusDirection							INTEGER,
+				baEdfaPlusVoaPresenceStatus						INTEGER,
+				baEdfaPlusCardGeneralDetailsTableRowStatus				RowStatus
+			}
+
+	baEdfaPlusInterface 	OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  not-accessible
+		STATUS  	current
+		DESCRIPTION	
+			"ba edfa plus interface number should be 0 always"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 1 }
+
+	baEdfaPlusEepromCardId OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " Tells the card ID of the BAEDFA-PLUS card, present in the EEPROM "
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 2 }
+
+	baEdfaPlusEepromCardName OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the card name of the BAEDFA-PLUS card, present in the EEPROM "
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 3 }
+
+	baEdfaPlusEepromPartCode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the part code of the BAEDFA-PLUS card, present in the EEPROM "
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 4 }
+
+	baEdfaPlusEepromCardSerialNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " This property get / set the information about BAEDFA-PLUS 
+		 Card's Serial Number.
+		-----------------------------
+		Values:
+		eg: 123456
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 5 }
+
+	baEdfaPlusEepromHardwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware External Release Version. This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product.
+		-----------------------------
+		Value:
+		eg: 0.1
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 6 }
+
+	baEdfaPlusSoftwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software External Release Version.  This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product.
+		-----------------------------
+		Value:
+		eg: 0.1
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 7 }
+
+	baEdfaPlusEepromHardwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware Internal Release Version. This detail 
+		 is used for development purposes only. It differs from the external 
+		 hardware version.
+		-----------------------------
+		Value:
+		eg: 4.1
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 8 }
+
+	baEdfaPlusSoftwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software Internal Release Version.  This detail 
+		 is used for development purposes only. It differs from the external 
+		 software version.
+		-----------------------------
+		Value:
+		eg: 5.1
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 9 }
+
+	baEdfaPlusEepromCardUidNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card Unique Identifier. It is a 4 byte address used to 
+		 uniquely identify a card.
+		------------------------------
+		Value:
+	      	eg: 12345678
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 10 }
+
+	baEdfaPlusEepromCardEUI48Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-48 Number. It’s a 6 byte address used to 
+		 uniquely identify a card.
+		-----------------------------
+		Value:
+	      	eg: 0004A3123456
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 11 }
+
+	baEdfaPlusEepromCardEUI64Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-64 Number. It’s a 8 byte address
+		 used to uniquely identify a card.
+		-----------------------------
+		Value:
+	      	eg: 0004A31234567890
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 12 }
+		
+        baEdfaPlusCardRootFileSystemVersion OBJECT-TYPE		 
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS current
+		DESCRIPTION
+			"Tells the Card's Root File System Version
+			-----------------------------
+			baEdfaPlusInterface: 0
+			-----------------------------
+			Value:
+		      	eg: 8
+			-----------------------------"
+		::= { baEdfaPlusCardGeneralDetailsEntry 13 }
+
+	baEdfaPlusInstallationDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the card's installation date in dd/mm/yyyy format.
+		-----------------------------
+		Value:
+	      	eg: 12/03/2016
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 21 }
+
+	baEdfaPlusCommissionDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the card's commission date in  dd/mm/yyyy format.
+		-----------------------------
+		Value:
+	      	eg: 20/03/2016
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 22 }
+
+	baEdfaPlusCardRunningTime OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the duration of time for which the card is operational/running.
+		-----------------------------
+		Values:
+	      	eg: 3d 2h 1m
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 23 }
+
+	baEdfaPlusCardRestartCount OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the number of times the card has been soft reset. This value 
+		 will get reset to 0 on factory reset.
+		-----------------------------
+		Values:
+	      	eg: 10
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 24 }
+
+	baEdfaPlusModuleVendorName OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card module vendor name.
+		-----------------------------
+		Values:
+	      	eg: ACCELINK
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 31 }
+
+	baEdfaPlusModuleSerialNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card module serial number.
+		-----------------------------
+		Values:
+	      	eg: 12345
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 32 }
+
+	baEdfaPlusNumberOfChannelsSupported OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card supports how many number of channels.
+		-----------------------------
+		Values:
+	      	eg: 30
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 33 }
+
+	baEdfaPlusNumberOfPumpSupported OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card supports how many number of pumps.
+		-----------------------------
+		Values:
+	      	eg: 2
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 34 }
+
+	baEdfaPlusMaxGainSupported OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card supports maximum gain supported.
+		-----------------------------
+		Values:
+	      	eg: 25.0
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 35 }
+
+	baEdfaPlusSaturationOutputPowerSupported OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card supports saturation power.
+		-----------------------------
+		Values:
+	      	eg: 19.0
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 36 }
+
+	baEdfaPlusMidStageAccessSupport OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card support status of mid stage access.
+		-----------------------------
+		Values:
+	      	1 - MSA supported
+		0 - MSA not supported
+		-----------------------------"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 37 }
+		
+	baEdfaPlusDirection	OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  read-only
+		STATUS  	current
+		DESCRIPTION	" to get BA EDFA PLUS card Direction.
+		-----------------------------
+		Values:
+		1 - Direction 1
+		2 - Direction 2
+		3 - Direction 3
+		4 - Direction 4
+		-----------------------------"
+		::= { baEdfaPlusCardGeneralDetailsEntry 38 }
+
+	baEdfaPlusVoaPresenceStatus	OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  read-only
+		STATUS  	current
+		DESCRIPTION	" to get BA EDFA PLUS inbuilt voa presence status.
+		-----------------------------
+		Values:
+		1 - VOA present 
+		0 - VOA absent
+		-----------------------------"
+		::= { baEdfaPlusCardGeneralDetailsEntry 39 }
+		
+	baEdfaPlusCardGeneralDetailsTableRowStatus OBJECT-TYPE
+		SYNTAX		RowStatus
+		MAX-ACCESS	read-write
+		STATUS		current
+		DESCRIPTION
+			"This is MIB realted property,
+			NOT to be considered as a card property"
+
+		::= { baEdfaPlusCardGeneralDetailsEntry 40 }
+
+--*****************************************************************************
+--			BA EDFA PLUS CONFIGURATION
+--***************************************************************************** 
+
+	baEdfaPlusConfigurationTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF BaEdfaPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " we can get BA EDFA PLUS configuration details "
+
+		::= { baEdfaPlusConfiguration 1 }
+              
+        baEdfaPlusConfigurationEntry OBJECT-TYPE
+		SYNTAX  	BaEdfaPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot and baEdfaPlusInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, baEdfaPlusInterface }
+		
+		::= { baEdfaPlusConfigurationTable 1 }
+	
+	BaEdfaPlusConfigurationEntry ::= 
+		SEQUENCE {
+				baEdfaPlusCardSoftReset								INTEGER,
+				baEdfaPlusCardDefaultFactoryReset						INTEGER,
+
+				baEdfaPlusAlarmMonitoringStatus	 						INTEGER,
+				baEdfaPlusManageUnmanageStatus							INTEGER,
+				
+				baEdfaPlusSyncSystemTimeWithNtpServer				DisplayString,
+				baEdfaPlusSyncRtcWithNtpServer						DisplayString,
+				baEdfaPlusSyncRtcWithSystemTime						DisplayString,
+				baEdfaPlusUpdateGivenTimeIntoSystem					DisplayString,
+				baEdfaPlusUpdateGivenTimeIntoRtc					DisplayString,
+				baEdfaPlusSystemTimeAndRtcTime						DisplayString,
+
+				baEdfaPlusVariableOpticalAttenuatorReset					INTEGER,
+				baEdfaPlusLaserStatus	 							INTEGER,
+				baEdfaPlusAutomaticPowerReductionStatus	 					INTEGER,
+				baEdfaPlusAutomaticLaserShutdownStatus	 					INTEGER,
+				baEdfaPlusModuleOperatingMode							DisplayString,
+				baEdfaPlusModuleGainInAutomaticGainControlMode					DisplayString,
+				baEdfaPlusModuleOutputPowerInAutomaticPowerControlMode				DisplayString,
+				baEdfaPlusPumpOperatingCurrentInAutomaticCurrentControlMode			DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorAttenuation	 				DisplayString,
+				baEdfaPlusOutputPowerLimitInAutomaticGainControlMode				DisplayString,
+				baEdfaPlusOutputPowerLimitFunctionStatusInAutomaticGainControlMode		INTEGER,
+
+				baEdfaPlusAutomaticPowerReductionThreshold					DisplayString,
+				baEdfaPlusOpticalInputPowerFailureAlarmThreshold				DisplayString,
+				baEdfaPlusOpticalHighInputPowerAlarmThreshold					DisplayString,
+				baEdfaPlusOpticalLowInputPowerAlarmThreshold					DisplayString,
+				baEdfaPlusOpticalHighInputPowerWarningThreshold					DisplayString,
+				baEdfaPlusOpticalLowInputPowerWarningThreshold					DisplayString,
+				baEdfaPlusOpticalOutputPowerFailureAlarmThreshold				DisplayString,
+				baEdfaPlusOpticalHighOutputPowerAlarmThreshold					DisplayString,
+				baEdfaPlusOpticalLowOutputPowerAlarmThreshold					DisplayString,
+				baEdfaPlusOpticalHighOutputPowerWarningThreshold				DisplayString,
+				baEdfaPlusOpticalLowOutputPowerWarningThreshold					DisplayString,
+				baEdfaPlusModuleHighTemperatureAlarmThreshold					DisplayString,
+				baEdfaPlusModuleLowTemperatureAlarmThreshold					DisplayString,
+				baEdfaPlusModuleHighTemperatureWarningThreshold					DisplayString,
+				baEdfaPlusModuleLowTemperatureWarningThreshold					DisplayString,
+				baEdfaPlusPumpHighTemperatureAlarmThreshold					DisplayString,
+				baEdfaPlusPumpLowTemperatureAlarmThreshold					DisplayString,
+				baEdfaPlusPumpHighTemperatureWarningThreshold					DisplayString,
+				baEdfaPlusPumpLowTemperatureWarningThreshold					DisplayString,
+				baEdfaPlusPumpHighOperatingCurrentAlarmThreshold				DisplayString,
+				baEdfaPlusPumpLowOperatingCurrentAlarmThreshold					DisplayString,
+				baEdfaPlusPumpHighOperatingCurrentWarningThreshold				DisplayString,
+				baEdfaPlusPumpLowOperatingCurrentWarningThreshold				DisplayString,
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmThreshold			DisplayString,
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmThreshold			DisplayString,
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningThreshold			DisplayString,
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningThreshold			DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmThreshold 		DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmThreshold 			DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningThreshold 		DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningThreshold 		DisplayString,
+
+				baEdfaPlusOpticalInputPowerFailureAlarmInhibit 					INTEGER,
+				baEdfaPlusOpticalHighInputPowerAlarmInhibit					INTEGER,
+				baEdfaPlusOpticalLowInputPowerAlarmInhibit	 				INTEGER,
+				baEdfaPlusOpticalHighInputPowerWarningInhibit	 				INTEGER,
+				baEdfaPlusOpticalLowInputPowerWarningInhibit 					INTEGER,
+				baEdfaPlusOpticalOutputPowerFailureAlarmInhibit					INTEGER,
+				baEdfaPlusOpticalHighOutputPowerAlarmInhibit					INTEGER,
+				baEdfaPlusOpticalLowOutputPowerAlarmInhibit					INTEGER,
+				baEdfaPlusOpticalHighOutputPowerWarningInhibit					INTEGER,
+				baEdfaPlusOpticalLowOutputPowerWarningInhibit					INTEGER,
+				baEdfaPlusModuleHighTemperatureAlarmInhibit					INTEGER,
+				baEdfaPlusModuleLowTemperatureAlarmInhibit					INTEGER,
+				baEdfaPlusModuleHighTemperatureWarningInhibit					INTEGER,
+				baEdfaPlusModuleLowTemperatureWarningInhibit					INTEGER,
+				baEdfaPlusPumpHighTemperatureAlarmInhibit					INTEGER,
+				baEdfaPlusPumpLowTemperatureAlarmInhibit					INTEGER,
+				baEdfaPlusPumpHighTemperatureWarningInhibit					INTEGER,
+				baEdfaPlusPumpLowTemperatureWarningInhibit					INTEGER,
+				baEdfaPlusPumpHighOperatingCurrentAlarmInhibit					INTEGER,
+				baEdfaPlusPumpLowOperatingCurrentAlarmInhibit					INTEGER,
+				baEdfaPlusPumpHighOperatingCurrentWarningInhibit				INTEGER,
+				baEdfaPlusPumpLowOperatingCurrentWarningInhibit					INTEGER,
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmInhibit			INTEGER,
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmInhibit			INTEGER,
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningInhibit			INTEGER,
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningInhibit			INTEGER,
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmInhibit			INTEGER,
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmInhibit			INTEGER,
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningInhibit			INTEGER,
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningInhibit			INTEGER,
+				baEdfaPlusInputOutOfRangeAlarmInhibit						INTEGER,
+				baEdfaPlusOutputOutOfRangeAlarmInhibit						INTEGER,
+				baEdfaPlusPumpBiasCurrentAlarmInhibit						INTEGER,
+				baEdfaPlusPumpCoolingTemperatureAlarmInhibit					INTEGER,
+				baEdfaPlusPumpLaserPowerAlarmInhibit						INTEGER,
+
+				baEdfaPlusOpticalInputPowerFailureAlarmSeverity					DisplayString,
+				baEdfaPlusOpticalHighInputPowerAlarmSeverity					DisplayString,
+				baEdfaPlusOpticalLowInputPowerAlarmSeverity					DisplayString,
+				baEdfaPlusOpticalHighInputPowerWarningSeverity					DisplayString,
+				baEdfaPlusOpticalLowInputPowerWarningSeverity					DisplayString,
+				baEdfaPlusOpticalOutputPowerFailureAlarmSeverity				DisplayString,
+				baEdfaPlusOpticalHighOutputPowerAlarmSeverity					DisplayString,
+				baEdfaPlusOpticalLowOutputPowerAlarmSeverity					DisplayString,
+				baEdfaPlusOpticalHighOutputPowerWarningSeverity					DisplayString,
+				baEdfaPlusOpticalLowOutputPowerWarningSeverity					DisplayString,
+				baEdfaPlusModuleHighTemperatureAlarmSeverity					DisplayString,
+				baEdfaPlusModuleLowTemperatureAlarmSeverity					DisplayString,
+				baEdfaPlusModuleHighTemperatureWarningSeverity					DisplayString,
+				baEdfaPlusModuleLowTemperatureWarningSeverity					DisplayString,
+				baEdfaPlusPumpHighTemperatureAlarmSeverity					DisplayString,
+				baEdfaPlusPumpLowTemperatureAlarmSeverity					DisplayString,
+				baEdfaPlusPumpHighTemperatureWarningSeverity					DisplayString,
+				baEdfaPlusPumpLowTemperatureWarningSeverity					DisplayString,
+				baEdfaPlusPumpHighOperatingCurrentAlarmSeverity					DisplayString,
+				baEdfaPlusPumpLowOperatingCurrentAlarmSeverity					DisplayString,
+				baEdfaPlusPumpHighOperatingCurrentWarningSeverity				DisplayString,
+				baEdfaPlusPumpLowOperatingCurrentWarningSeverity				DisplayString,
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmSeverity			DisplayString,
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmSeverity			DisplayString,
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningSeverity			DisplayString,
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningSeverity			DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmSeverity			DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmSeverity			DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningSeverity		DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningSeverity			DisplayString,
+				baEdfaPlusInputOutOfRangeAlarmSeverity						DisplayString,
+				baEdfaPlusOutputOutOfRangeAlarmSeverity						DisplayString,
+				baEdfaPlusPumpBiasCurrentAlarmSeverity						DisplayString,
+				baEdfaPlusPumpCoolingTemperatureAlarmSeverity					DisplayString,
+				baEdfaPlusPumpLaserPowerAlarmSeverity						DisplayString,
+				baEdfaPlusCardSoftwareUpgrade							DisplayString,
+				baEdfaPlusConfigurationTableRowStatus						RowStatus
+			}
+
+	baEdfaPlusCardSoftReset OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		"Valid only as a SET command.
+		Reboots the Card, Reconfigures the Card 
+		i.e All Configuration Parameter	like Laser State,
+		thresholds, operating mode & gain will be restored to 
+		previous state.
+		-----------------------------
+		Values:
+		Dont care, any value
+		eg: 0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 1 }		
+	
+	baEdfaPlusCardDefaultFactoryReset OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		"Valid only as a SET command.
+		Sets the Card To Factory Default State
+		i.e All Configuration Parameter	like Laser State,
+		thresholds, operating mode & gain will be set to 
+		default state.
+		-----------------------------
+		Values:
+		Dont care, any value
+		eg: 0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 2 }
+
+	baEdfaPlusAlarmMonitoringStatus OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		"This property sets or gets the card's Alarm
+		monitoring state. Disabling card alarm monitoring 
+		will not provide any alarms and performances
+		information to the user.
+		-----------------------------
+		Values:
+		1 - Card Alarm Monitoring is enabled
+		0 - Card Alarm Monitoring is disabled
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 3 }
+
+	baEdfaPlusManageUnmanageStatus OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 "This property will tell whether the card is 
+		accessible from EMS/LCT or not. Turning off the
+		accessbility to the card, will not allow the user
+		to access any configuration, alarm or performance
+		of the card and also turns off fast alarm
+		triggering, global alarm led indication
+		-----------------------------
+		Values:
+		1 - Card is accessible from EMS/LCT
+		0 - Card is inaccessible from EMS/LCT
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 4 }
+
+	baEdfaPlusSyncSystemTimeWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+					present in linux kernel with the NTP server
+					we can use this OID. We can provide NTP server
+					ip address as a value to this OID and the time
+					will be synced to that particular server. 
+					If we are not providing NTP server IP address 
+					then the system will be synced with the NTP server 
+					which is already been registered with card. 
+					If both are absent then error message will be returned
+					-----------------------------
+						Interface : 0
+					-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+						
+						If we don't want to provide NTP server address then no
+						need to pass any value. 
+					---------------------------"
+  						
+  		::= { baEdfaPlusConfigurationEntry 5 }
+  		
+  	baEdfaPlusSyncRtcWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in RTC with the NTP server
+  						we can use this OID. We can provide NTP server
+  						ip address as a value to this OID and the time
+  						will be synced to that particular server. 
+  						If we are not providing NTP server IP address 
+  						then the system will be synced with the NTP server 
+  						which is already been registered with card. 
+  						If both are absent then error message will be returned.
+  						-----------------------------
+						Interface : 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+							
+						If we don't want to provide NTP server address, then no
+						need to pass any value. 
+						---------------------------"
+  						
+  		::= { baEdfaPlusConfigurationEntry 6 }
+  		
+  	baEdfaPlusSyncRtcWithSystemTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in RTC with the time value in linux kernel
+  						we can use this OID. With this set operation, 
+  						the time available with linux kernel will be updated
+  						into RTC. It is not required to provide any value for 
+  						this operation"
+  						
+  		::= { baEdfaPlusConfigurationEntry 7 }
+  		
+  	baEdfaPlusUpdateGivenTimeIntoSystem	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update system time
+  						with the user provided time, we can use this OID.
+  						With OID we need to provide time value which we
+  						want to update in the system.
+  						-----------------------------
+						Interface : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { baEdfaPlusConfigurationEntry 8 }
+  		
+  	baEdfaPlusUpdateGivenTimeIntoRtc	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update RTC time
+  						with the user provided time, we can use this OID.
+  						With OID we need to provide time value which we
+  						want to update in RTC.
+  						-----------------------------
+						Interface : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { baEdfaPlusConfigurationEntry 9 }
+  		
+  	baEdfaPlusSystemTimeAndRtcTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-only
+  		STATUS  		current
+  		DESCRIPTION	 	" get the system time and time value present in RTC.
+  						-----------------------------
+						Interface : 0
+						-----------------------------"
+						
+  		::= { baEdfaPlusConfigurationEntry 10 }
+
+	baEdfaPlusVariableOpticalAttenuatorReset OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to reset variable optical attenuator of BA EDFA PLUS card.
+		-----------------------------
+		Values:
+		Dont care, any value
+		eg: 0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 21 }
+
+	baEdfaPlusLaserStatus OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card laser status.
+		-----------------------------
+		Values:
+		1 - Laser ON
+		0 - Laser OFF
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 22 }
+
+	baEdfaPlusAutomaticPowerReductionStatus OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card automatic power reduction status.
+		-----------------------------
+		Values:
+		1 - Automatic power reduction function ON
+		0 - Automatic power reduction function OFF
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 23 }
+
+	baEdfaPlusAutomaticLaserShutdownStatus OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card automatic laser shutdown status.
+		-----------------------------
+		Values:
+		1 - Automatic laser shutdown function ON
+		0 - Automatic laser shutdown function OFF
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 24 }
+
+	baEdfaPlusModuleOperatingMode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module operating mode.
+		-----------------------------
+		Values:
+		APC - Automatic power control mode
+		AGC - Automatic gain control mode
+		ACC - Automatic current control mode
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 25 }		
+      
+	baEdfaPlusModuleGainInAutomaticGainControlMode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module gain in automatic gain control mode.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 26 }		
+      
+	baEdfaPlusModuleOutputPowerInAutomaticPowerControlMode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module output power in automatic power control mode.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 27 }		
+    
+	baEdfaPlusPumpOperatingCurrentInAutomaticCurrentControlMode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump operating current in automatic current control mode.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 28 }
+                  
+	baEdfaPlusVariableOpticalAttenuatorAttenuation OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator attenuation.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 29 }	
+
+	baEdfaPlusOutputPowerLimitInAutomaticGainControlMode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card output power limit in automatic gain control mode.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 30 }
+
+	baEdfaPlusOutputPowerLimitFunctionStatusInAutomaticGainControlMode OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card output power limit function enable/disable status.
+		-----------------------------
+		Values:
+		1 - Output power limit function will be enabled 
+		0 - Output power limit function will be disabled 
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 31 }	
+      
+	baEdfaPlusAutomaticPowerReductionThreshold OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card automatic power reduction threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 51 }		
+              
+	baEdfaPlusOpticalInputPowerFailureAlarmThreshold OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical input power failure alarm threshold.
+		-----------------------------
+		Values:
+		eg. : -21.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 52 }	
+              
+     	baEdfaPlusOpticalHighInputPowerAlarmThreshold OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high input power alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 53 }         
+         
+      	baEdfaPlusOpticalLowInputPowerAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low input power alarm threshold.
+		-----------------------------
+		Values:
+		eg. : -15.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 54 }
+
+	baEdfaPlusOpticalHighInputPowerWarningThreshold OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high input power warning threshold.
+		-----------------------------
+		Values:
+		eg. : 13.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 55 }         
+         
+      	baEdfaPlusOpticalLowInputPowerWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low input power warning threshold.
+		-----------------------------
+		Values:
+		eg. : -14.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 56 } 
+
+	baEdfaPlusOpticalOutputPowerFailureAlarmThreshold OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical output power failure alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 5.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 57 }         
+         
+      	baEdfaPlusOpticalHighOutputPowerAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high output power alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 19.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 58 } 
+
+	baEdfaPlusOpticalLowOutputPowerAlarmThreshold OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low output power alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 10.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 59 }         
+         
+      	baEdfaPlusOpticalHighOutputPowerWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high output power warning threshold.
+		-----------------------------
+		Values:
+		eg. : 18.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 60 } 
+
+	baEdfaPlusOpticalLowOutputPowerWarningThreshold OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low output power warning threshold.
+		-----------------------------
+		Values:
+		eg. : 8.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 61 }         
+         
+      	baEdfaPlusModuleHighTemperatureAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module high temperature alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 75.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 62 } 
+
+	baEdfaPlusModuleLowTemperatureAlarmThreshold OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module low temperature alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 0.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 63 }         
+         
+      	baEdfaPlusModuleHighTemperatureWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module high temperature warning threshold.
+		-----------------------------
+		Values:
+		eg. : 60.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 64 }             
+
+	baEdfaPlusModuleLowTemperatureWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module low temperature warning threshold.
+		-----------------------------
+		Values:
+		eg. : 4.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 65 }
+
+	baEdfaPlusPumpHighTemperatureAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high temperature alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 75.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 66 }
+
+	baEdfaPlusPumpLowTemperatureAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low temperature alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 0.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 67 }
+
+	baEdfaPlusPumpHighTemperatureWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high temperature warning threshold.
+		-----------------------------
+		Values:
+		eg. : 60.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 68 }
+
+	baEdfaPlusPumpLowTemperatureWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low temperature warning threshold.
+		-----------------------------
+		Values:
+		eg. : 4.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 69 }
+
+	baEdfaPlusPumpHighOperatingCurrentAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high operating current alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 70 }
+
+	baEdfaPlusPumpLowOperatingCurrentAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low operating current alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 71 }
+	
+	baEdfaPlusPumpHighOperatingCurrentWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high operating current warning threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 72 }
+
+	baEdfaPlusPumpLowOperatingCurrentWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high operating current warning threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 73 }
+
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high Thermo electric cooler current alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 74 }
+
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low thermo electric cooler current alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 75 }
+
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high thermo electric cooler current warning threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 76 }
+
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low thermo electric cooler current warning threshold.
+		-----------------------------
+		Values:
+		eg. : 15.5
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 77 }
+
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator high input power alarm threshold.
+		-----------------------------
+		Values:
+		eg. : 6.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 78 }
+
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator low input power alarm threshold.
+		-----------------------------
+		Values:
+		eg. : -18.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 79 }
+
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator high input power warning threshold.
+		-----------------------------
+		Values:
+		eg. : 4.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 80 }
+
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningThreshold  OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator low input power alarm threshold.
+		-----------------------------
+		Values:
+		eg. : -15.0
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 81 }
+
+	baEdfaPlusOpticalInputPowerFailureAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical input power failure alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 101 }	                                              
+                      
+	baEdfaPlusOpticalHighInputPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high input power alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 102 }	              
+                      
+	baEdfaPlusOpticalLowInputPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low input power alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 103 }	              
+                      
+	baEdfaPlusOpticalHighInputPowerWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high input power warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 104 }	              
+                      
+	baEdfaPlusOpticalLowInputPowerWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low input power warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 105 }              
+                    
+	baEdfaPlusOpticalOutputPowerFailureAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical output power failure alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 106 }
+
+	baEdfaPlusOpticalHighOutputPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high output power alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 107 }
+
+	baEdfaPlusOpticalLowOutputPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low output power alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 108 }
+
+	baEdfaPlusOpticalHighOutputPowerWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high output power warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 109 }
+
+	baEdfaPlusOpticalLowOutputPowerWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low output power warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 110 }
+
+	baEdfaPlusModuleHighTemperatureAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module high temperature alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 111 }
+
+	baEdfaPlusModuleLowTemperatureAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module low temperature alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 112 }
+
+	baEdfaPlusModuleHighTemperatureWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module high temperature warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 113 }
+
+	baEdfaPlusModuleLowTemperatureWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module low temperature warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 114 }
+
+	baEdfaPlusPumpHighTemperatureAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high temperature alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 115 }
+
+	baEdfaPlusPumpLowTemperatureAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low temperature alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 116 }
+
+	baEdfaPlusPumpHighTemperatureWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high temperature warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 117 }
+
+	baEdfaPlusPumpLowTemperatureWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low temperature warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 118 }
+
+	baEdfaPlusPumpHighOperatingCurrentAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high operating current alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 119 }
+
+	baEdfaPlusPumpLowOperatingCurrentAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low operating current alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 120 }
+
+	baEdfaPlusPumpHighOperatingCurrentWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high operating current warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 121 }
+
+	baEdfaPlusPumpLowOperatingCurrentWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low operating current warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 122 }
+
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high thermo electric cooler current alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 123 }
+
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low thermo electric cooler current alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 124 }
+
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high thermo electric cooler current warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 125 }
+
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low thermo electric cooler current warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 126 } 
+                               	
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator high input power alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 127 }
+
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator low input power alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 128 }
+
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator high input power warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 129 }
+
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator low input power warning inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 130 }
+
+	baEdfaPlusInputOutOfRangeAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card Input Out Of Range Alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 131 }
+
+	baEdfaPlusOutputOutOfRangeAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card Output Out Of Range Alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 132 }
+
+	baEdfaPlusPumpBiasCurrentAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card Pump Bias Current Alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 133 }
+
+	baEdfaPlusPumpCoolingTemperatureAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump cooling temperature alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 134 }
+		
+	baEdfaPlusPumpLaserPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump laser power alarm inhibit status.
+		-----------------------------
+		Value:
+		1 - Inhibit
+		0 - Do Not Inhibit
+		-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 135 }
+
+	baEdfaPlusOpticalInputPowerFailureAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical input power failure alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 151 }	                                              
+                      
+	baEdfaPlusOpticalHighInputPowerAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high input power alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 152 }	              
+                      
+	baEdfaPlusOpticalLowInputPowerAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low input power alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 153 }	              
+                      
+	baEdfaPlusOpticalHighInputPowerWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high input power warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 154 }	              
+                      
+	baEdfaPlusOpticalLowInputPowerWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low input power warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 155 }              
+                    
+	baEdfaPlusOpticalOutputPowerFailureAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical output power failure alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 156 }
+
+	baEdfaPlusOpticalHighOutputPowerAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high output power alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 157 }
+
+	baEdfaPlusOpticalLowOutputPowerAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low output power alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 158 }
+
+	baEdfaPlusOpticalHighOutputPowerWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical high output power warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 159 }
+
+	baEdfaPlusOpticalLowOutputPowerWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card optical low output power warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 160 }
+
+	baEdfaPlusModuleHighTemperatureAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module high temperature alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 161 }
+
+	baEdfaPlusModuleLowTemperatureAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module low temperature alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 162 }
+
+	baEdfaPlusModuleHighTemperatureWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module high temperature warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 163 }
+
+	baEdfaPlusModuleLowTemperatureWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card module low temperature warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 164 }
+
+	baEdfaPlusPumpHighTemperatureAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high temperature alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 165 }
+
+	baEdfaPlusPumpLowTemperatureAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low temperature alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 166 }
+
+	baEdfaPlusPumpHighTemperatureWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high temperature warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 167 }
+
+	baEdfaPlusPumpLowTemperatureWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low temperature warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 168 }
+
+	baEdfaPlusPumpHighOperatingCurrentAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high operating current alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 169 }
+
+	baEdfaPlusPumpLowOperatingCurrentAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low operating current alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 170 }
+
+	baEdfaPlusPumpHighOperatingCurrentWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high operating current warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 171 }
+
+	baEdfaPlusPumpLowOperatingCurrentWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low operating current warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 172 }
+
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high thermo electric cooler current alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 173 }
+
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low thermo electric cooler current alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 174 }
+
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump high thermo electric cooler current warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 175 }
+
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump low thermo electric cooler current warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 176 } 
+                               	
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator high input power alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 177 }
+
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator low input power alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 178 }
+
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator high input power warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 179 }
+
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card variable optical attenuator low input power warning severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 180 }
+
+	baEdfaPlusInputOutOfRangeAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card Input Out Of Range alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 181 }
+
+	baEdfaPlusOutputOutOfRangeAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card Output Out Of Range alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 182 }
+
+	baEdfaPlusPumpBiasCurrentAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card Pump Bias Current alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 183 }
+
+	baEdfaPlusPumpCoolingTemperatureAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump cooling temperature alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 184 }
+
+	baEdfaPlusPumpLaserPowerAlarmSeverity OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " to set/get BA EDFA PLUS card pump laser power alarm severity level.
+		-----------------------------
+		Value:
+		critical
+		major
+		minor
+		deferred
+		---------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 185 }
+
+	baEdfaPlusCardSoftwareUpgrade OBJECT-TYPE
+		SYNTAX 		DisplayString
+		MAX-ACCESS 	read-write
+		STATUS 		current
+		DESCRIPTION
+			"Valid only as SET command.
+			This property upgrades the software of the BA-EDFA-PLUS card
+			It takes the path of the software release as
+			a value,
+			baEdfaPlusInterface: 0
+			Values:
+			eg: /home/root/rel-2.0.0.tar.gz
+			-----------------------------"
+
+		::= { baEdfaPlusConfigurationEntry 280 }
+
+	baEdfaPlusConfigurationTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              ::= { baEdfaPlusConfigurationEntry 281 }
+
+--*****************************************************************************
+--				BA EDFA PLUS ALARMS
+--*****************************************************************************         
+              
+	baEdfaPlusAlarmQueryTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF BaEdfaPlusAlarmQueryEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 "we can get BA EDFA PLUS card alarm details"
+
+		::= { baEdfaPlusAlarmQuery 1 }
+	      
+	baEdfaPlusAlarmQueryEntry OBJECT-TYPE
+		SYNTAX  	BaEdfaPlusAlarmQueryEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot and baEdfaPlusInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, baEdfaPlusInterface }
+		
+		::= { baEdfaPlusAlarmQueryTable 1 }
+
+	BaEdfaPlusAlarmQueryEntry ::= 
+		SEQUENCE {
+				baEdfaPlusOpticalInputPowerFailureAlarm 			DisplayString,
+				baEdfaPlusOpticalHighInputPowerAlarm				DisplayString,
+				baEdfaPlusOpticalLowInputPowerAlarm	 			DisplayString,
+				baEdfaPlusOpticalHighInputPowerWarning	 			DisplayString,
+				baEdfaPlusOpticalLowInputPowerWarning 				DisplayString,
+				baEdfaPlusOpticalOutputPowerFailureAlarm			DisplayString,
+				baEdfaPlusOpticalHighOutputPowerAlarm				DisplayString,
+				baEdfaPlusOpticalLowOutputPowerAlarm				DisplayString,
+				baEdfaPlusOpticalHighOutputPowerWarning				DisplayString,
+				baEdfaPlusOpticalLowOutputPowerWarning				DisplayString,
+				baEdfaPlusModuleHighTemperatureAlarm				DisplayString,
+				baEdfaPlusModuleLowTemperatureAlarm				DisplayString,
+				baEdfaPlusModuleHighTemperatureWarning				DisplayString,
+				baEdfaPlusModuleLowTemperatureWarning				DisplayString,
+				baEdfaPlusPumpHighTemperatureAlarm				DisplayString,
+				baEdfaPlusPumpLowTemperatureAlarm				DisplayString,
+				baEdfaPlusPumpHighTemperatureWarning				DisplayString,
+				baEdfaPlusPumpLowTemperatureWarning				DisplayString,
+				baEdfaPlusPumpHighOperatingCurrentAlarm				DisplayString,
+				baEdfaPlusPumpLowOperatingCurrentAlarm				DisplayString,
+				baEdfaPlusPumpHighOperatingCurrentWarning			DisplayString,
+				baEdfaPlusPumpLowOperatingCurrentWarning			DisplayString,
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarm		DisplayString,
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarm		DisplayString,
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentWarning		DisplayString,
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentWarning		DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarm 		DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarm 		DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarning 	DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarning 	DisplayString,
+				baEdfaPlusInputOutOfRangeAlarm					DisplayString,
+				baEdfaPlusOutputOutOfRangeAlarm					DisplayString,			
+				baEdfaPlusPumpBiasCurrentAlarm					DisplayString,
+				baEdfaPlusPumpCoolingTemperatureAlarm				DisplayString,
+				baEdfaPlusPumpLaserPowerAlarm					DisplayString,
+				baEdfaPlusAlarmQueryTableRowStatus				RowStatus
+			}
+
+	baEdfaPlusOpticalInputPowerFailureAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical input power failure alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 1 }	              
+		      
+	baEdfaPlusOpticalHighInputPowerAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical high input power alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 2 }	              
+		      
+	baEdfaPlusOpticalLowInputPowerAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical low input power alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 3 }	              
+		      
+	baEdfaPlusOpticalHighInputPowerWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical high input power warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 4 }	              
+		      
+	baEdfaPlusOpticalLowInputPowerWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical low input power warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+	
+	      ::= { baEdfaPlusAlarmQueryEntry 5 }	              
+		      
+	baEdfaPlusOpticalOutputPowerFailureAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical high output power failure alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 6 }	              
+		      
+	baEdfaPlusOpticalHighOutputPowerAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical high output power alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 7 }
+
+	baEdfaPlusOpticalLowOutputPowerAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical low output power alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 8 }	              
+		      
+	baEdfaPlusOpticalHighOutputPowerWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical high output power warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 9 }	              
+		      
+	baEdfaPlusOpticalLowOutputPowerWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card optical low output power warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 10 }	              
+		      
+	baEdfaPlusModuleHighTemperatureAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card module high temperature alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 11 }	              
+		      
+	baEdfaPlusModuleLowTemperatureAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card module low temperature alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+	
+	      ::= { baEdfaPlusAlarmQueryEntry 12 }	              
+		      
+	baEdfaPlusModuleHighTemperatureWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card module high temperature warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 13 }	              
+		      
+	baEdfaPlusModuleLowTemperatureWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card module low temperature warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 14 }
+
+	baEdfaPlusPumpHighTemperatureAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump high temperature alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 15 }	              
+		      
+	baEdfaPlusPumpLowTemperatureAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump low temperature alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 16 }	              
+	      
+	baEdfaPlusPumpHighTemperatureWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump high temperature warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 17 }	              
+		      
+	baEdfaPlusPumpLowTemperatureWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump low temperature warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 18 }	              
+		      
+	baEdfaPlusPumpHighOperatingCurrentAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump high operating current alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+	
+	      ::= { baEdfaPlusAlarmQueryEntry 19 }	              
+		      
+	baEdfaPlusPumpLowOperatingCurrentAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump low operating current alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 20 }	              
+		      
+	baEdfaPlusPumpHighOperatingCurrentWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump high operating current warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 21 }
+
+	baEdfaPlusPumpLowOperatingCurrentWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump low operating current warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 22 }
+
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump high thermo electric cooler current alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 23 }
+
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump low thermo electric cooler current alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 24 }
+
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump high thermo electric cooler current warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 25 }
+
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump low thermo electric cooler current warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 26 }
+
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card variable optical attenuator high input power alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 27 }
+
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card variable optical attenuator low input power alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 28 }
+
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card variable optical attenuator high input power warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 29 }
+
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarning OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card variable optical attenuator low input power warning status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 30 }	              
+
+	baEdfaPlusInputOutOfRangeAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card input out of range alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 31 }
+
+	baEdfaPlusOutputOutOfRangeAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card output out of range alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 32 }
+
+	baEdfaPlusPumpBiasCurrentAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump bias current alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 33 }
+
+	baEdfaPlusPumpCoolingTemperatureAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump cooling temperature alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 34 }
+
+	baEdfaPlusPumpLaserPowerAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		" to get BA EDFA PLUS card pump laser power alarm status.
+		-----------------------------
+		Values :
+		If Alarm is Present - Date and Time Stamp
+			    eg:2017-5-18,9:47:20.0,+5:30
+		If Alarm is Absent  - 0
+		-----------------------------"
+
+		::= { baEdfaPlusAlarmQueryEntry 35 }
+
+	baEdfaPlusAlarmQueryTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              ::= { baEdfaPlusAlarmQueryEntry 36 }
+
+--*****************************************************************************
+--				BA EDFA PLUS PERFORMANCE
+--***************************************************************************** 
+
+	baEdfaPlusPerformanceTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF BaEdfaPlusPerformanceEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 "we can get BA EDFA PLUS card performance details "
+
+		::= { baEdfaPlusPerformance 1 }
+	      
+	baEdfaPlusPerformanceEntry OBJECT-TYPE
+		SYNTAX  	BaEdfaPlusPerformanceEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot and baEdfaPlusInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, baEdfaPlusInterface }
+		
+		::= { baEdfaPlusPerformanceTable 1 }
+	
+	BaEdfaPlusPerformanceEntry ::= 
+		SEQUENCE {
+				baEdfaPlusModuleTemperature				DisplayString,
+				baEdfaPlusInputPower					DisplayString,
+				baEdfaPlusOutputPower					DisplayString,
+				baEdfaPlusAmplifiedSpontaneousEmmissionPower		DisplayString,
+				baEdfaPlusSignalGain					DisplayString,
+				baEdfaPlusSignalOutputPower				DisplayString,
+				baEdfaPlusPumpLaserPower				DisplayString,
+				baEdfaPlusPumpTemperature				DisplayString,
+				baEdfaPlusPumpOperatingCurrent				DisplayString,
+				baEdfaPlusPumpThermoElectricCoolerCurrent		DisplayString,
+				baEdfaPlusPumpCoolingTemperature			DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorInputPower		DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorOutputPower		DisplayString,
+				baEdfaPlusVariableOpticalAttenuatorActualAttenuation	DisplayString,
+				baEdfaPlusPerformanceTableRowStatus			RowStatus					
+			}
+	
+	baEdfaPlusModuleTemperature OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card module temperature.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 1 }
+
+	baEdfaPlusInputPower OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card input power.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 2 }
+
+	baEdfaPlusOutputPower OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card output power.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+	
+	      ::= { baEdfaPlusPerformanceEntry 3 }	
+
+	baEdfaPlusAmplifiedSpontaneousEmmissionPower OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card Amplified Spontaneous Emmission power.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 4 }
+
+	baEdfaPlusSignalGain OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS signal gain.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 5 }
+
+	baEdfaPlusSignalOutputPower OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card signal output power.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 6 }	  	 
+	      
+	baEdfaPlusPumpLaserPower OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump laser power.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 16 }	 
+	      
+	baEdfaPlusPumpTemperature OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump temperature.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 17 }	 
+
+	baEdfaPlusPumpOperatingCurrent OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump operating current.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 18 }	 
+	      
+	baEdfaPlusPumpThermoElectricCoolerCurrent OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card thermo electric cooler current.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+	
+	      ::= { baEdfaPlusPerformanceEntry 19 }	 
+
+	baEdfaPlusPumpCoolingTemperature OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card pump cooling temperature.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 20 }
+	      
+	baEdfaPlusVariableOpticalAttenuatorInputPower OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card variable optical attenuator input power.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 31 }	 
+	      
+		
+	baEdfaPlusVariableOpticalAttenuatorOutputPower OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card output power.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 32 }	 
+
+	baEdfaPlusVariableOpticalAttenuatorActualAttenuation OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " to get BA EDFA PLUS card variable optical attenuator actual attenuation.
+		-----------------------------
+		Values:
+		eg: 18.5
+		-----------------------------"
+
+		::= { baEdfaPlusPerformanceEntry 33 }
+
+	baEdfaPlusPerformanceTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              ::= { baEdfaPlusPerformanceEntry 34 }
+--*****************************************************************************
+--		 	 BA EDFA PLUS Alarm Notification Table
+--***************************************************************************** 
+
+	baEdfaPlusOpticalInputPowerFailureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalInputPowerFailureAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical input power failure alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 1 }
+	      
+	baEdfaPlusOpticalHighInputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalHighInputPowerAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical high input power alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 2 }              
+
+	      
+	baEdfaPlusOpticalLowInputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalLowInputPowerAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical low input power alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 3 } 
+	      
+	      
+	baEdfaPlusOpticalHighInputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalHighInputPowerWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical high input power warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 4 } 
+	      
+	      
+	baEdfaPlusOpticalLowInputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalLowInputPowerWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical low input power warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 5 }      
+	      
+	baEdfaPlusOpticalOutputPowerFailureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalOutputPowerFailureAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical output power failure alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 6 }  
+	     
+	baEdfaPlusOpticalHighOutputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalHighOutputPowerAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical high output power alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 7 }  
+
+	baEdfaPlusOpticalLowOutputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalLowOutputPowerAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical low output power alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 8 }
+	      
+	baEdfaPlusOpticalHighOutputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalHighOutputPowerWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical high output power warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 9 }              
+
+	      
+	baEdfaPlusOpticalLowOutputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOpticalLowOutputPowerWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus optical low output power warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 10 } 
+	      
+	      
+	baEdfaPlusModuleHighTemperatureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusModuleHighTemperatureAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus module high temperature alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 11 } 
+	      
+	      
+	baEdfaPlusModuleLowTemperatureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusModuleLowTemperatureAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus module low temperature alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 12 }      
+	      
+	baEdfaPlusModuleHighTemperatureWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusModuleHighTemperatureWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus module high temperature warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 13 }  
+	     
+	baEdfaPlusModuleLowTemperatureWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusModuleLowTemperatureWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus module low temperature warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 14 } 
+
+	baEdfaPlusPumpHighTemperatureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpHighTemperatureAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump high temperature alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 15 }
+	      
+	baEdfaPlusPumpLowTemperatureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpLowTemperatureAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump low temperature alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 16 }              
+
+	      
+	baEdfaPlusPumpHighTemperatureWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpHighTemperatureWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump high temperature warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 17 } 
+	      
+	      
+	baEdfaPlusPumpLowTemperatureWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpLowTemperatureWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump low temperature warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 18 } 
+	      
+	      
+	baEdfaPlusPumpHighOperatingCurrentAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpHighOperatingCurrentAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump high operating current alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 19 }      
+	      
+	baEdfaPlusPumpLowOperatingCurrentAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpLowOperatingCurrentAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump low operating current alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 20 }  
+	     
+	baEdfaPlusPumpHighOperatingCurrentWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpHighOperatingCurrentWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump high operating current warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 21 } 
+
+	baEdfaPlusPumpLowOperatingCurrentWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpLowOperatingCurrentWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump low operating current warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 22 }
+	      
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump high thermo electric cooler current alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 23 }              
+
+	      
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump low thermo electric cooler current alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 24 } 
+	      
+	      
+	baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpHighThermoElectricCoolerCurrentWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump high thermo electric cooler current warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 25 } 
+	      
+	      
+	baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpLowThermoElectricCoolerCurrentWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump low thermo electric cooler current warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 26 }            
+	      
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus variable optical attenuator high input power alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 27 }              
+
+	      
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus variable optical attenuator low input power alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 28 } 
+	      
+	      
+	baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus variable optical attenuator high input power warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 29 } 
+	      
+	      
+	baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarning
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus variable optical attenuator low input power warning state changes "
+
+		::= { baEdfaPlusAlarmNotification 30 } 
+
+	baEdfaPlusInputOutOfRangeAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusInputOutOfRangeAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus input out of range alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 31 }
+
+	baEdfaPlusOutputOutOfRangeAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusOutputOutOfRangeAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus output out of range alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 32 }
+	      
+	baEdfaPlusPumpBiasCurrentAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpBiasCurrentAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump bias current alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 33 } 
+
+	baEdfaPlusPumpCoolingTemperatureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpCoolingTemperatureAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump cooling temperature alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 34 }
+
+	baEdfaPlusPumpLaserPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { baEdfaPlusPumpLaserPowerAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This trap is sent when baEdfaPlus pump laser power alarm state changes "
+
+		::= { baEdfaPlusAlarmNotification 35 }
+	      
+--*****************************************************************************
+             
+	snmpCurrentNotificationsGroup NOTIFICATION-GROUP
+		NOTIFICATIONS 	{ 
+					baEdfaPlusOpticalInputPowerFailureAlarmTrap, 			
+					baEdfaPlusOpticalHighInputPowerAlarmTrap,
+					baEdfaPlusOpticalLowInputPowerAlarmTrap,
+					baEdfaPlusOpticalHighInputPowerWarningTrap,
+					baEdfaPlusOpticalLowInputPowerWarningTrap,
+					baEdfaPlusOpticalOutputPowerFailureAlarmTrap,
+					baEdfaPlusOpticalHighOutputPowerAlarmTrap,
+					baEdfaPlusOpticalLowOutputPowerAlarmTrap,
+					baEdfaPlusOpticalHighOutputPowerWarningTrap,
+					baEdfaPlusOpticalLowOutputPowerWarningTrap,
+					baEdfaPlusModuleHighTemperatureAlarmTrap,
+					baEdfaPlusModuleLowTemperatureAlarmTrap,
+					baEdfaPlusModuleHighTemperatureWarningTrap,
+					baEdfaPlusModuleLowTemperatureWarningTrap,
+					baEdfaPlusPumpHighTemperatureAlarmTrap,
+					baEdfaPlusPumpLowTemperatureAlarmTrap,
+					baEdfaPlusPumpHighTemperatureWarningTrap,
+					baEdfaPlusPumpLowTemperatureWarningTrap,
+					baEdfaPlusPumpHighOperatingCurrentAlarmTrap,
+					baEdfaPlusPumpLowOperatingCurrentAlarmTrap,
+					baEdfaPlusPumpHighOperatingCurrentWarningTrap,
+					baEdfaPlusPumpLowOperatingCurrentWarningTrap,
+					baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmTrap,
+					baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmTrap,
+					baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningTrap,
+					baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningTrap,
+					baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmTrap,
+					baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmTrap,
+					baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningTrap,
+					baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningTrap,
+					baEdfaPlusInputOutOfRangeAlarmTrap,
+					baEdfaPlusOutputOutOfRangeAlarmTrap,
+					baEdfaPlusPumpBiasCurrentAlarmTrap,
+					baEdfaPlusPumpCoolingTemperatureAlarmTrap,
+					baEdfaPlusPumpLaserPowerAlarmTrap
+				}
+		STATUS current
+
+		DESCRIPTION
+		"The UTL DWDM current notifications group"
+
+		::= { baEdfaPlus 5 }                           
+
+--***************************************************************************** 
+
+	snmpcurrentGroup OBJECT-GROUP
+		OBJECTS {
+				baEdfaPlusInterface,
+				baEdfaPlusEepromCardId,							
+				baEdfaPlusEepromCardName,						
+				baEdfaPlusEepromPartCode,						
+				baEdfaPlusEepromCardSerialNumber,				
+				baEdfaPlusEepromHardwareExternalReleaseVersion,	
+				baEdfaPlusSoftwareExternalReleaseVersion,	
+				baEdfaPlusEepromHardwareInternalReleaseVersion,	
+				baEdfaPlusSoftwareInternalReleaseVersion,	
+				baEdfaPlusEepromCardUidNumber,					
+				baEdfaPlusEepromCardEUI48Number,					
+				baEdfaPlusEepromCardEUI64Number,
+				baEdfaPlusCardRootFileSystemVersion,					
+				baEdfaPlusInstallationDate,						
+				baEdfaPlusCommissionDate,							
+				baEdfaPlusCardRunningTime,						
+				baEdfaPlusCardRestartCount,						
+				baEdfaPlusModuleVendorName,					
+				baEdfaPlusModuleSerialNumber,					
+				baEdfaPlusNumberOfChannelsSupported,				
+				baEdfaPlusNumberOfPumpSupported,					
+				baEdfaPlusMaxGainSupported,						
+				baEdfaPlusSaturationOutputPowerSupported,		
+				baEdfaPlusMidStageAccessSupport,
+				baEdfaPlusDirection,
+				baEdfaPlusVoaPresenceStatus,
+				baEdfaPlusCardGeneralDetailsTableRowStatus,
+				baEdfaPlusCardSoftReset,
+				baEdfaPlusCardDefaultFactoryReset,							
+				baEdfaPlusAlarmMonitoringStatus,	 						
+				baEdfaPlusManageUnmanageStatus,
+				baEdfaPlusSyncSystemTimeWithNtpServer,
+				baEdfaPlusSyncRtcWithNtpServer,
+				baEdfaPlusSyncRtcWithSystemTime,
+				baEdfaPlusUpdateGivenTimeIntoSystem,
+				baEdfaPlusUpdateGivenTimeIntoRtc,
+				baEdfaPlusSystemTimeAndRtcTime,							
+				baEdfaPlusVariableOpticalAttenuatorReset,						
+				baEdfaPlusLaserStatus,	 							
+				baEdfaPlusAutomaticPowerReductionStatus,	 					
+				baEdfaPlusAutomaticLaserShutdownStatus,	 					
+				baEdfaPlusModuleOperatingMode,							
+				baEdfaPlusModuleGainInAutomaticGainControlMode,					
+				baEdfaPlusModuleOutputPowerInAutomaticPowerControlMode,				
+				baEdfaPlusPumpOperatingCurrentInAutomaticCurrentControlMode,				
+				baEdfaPlusVariableOpticalAttenuatorAttenuation,	 				
+				baEdfaPlusOutputPowerLimitInAutomaticGainControlMode,				
+				baEdfaPlusOutputPowerLimitFunctionStatusInAutomaticGainControlMode,			
+				baEdfaPlusAutomaticPowerReductionThreshold,						
+				baEdfaPlusOpticalInputPowerFailureAlarmThreshold,					
+				baEdfaPlusOpticalHighInputPowerAlarmThreshold,					
+				baEdfaPlusOpticalLowInputPowerAlarmThreshold,					
+				baEdfaPlusOpticalHighInputPowerWarningThreshold,					
+				baEdfaPlusOpticalLowInputPowerWarningThreshold,					
+				baEdfaPlusOpticalOutputPowerFailureAlarmThreshold,					
+				baEdfaPlusOpticalHighOutputPowerAlarmThreshold,					
+				baEdfaPlusOpticalLowOutputPowerAlarmThreshold,					
+				baEdfaPlusOpticalHighOutputPowerWarningThreshold,					
+				baEdfaPlusOpticalLowOutputPowerWarningThreshold,					
+				baEdfaPlusModuleHighTemperatureAlarmThreshold,					
+				baEdfaPlusModuleLowTemperatureAlarmThreshold,					
+				baEdfaPlusModuleHighTemperatureWarningThreshold,					
+				baEdfaPlusModuleLowTemperatureWarningThreshold,					
+				baEdfaPlusPumpHighTemperatureAlarmThreshold,					
+				baEdfaPlusPumpLowTemperatureAlarmThreshold,						
+				baEdfaPlusPumpHighTemperatureWarningThreshold,					
+				baEdfaPlusPumpLowTemperatureWarningThreshold,					
+				baEdfaPlusPumpHighOperatingCurrentAlarmThreshold,					
+				baEdfaPlusPumpLowOperatingCurrentAlarmThreshold,					
+				baEdfaPlusPumpHighOperatingCurrentWarningThreshold,					
+				baEdfaPlusPumpLowOperatingCurrentWarningThreshold,					
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmThreshold,				
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmThreshold,				
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningThreshold,			
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningThreshold,			
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmThreshold, 			
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmThreshold, 			
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningThreshold, 			
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningThreshold, 			
+				baEdfaPlusOpticalInputPowerFailureAlarmInhibit, 					
+				baEdfaPlusOpticalHighInputPowerAlarmInhibit,						
+				baEdfaPlusOpticalLowInputPowerAlarmInhibit,	 					
+				baEdfaPlusOpticalHighInputPowerWarningInhibit,	 				
+				baEdfaPlusOpticalLowInputPowerWarningInhibit, 					
+				baEdfaPlusOpticalOutputPowerFailureAlarmInhibit,					
+				baEdfaPlusOpticalHighOutputPowerAlarmInhibit,					
+				baEdfaPlusOpticalLowOutputPowerAlarmInhibit,						
+				baEdfaPlusOpticalHighOutputPowerWarningInhibit,					
+				baEdfaPlusOpticalLowOutputPowerWarningInhibit,					
+				baEdfaPlusModuleHighTemperatureAlarmInhibit,						
+				baEdfaPlusModuleLowTemperatureAlarmInhibit,						
+				baEdfaPlusModuleHighTemperatureWarningInhibit,					
+				baEdfaPlusModuleLowTemperatureWarningInhibit,					
+				baEdfaPlusPumpHighTemperatureAlarmInhibit,						
+				baEdfaPlusPumpLowTemperatureAlarmInhibit,						
+				baEdfaPlusPumpHighTemperatureWarningInhibit,						
+				baEdfaPlusPumpLowTemperatureWarningInhibit,						
+				baEdfaPlusPumpHighOperatingCurrentAlarmInhibit,					
+				baEdfaPlusPumpLowOperatingCurrentAlarmInhibit,					
+				baEdfaPlusPumpHighOperatingCurrentWarningInhibit,					
+				baEdfaPlusPumpLowOperatingCurrentWarningInhibit,					
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmInhibit,				
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmInhibit,				
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningInhibit,				
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningInhibit,				
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmInhibit,			
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmInhibit,			
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningInhibit,			
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningInhibit,			
+				baEdfaPlusInputOutOfRangeAlarmInhibit,						
+				baEdfaPlusOutputOutOfRangeAlarmInhibit,						
+				baEdfaPlusPumpBiasCurrentAlarmInhibit,						
+				baEdfaPlusPumpCoolingTemperatureAlarmInhibit,					
+				baEdfaPlusPumpLaserPowerAlarmInhibit,						
+				baEdfaPlusOpticalInputPowerFailureAlarmSeverity,					
+				baEdfaPlusOpticalHighInputPowerAlarmSeverity,					
+				baEdfaPlusOpticalLowInputPowerAlarmSeverity,						
+				baEdfaPlusOpticalHighInputPowerWarningSeverity,					
+				baEdfaPlusOpticalLowInputPowerWarningSeverity,					
+				baEdfaPlusOpticalOutputPowerFailureAlarmSeverity,					
+				baEdfaPlusOpticalHighOutputPowerAlarmSeverity,					
+				baEdfaPlusOpticalLowOutputPowerAlarmSeverity,					
+				baEdfaPlusOpticalHighOutputPowerWarningSeverity,					
+				baEdfaPlusOpticalLowOutputPowerWarningSeverity,					
+				baEdfaPlusModuleHighTemperatureAlarmSeverity,					
+				baEdfaPlusModuleLowTemperatureAlarmSeverity,					
+				baEdfaPlusModuleHighTemperatureWarningSeverity,					
+				baEdfaPlusModuleLowTemperatureWarningSeverity,					
+				baEdfaPlusPumpHighTemperatureAlarmSeverity,						
+				baEdfaPlusPumpLowTemperatureAlarmSeverity,						
+				baEdfaPlusPumpHighTemperatureWarningSeverity,					
+				baEdfaPlusPumpLowTemperatureWarningSeverity,						
+				baEdfaPlusPumpHighOperatingCurrentAlarmSeverity,					
+				baEdfaPlusPumpLowOperatingCurrentAlarmSeverity,					
+				baEdfaPlusPumpHighOperatingCurrentWarningSeverity,					
+				baEdfaPlusPumpLowOperatingCurrentWarningSeverity,					
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarmSeverity,				
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarmSeverity,				
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentWarningSeverity,			
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentWarningSeverity,				
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarmSeverity,			
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarmSeverity,			
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarningSeverity,			
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarningSeverity,			
+				baEdfaPlusInputOutOfRangeAlarmSeverity,						
+				baEdfaPlusOutputOutOfRangeAlarmSeverity,						
+				baEdfaPlusPumpBiasCurrentAlarmSeverity,						
+				baEdfaPlusPumpCoolingTemperatureAlarmSeverity,					
+				baEdfaPlusPumpLaserPowerAlarmSeverity,
+				baEdfaPlusCardSoftwareUpgrade,
+				baEdfaPlusConfigurationTableRowStatus,
+				baEdfaPlusOpticalInputPowerFailureAlarm, 			
+				baEdfaPlusOpticalHighInputPowerAlarm,			
+				baEdfaPlusOpticalLowInputPowerAlarm, 			
+				baEdfaPlusOpticalHighInputPowerWarning,	 		
+				baEdfaPlusOpticalLowInputPowerWarning, 			
+				baEdfaPlusOpticalOutputPowerFailureAlarm,			
+				baEdfaPlusOpticalHighOutputPowerAlarm,			
+				baEdfaPlusOpticalLowOutputPowerAlarm,			
+				baEdfaPlusOpticalHighOutputPowerWarning,			
+				baEdfaPlusOpticalLowOutputPowerWarning,			
+				baEdfaPlusModuleHighTemperatureAlarm,			
+				baEdfaPlusModuleLowTemperatureAlarm,				
+				baEdfaPlusModuleHighTemperatureWarning,			
+				baEdfaPlusModuleLowTemperatureWarning,			
+				baEdfaPlusPumpHighTemperatureAlarm,				
+				baEdfaPlusPumpLowTemperatureAlarm,				
+				baEdfaPlusPumpHighTemperatureWarning,			
+				baEdfaPlusPumpLowTemperatureWarning,				
+				baEdfaPlusPumpHighOperatingCurrentAlarm,			
+				baEdfaPlusPumpLowOperatingCurrentAlarm,			
+				baEdfaPlusPumpHighOperatingCurrentWarning,			
+				baEdfaPlusPumpLowOperatingCurrentWarning,			
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentAlarm,		
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentAlarm,		
+				baEdfaPlusPumpHighThermoElectricCoolerCurrentWarning,	
+				baEdfaPlusPumpLowThermoElectricCoolerCurrentWarning,		
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerAlarm, 	
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerAlarm, 	
+				baEdfaPlusVariableOpticalAttenuatorHighInputPowerWarning, 	
+				baEdfaPlusVariableOpticalAttenuatorLowInputPowerWarning, 	
+				baEdfaPlusInputOutOfRangeAlarm,				
+				baEdfaPlusOutputOutOfRangeAlarm,							
+				baEdfaPlusPumpBiasCurrentAlarm,				
+				baEdfaPlusPumpCoolingTemperatureAlarm,
+				baEdfaPlusAlarmQueryTableRowStatus,			
+				baEdfaPlusPumpLaserPowerAlarm,				
+				baEdfaPlusModuleTemperature,					
+				baEdfaPlusInputPower,					
+				baEdfaPlusOutputPower,					
+				baEdfaPlusAmplifiedSpontaneousEmmissionPower,		
+				baEdfaPlusSignalGain,					
+				baEdfaPlusSignalOutputPower,						
+				baEdfaPlusPumpLaserPower,					
+				baEdfaPlusPumpTemperature,					
+				baEdfaPlusPumpOperatingCurrent,				
+				baEdfaPlusPumpThermoElectricCoolerCurrent,			
+				baEdfaPlusPumpCoolingTemperature,				
+				baEdfaPlusVariableOpticalAttenuatorInputPower,		
+				baEdfaPlusVariableOpticalAttenuatorOutputPower,		
+				baEdfaPlusVariableOpticalAttenuatorActualAttenuation,
+				baEdfaPlusPerformanceTableRowStatus
+			}
+		STATUS	current
+
+		DESCRIPTION
+		"A collection of objects from RFC 1213 made current by this MIB module."
+
+		::= { utlrnd 2 }
+
+END	

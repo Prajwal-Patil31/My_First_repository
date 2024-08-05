@@ -1,0 +1,548 @@
+--*****************************************************************************
+--				UTL SCU PLUS MIB
+--*****************************************************************************
+
+SCU-PLUS-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+        	RowStatus      			FROM STANDARD-MIB
+
+        	DisplayString  			FROM RFC1213-MIB       
+			
+    		OBJECT-IDENTITY, 
+    		NOTIFICATION-TYPE, 
+    		MODULE-IDENTITY, 
+    		Integer32, 
+    		Unsigned32,
+    		IpAddress,
+    		TimeTicks			FROM SNMPv2-SMI
+    		
+	 	OBJECT-TYPE    			FROM RFC-1212
+	 		
+		MODULE-COMPLIANCE, 
+		OBJECT-GROUP, 
+		NOTIFICATION-GROUP		FROM SNMPv2-CONF
+			
+		node, 
+		rack, 
+		subRack, 
+		slot 				FROM SCC-MIB
+
+		enterprises 			FROM RFC1155-SMI		
+
+	;
+
+	utl   	MODULE-IDENTITY
+	
+            	LAST-UPDATED    	"1807130630Z"
+            	ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+            	CONTACT-INFO    	"Website: http://www.utlindia.com."                                           
+            	DESCRIPTION     	"MIB module for UTL DWDM."
+            	REVISION 	    	"1807130630Z"
+            	DESCRIPTION    	 	"MIB module for SCU Plus Card."
+            
+            	::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+            	STATUS  current
+            
+		DESCRIPTION "UTL R and D."
+            	
+		::= { utl 1 }
+
+	dwdm 				OBJECT IDENTIFIER	::=   { utlrnd 1 }
+	indus 				OBJECT IDENTIFIER	::=   { dwdm 1 }
+	scuPlus 			OBJECT IDENTIFIER 	::=   { indus 51 }
+
+	scuPlusCardGeneralDetails 	OBJECT IDENTIFIER 	::=   { scuPlus 1 }
+	scuPlusConfiguration 		OBJECT IDENTIFIER 	::=   { scuPlus 2 }	
+
+--*****************************************************************************
+--			SCU PLUS CARD GENERAL DETAILS
+--*****************************************************************************
+
+	scuPlusCardGeneralDetailsTable OBJECT-TYPE 
+		SYNTAX 		SEQUENCE OF ScuPlusCardGeneralDetailsEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+
+		DESCRIPTION
+		 " we can get SCU Plus card general details "
+
+		::= { scuPlusCardGeneralDetails 1 }
+
+	scuPlusCardGeneralDetailsEntry OBJECT-TYPE
+		SYNTAX  	ScuPlusCardGeneralDetailsEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot and scuPlusInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, scuPlusInterface }
+		::= { scuPlusCardGeneralDetailsTable 1 }
+
+	ScuPlusCardGeneralDetailsEntry ::=
+		SEQUENCE {
+				scuPlusInterface				INTEGER,
+				scuPlusEepromCardId				INTEGER,
+				scuPlusEepromCardName				DisplayString,
+				scuPlusEepromPartCode				DisplayString,
+				scuPlusEepromCardSerialNumber			DisplayString,
+				scuPlusEepromHardwareExternalReleaseVersion	DisplayString,
+				scuPlusSoftwareExternalReleaseVersion		DisplayString,
+				scuPlusEepromHardwareInternalReleaseVersion	DisplayString,
+				scuPlusSoftwareInternalReleaseVersion		DisplayString,
+				scuPlusEepromCardUidNumber			DisplayString,
+				scuPlusEepromCardEUI48Number			DisplayString,
+				scuPlusEepromCardEUI64Number			DisplayString,
+				scuPlusCardRootFileSystemVersion		DisplayString,
+				scuPlusInstallationDate				DisplayString,
+				scuPlusCommissionDate				DisplayString,
+				scuPlusCardRunningTime				DisplayString,
+				scuPlusCardRestartCount				INTEGER,
+				scuPlusCardGeneralDetailsTableRowStatus	RowStatus
+			}
+
+	scuPlusInterface 	OBJECT-TYPE
+		SYNTAX  		INTEGER
+		MAX-ACCESS  	not-accessible
+		STATUS  		current
+		DESCRIPTION 	"scu interface number"
+		
+		::= { scuPlusCardGeneralDetailsEntry 1 }
+
+	scuPlusEepromCardId OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " Tells the card ID of the SCU-PLUS card, present in the EEPROM 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 2 }
+
+	scuPlusEepromCardName OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the card name of the SCU-PLUS card, present in the EEPROM 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 3 }
+
+	scuPlusEepromPartCode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the part code of the SCU-PLUS card, present in the EEPROM 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 4 }
+
+	scuPlusEepromCardSerialNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " This property get / set the information about SCU-PLUS 
+		 Card's Serial Number.
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 5 }
+
+	scuPlusEepromHardwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware External Release Version. This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 6 }
+
+	scuPlusSoftwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software External Release Version.  This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 7 }
+
+	scuPlusEepromHardwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware Internal Release Version. This detail 
+		 is used for development purposes only. It differs from the external 
+		 hardware version 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 8 }
+
+	scuPlusSoftwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software Internal Release Version.  This detail 
+		 is used for development purposes only. It differs from the external 
+		 software version 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 9 }
+
+	scuPlusEepromCardUidNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card Unique Identifier It is a 4 byte address used to 
+		 uniquely identify a card 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 10 }
+
+	scuPlusEepromCardEUI48Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-48 Number. It’s a 6 byte address used to 
+		 uniquely identify a card 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 11 }
+
+	scuPlusEepromCardEUI64Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-64 Number. It’s a 8 byte address 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 12 }
+		
+	scuPlusCardRootFileSystemVersion OBJECT-TYPE		 
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS current
+		DESCRIPTION
+			"Tells the Card's Root File System Version
+			-----------------------------
+			scuPlusInterface: 0
+			-----------------------------
+			Value:
+		      	eg: 8
+			-----------------------------"
+		::= { scuPlusCardGeneralDetailsEntry 13 }
+
+	scuPlusInstallationDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the card's installation date in dd/mm/yyyy format 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 22 }
+
+	scuPlusCommissionDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the card's commission date in  dd/mm/yyyy format 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 23 }
+
+	scuPlusCardRunningTime OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the duration of time for which the card is operational/running 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 24 }
+
+	scuPlusCardRestartCount OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the number of times the card has been soft reset. This value 
+		 will get reset to 0 on factory reset 
+		 scuPlusInterface: 0 "
+
+		::= { scuPlusCardGeneralDetailsEntry 25 }
+		
+	scuPlusCardGeneralDetailsTableRowStatus OBJECT-TYPE
+		SYNTAX		RowStatus
+		MAX-ACCESS	read-write
+		STATUS		current
+		DESCRIPTION
+			"This is MIB realted property,
+			NOT to be considered as a card property"
+
+		::= { scuPlusCardGeneralDetailsEntry 26 }
+
+--*****************************************************************************
+--				SCU PLUS CONFIGURATION
+--*****************************************************************************
+
+	scuPlusConfigurationTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF ScuPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " we can get SCU Plus configuration details "
+
+		::= { scuPlusConfiguration 1 }
+              
+        scuPlusConfigurationEntry OBJECT-TYPE
+		SYNTAX  	ScuPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot and scuPlusInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, scuPlusInterface }
+
+		::= { scuPlusConfigurationTable 1 }
+	
+	ScuPlusConfigurationEntry ::= 
+		SEQUENCE {
+				scuPlusCardSoftwareUpgrade			DisplayString,
+				scuPlusSoftReset 				INTEGER,
+				scuPlusSyncSystemTimeWithNtpServer				DisplayString,
+				scuPlusSyncRtcWithNtpServer						DisplayString,
+				scuPlusSyncRtcWithSystemTime					DisplayString,
+				scuPlusUpdateGivenTimeIntoSystem				DisplayString,
+				scuPlusUpdateGivenTimeIntoRtc					DisplayString,
+				scuPlusSystemTimeAndRtcTime						DisplayString,
+				scuPlusConfigurationTableRowStatus		RowStatus
+				
+			}
+
+	scuPlusCardSoftwareUpgrade OBJECT-TYPE
+		SYNTAX 		DisplayString
+		MAX-ACCESS 	read-write
+		STATUS 		current
+		DESCRIPTION
+			"Valid only as SET command.
+			This property upgrades the software of the SCU-PLUS card
+			It takes the path of the software release as
+			a value,
+			scuPlusInterface: 0
+			Values:
+			eg: /home/root/rel-2.0.0.tar.gz
+			-----------------------------"
+
+		::= { scuPlusConfigurationEntry 1 }
+
+ 	scuPlusSoftReset OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " soft reset the card with value 1,
+			scuPlusInterface: 0 "
+		
+		::= { scuPlusConfigurationEntry 2 }
+		
+	scuPlusSyncSystemTimeWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+						present in linux kernel with the NTP server
+						we can use this OID. We can provide NTP server
+						ip address as a value to this OID and the time
+						will be synced to that ilarticular server. 
+						If we are not providing NTP server IP address 
+						then the system will be synced with the NTP server 
+						which is already been registered with card. 
+						If both are absent then error message will be returned
+						-----------------------------
+							Interface : 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+						
+						If we don't want to provide NTP server address then no
+						need to pass any value. 
+						---------------------------"
+  						
+  		::= { scuPlusConfigurationEntry 7 }
+  		
+  	scuPlusSyncRtcWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in RTC with the NTP server
+  						we can use this OID. We can provide NTP server
+  						ip address as a value to this OID and the time
+  						will be synced to that particular server. 
+  						If we are not providing NTP server IP address 
+  						then the system will be synced with the NTP server 
+  						which is already been registered with card. 
+  						If both are absent then error message will be returned.
+  						-----------------------------
+						Interface : 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+							
+						If we don't want to provide NTP server address, then no
+						need to ilass any value. 
+						---------------------------"
+  						
+  		::= { scuPlusConfigurationEntry 8 }
+  		
+  	scuPlusSyncRtcWithSystemTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+						present in RTC with the time value in linux kernel
+						we can use this OID. With this set operation, 
+						the time available with linux kernel will be updated
+						into RTC. It is not required to provide any value for 
+						this operation
+						-----------------------------
+						Interface : 0
+						-----------------------------"
+  						
+  		::= { scuPlusConfigurationEntry 9 }
+  		
+  	scuPlusUpdateGivenTimeIntoSystem	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update system time
+						with the user provided time, we can use this OID.
+						With OID we need to provide time value which we
+						want to update in the system.
+						-----------------------------
+						Interface : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { scuPlusConfigurationEntry 10 }
+  		
+  	scuPlusUpdateGivenTimeIntoRtc	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update RTC time
+						with the user provided time, we can use this OID.
+						With OID we need to provide time value which we
+						want to update in RTC.
+						-----------------------------
+						Interface : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { scuPlusConfigurationEntry 11 }
+  		
+  	scuPlusSystemTimeAndRtcTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-only
+  		STATUS  		current
+  		DESCRIPTION	 	" get the system time and time value present in RTC.
+						-----------------------------
+						Interface : 0
+						-----------------------------"
+						
+  		::= { scuPlusConfigurationEntry 12 }
+		
+	scuPlusConfigurationTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              ::= { scuPlusConfigurationEntry 20 }
+
+--***************************************************************************** 
+		  	  
+	snmpcurrentGroup OBJECT-GROUP
+		OBJECTS {
+				scuPlusInterface,
+				scuPlusEepromCardId,
+				scuPlusEepromCardName,
+				scuPlusEepromPartCode,
+				scuPlusEepromCardSerialNumber,
+				scuPlusEepromHardwareExternalReleaseVersion,
+				scuPlusSoftwareExternalReleaseVersion,
+				scuPlusEepromHardwareInternalReleaseVersion,
+				scuPlusSoftwareInternalReleaseVersion,
+				scuPlusEepromCardUidNumber,
+				scuPlusEepromCardEUI48Number,
+				scuPlusEepromCardEUI64Number,
+				scuPlusCardRootFileSystemVersion,
+				scuPlusInstallationDate,
+				scuPlusCommissionDate,
+				scuPlusCardRunningTime,
+				scuPlusCardRestartCount,
+				scuPlusCardSoftwareUpgrade,
+				scuPlusCardGeneralDetailsTableRowStatus,	
+				scuPlusSoftReset,
+				scuPlusSyncSystemTimeWithNtpServer,
+				scuPlusSyncRtcWithNtpServer,
+				scuPlusSyncRtcWithSystemTime,
+				scuPlusUpdateGivenTimeIntoSystem,
+				scuPlusUpdateGivenTimeIntoRtc,
+				scuPlusSystemTimeAndRtcTime,
+				scuPlusConfigurationTableRowStatus
+ 			}
+		STATUS  current
+
+		DESCRIPTION
+		 "A collection of objects from RFC 1213 made current by this MIB module."
+
+		::= { utlrnd 2 }
+	
+END	

@@ -1,0 +1,551 @@
+--*****************************************************************************
+--                      UTL SCU PLUS EIGHT FANS FANTRAY MIB
+--*****************************************************************************
+
+SCU-PLUS-EIGHT-FANS-FANTRAY-MIB DEFINITIONS ::= BEGIN
+
+        IMPORTS
+                RowStatus                       FROM STANDARD-MIB
+
+                DisplayString                   FROM RFC1213-MIB
+
+                OBJECT-IDENTITY, 
+                NOTIFICATION-TYPE, 
+                MODULE-IDENTITY, 
+                Integer32, 
+                Unsigned32,
+                IpAddress,
+                TimeTicks                       FROM SNMPv2-SMI
+
+                OBJECT-TYPE                     FROM RFC-1212
+
+                MODULE-COMPLIANCE, 
+                OBJECT-GROUP, 
+                NOTIFICATION-GROUP              FROM SNMPv2-CONF
+
+                node, 
+                rack, 
+                subRack, 
+                slot                            FROM SCC-MIB
+
+                enterprises                     FROM RFC1155-SMI
+
+        ;
+
+        utl     MODULE-IDENTITY
+
+                LAST-UPDATED            "1807130630Z"
+                ORGANIZATION            "United Telecoms Limited, Bangalore-560048."
+                CONTACT-INFO            "Website: http://www.utlindia.com."
+                DESCRIPTION             "MIB module for UTL DWDM."
+                REVISION                "1807130630Z"
+                DESCRIPTION             "MIB module for SCU Plus Card."
+
+                ::= { enterprises 18036 }
+
+        utlrnd  OBJECT-IDENTITY
+                STATUS  current
+
+                DESCRIPTION "UTL R and D."
+
+                ::= { utl 1 }
+
+        dwdm                                            OBJECT IDENTIFIER       ::=   { utlrnd 1 }
+        indus                                           OBJECT IDENTIFIER       ::=   { dwdm 1 }
+        scuPlusEightFansFantray                         OBJECT IDENTIFIER       ::=   { indus 52 }
+
+        scuPlusEightFansFantrayCardGeneralDetails       OBJECT IDENTIFIER       ::=   { scuPlusEightFansFantray 1 }
+        scuPlusEightFansFantrayConfiguration            OBJECT IDENTIFIER       ::=   { scuPlusEightFansFantray 2 }
+
+
+--*****************************************************************************
+--              SCU PLUS EIGHT FANS FANTRAY CARD GENERAL DETAILS
+--*****************************************************************************
+
+        scuPlusEightFansFantrayCardGeneralDetailsTable OBJECT-TYPE 
+                SYNTAX          SEQUENCE OF ScuPlusEightFansFantrayCardGeneralDetailsEntry
+                MAX-ACCESS      not-accessible
+                STATUS          current
+
+                DESCRIPTION
+                 " we can get SCU Plus card general details "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetails 1 }
+
+        scuPlusEightFansFantrayCardGeneralDetailsEntry OBJECT-TYPE
+                SYNTAX          ScuPlusEightFansFantrayCardGeneralDetailsEntry
+                MAX-ACCESS      not-accessible
+                STATUS          current
+
+                DESCRIPTION 
+                 "Enter node rack, subrack, slot and scuPlusEightFansFantrayInterface numbers"
+
+                INDEX   { node, rack, subRack, slot, scuPlusEightFansFantrayInterface }
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsTable 1 }
+
+	ScuPlusEightFansFantrayCardGeneralDetailsEntry ::=
+                SEQUENCE {
+                                scuPlusEightFansFantrayInterface                                INTEGER,
+                                scuPlusEightFansFantrayEepromCardId                             INTEGER,
+                                scuPlusEightFansFantrayEepromCardName                           DisplayString,
+                                scuPlusEightFansFantrayEepromPartCode                           DisplayString,
+                                scuPlusEightFansFantrayEepromCardSerialNumber                   DisplayString,
+                                scuPlusEightFansFantrayEepromHardwareExternalReleaseVersion     DisplayString,
+                                scuPlusEightFansFantraySoftwareExternalReleaseVersion           DisplayString,
+                                scuPlusEightFansFantrayEepromHardwareInternalReleaseVersion     DisplayString,
+                                scuPlusEightFansFantraySoftwareInternalReleaseVersion           DisplayString,
+                                scuPlusEightFansFantrayEepromCardUidNumber                      DisplayString,
+                                scuPlusEightFansFantrayEepromCardEUI48Number                    DisplayString,
+                                scuPlusEightFansFantrayEepromCardEUI64Number                    DisplayString,
+                                scuPlusEightFansFantrayCardRootFileSystemVersion                DisplayString,
+                                scuPlusEightFansFantrayInstallationDate                         DisplayString,
+                                scuPlusEightFansFantrayCommissionDate                           DisplayString,
+                                scuPlusEightFansFantrayCardRunningTime                          DisplayString,
+                                scuPlusEightFansFantrayCardRestartCount                         INTEGER,
+                                scuPlusEightFansFantrayCardGeneralDetailsTableRowStatus RowStatus
+                        }
+
+        scuPlusEightFansFantrayInterface        OBJECT-TYPE
+                SYNTAX          INTEGER
+                MAX-ACCESS      not-accessible
+                STATUS          current
+                DESCRIPTION     "scu interface number"
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 1 }
+
+        scuPlusEightFansFantrayEepromCardId OBJECT-TYPE
+                SYNTAX          INTEGER
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " Tells the card ID of the SCU-PLUS-EIGHT-FANS-FANTRAY card, present in the EEPROM 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 2 }
+
+        scuPlusEightFansFantrayEepromCardName OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " Tells the card name of the SCU-PLUS-EIGHT-FANS-FANTRAY card, present in the EEPROM 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 3 }
+
+        scuPlusEightFansFantrayEepromPartCode OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " Tells the part code of the SCU-PLUS-EIGHT-FANS-FANTRAY card, present in the EEPROM 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 4 }
+
+        scuPlusEightFansFantrayEepromCardSerialNumber OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-write
+                STATUS          current
+
+                DESCRIPTION
+                 " This property get / set the information about SCU-PLUS-EIGHT-FANS-FANTRAY 
+                 Card's Serial Number.
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 5 }
+
+        scuPlusEightFansFantrayEepromHardwareExternalReleaseVersion OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " To get the Card's Hardware External Release Version. This detail 
+                 will be displayed to the customer. This version will increment 
+                 only if there are significant architectural changes in the product 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 6 }
+
+        scuPlusEightFansFantraySoftwareExternalReleaseVersion OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " To get the Card's Software External Release Version.  This detail 
+                 will be displayed to the customer. This version will increment 
+                 only if there are significant architectural changes in the product 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 7 }
+
+        scuPlusEightFansFantrayEepromHardwareInternalReleaseVersion OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " To get the Card's Hardware Internal Release Version. This detail 
+                 is used for development purposes only. It differs from the external 
+                 hardware version 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 8 }
+
+        scuPlusEightFansFantraySoftwareInternalReleaseVersion OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " To get the Card's Software Internal Release Version.  This detail 
+                 is used for development purposes only. It differs from the external 
+                 software version 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 9 }
+
+        scuPlusEightFansFantrayEepromCardUidNumber OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " Tells the Card Unique Identifier It is a 4 byte address used to 
+                 uniquely identify a card 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 10 }
+
+        scuPlusEightFansFantrayEepromCardEUI48Number OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " Tells the Card EUI-48 Number. It’s a 6 byte address used to 
+                 uniquely identify a card 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 11 }
+
+        scuPlusEightFansFantrayEepromCardEUI64Number OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " Tells the Card EUI-64 Number. It’s a 8 byte address 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 12 }
+
+        scuPlusEightFansFantrayCardRootFileSystemVersion OBJECT-TYPE
+                SYNTAX          DisplayString
+                MAX-ACCESS      read-only
+                STATUS          current
+                DESCRIPTION
+                        "Tells the Card's Root File System Version
+                        -----------------------------
+                        scuPlusEightFansFantrayInterface: 0
+                        -----------------------------
+                        Value:
+                        eg: 8
+                        -----------------------------"
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 13 }
+
+        scuPlusEightFansFantrayInstallationDate OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-write
+                STATUS          current
+
+                DESCRIPTION
+                 " To get the card's installation date in dd/mm/yyyy format 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 22 }
+
+        scuPlusEightFansFantrayCommissionDate OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-write
+                STATUS          current
+
+                DESCRIPTION
+                 " To get the card's commission date in  dd/mm/yyyy format 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 23 }
+
+        scuPlusEightFansFantrayCardRunningTime OBJECT-TYPE
+                SYNTAX          DisplayString (SIZE (0..255))
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " To get the duration of time for which the card is operational/running 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 24 }
+
+        scuPlusEightFansFantrayCardRestartCount OBJECT-TYPE
+                SYNTAX          INTEGER
+                MAX-ACCESS      read-only
+                STATUS          current
+
+                DESCRIPTION
+                 " To get the number of times the card has been soft reset. This value 
+                 will get reset to 0 on factory reset 
+                 scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 25 }
+
+        scuPlusEightFansFantrayCardGeneralDetailsTableRowStatus OBJECT-TYPE
+                SYNTAX          RowStatus
+                MAX-ACCESS      read-write
+                STATUS          current
+                DESCRIPTION
+                        "This is MIB realted property,
+                        NOT to be considered as a card property"
+
+                ::= { scuPlusEightFansFantrayCardGeneralDetailsEntry 26 }
+
+
+--*****************************************************************************
+--              SCU PLUS EIGHT FANS FANTRAY CONFIGURATION
+--*****************************************************************************
+
+        scuPlusEightFansFantrayConfigurationTable OBJECT-TYPE
+                SYNTAX          SEQUENCE OF ScuPlusEightFansFantrayConfigurationEntry
+                MAX-ACCESS      not-accessible
+                STATUS          current
+
+                DESCRIPTION
+                 " we can get SCU Plus configuration details "
+
+                ::= { scuPlusEightFansFantrayConfiguration 1 }
+
+        scuPlusEightFansFantrayConfigurationEntry OBJECT-TYPE
+                SYNTAX          ScuPlusEightFansFantrayConfigurationEntry
+                MAX-ACCESS      not-accessible
+                STATUS          current
+
+                DESCRIPTION 
+                 "Enter node rack, subrack, slot and scuPlusEightFansFantrayInterface numbers"
+
+                INDEX   { node, rack, subRack, slot, scuPlusEightFansFantrayInterface }
+
+                ::= { scuPlusEightFansFantrayConfigurationTable 1 }
+
+        ScuPlusEightFansFantrayConfigurationEntry ::= 
+                SEQUENCE {
+                                scuPlusEightFansFantrayCardSoftwareUpgrade                      DisplayString,
+                                scuPlusEightFansFantraySoftReset                                INTEGER,
+                                scuPlusEightFansFantraySyncSystemTimeWithNtpServer              DisplayString,
+                                scuPlusEightFansFantraySyncRtcWithNtpServer                     DisplayString,
+                                scuPlusEightFansFantraySyncRtcWithSystemTime                    DisplayString,
+                                scuPlusEightFansFantrayUpdateGivenTimeIntoSystem                DisplayString,
+                                scuPlusEightFansFantrayUpdateGivenTimeIntoRtc                   DisplayString,
+                                scuPlusEightFansFantraySystemTimeAndRtcTime                     DisplayString,
+                                scuPlusEightFansFantrayConfigurationTableRowStatus      RowStatus
+                        }
+
+        scuPlusEightFansFantrayCardSoftwareUpgrade OBJECT-TYPE
+                SYNTAX          DisplayString
+                MAX-ACCESS      read-write
+                STATUS          current
+                DESCRIPTION
+                        "Valid only as SET command.
+                        This property upgrades the software of the SCU-PLUS-EIGHT-FANS-FANTRAY card
+                        It takes the path of the software release as
+                        a value,
+                        scuPlusEightFansFantrayInterface: 0
+                        Values:
+                        eg: /home/root/rel-2.0.0.tar.gz
+                        -----------------------------"
+
+                ::= { scuPlusEightFansFantrayConfigurationEntry 1 }
+
+        scuPlusEightFansFantraySoftReset OBJECT-TYPE
+                SYNTAX          INTEGER
+                MAX-ACCESS      read-write
+                STATUS          current
+
+                DESCRIPTION
+                 " soft reset the card with value 1,
+                        scuPlusEightFansFantrayInterface: 0 "
+
+                ::= { scuPlusEightFansFantrayConfigurationEntry 2 }
+
+        scuPlusEightFansFantraySyncSystemTimeWithNtpServer       OBJECT-TYPE
+                SYNTAX                  DisplayString
+                MAX-ACCESS              read-write
+                STATUS                  current
+                DESCRIPTION             " when we want to manually sync the time value
+                                                present in linux kernel with the NTP server
+                                                we can use this OID. We can provide NTP server
+                                                ip address as a value to this OID and the time
+                                                will be synced to that ilarticular server. 
+                                                If we are not providing NTP server IP address 
+                                                then the system will be synced with the NTP server 
+                                                which is already been registered with card. 
+                                                If both are absent then error message will be returned
+                                                -----------------------------
+                                                        Interface : 0
+                                                -----------------------------
+                                                If we want to provide NTP server IP address then
+                                                Value should be a valid IP address as shown below
+                                                : 192.168.21.25
+
+                                                If we don't want to provide NTP server address then no
+                                                need to pass any value. 
+                                                ---------------------------"
+
+                ::= { scuPlusEightFansFantrayConfigurationEntry 7 }
+
+        scuPlusEightFansFantraySyncRtcWithNtpServer      OBJECT-TYPE
+                SYNTAX                  DisplayString
+                MAX-ACCESS              read-write
+                STATUS                  current
+                DESCRIPTION             " when we want to manually sync the time value
+                                                present in RTC with the NTP server
+                                                we can use this OID. We can provide NTP server
+                                                ip address as a value to this OID and the time
+                                                will be synced to that particular server. 
+                                                If we are not providing NTP server IP address 
+                                                then the system will be synced with the NTP server 
+                                                which is already been registered with card. 
+                                                If both are absent then error message will be returned.
+                                                -----------------------------
+                                                Interface : 0
+                                                -----------------------------
+                                                If we want to provide NTP server IP address then
+                                                Value should be a valid IP address as shown below
+                                                : 192.168.21.25
+
+                                                If we don't want to provide NTP server address, then no
+                                                need to ilass any value. 
+                                                ---------------------------"
+
+                ::= { scuPlusEightFansFantrayConfigurationEntry 8 }
+
+        scuPlusEightFansFantraySyncRtcWithSystemTime     OBJECT-TYPE
+                SYNTAX                  DisplayString
+                MAX-ACCESS              read-write
+                STATUS                  current
+                DESCRIPTION             " when we want to manually sync the time value
+                                                present in RTC with the time value in linux kernel
+                                                we can use this OID. With this set operation, 
+                                                the time available with linux kernel will be updated
+                                                into RTC. It is not required to provide any value for 
+                                                this operation
+                                                -----------------------------
+                                                Interface : 0
+                                                -----------------------------"
+
+                ::= { scuPlusEightFansFantrayConfigurationEntry 9 }
+
+        scuPlusEightFansFantrayUpdateGivenTimeIntoSystem         OBJECT-TYPE
+                SYNTAX                  DisplayString
+                MAX-ACCESS              read-write
+                STATUS                  current
+                DESCRIPTION             " when we want to manually update system time
+                                                with the user provided time, we can use this OID.
+                                                With OID we need to provide time value which we
+                                                want to update in the system.
+                                                -----------------------------
+                                                Interface : 0
+                                                -----------------------------
+                                                Value should be of given format:
+                                                YYYY-MM-DD H:M:S
+
+                                                Example: 2017-10-31 15:20:44
+                                                ---------------------------"
+
+                ::= { scuPlusEightFansFantrayConfigurationEntry 10 }
+
+        scuPlusEightFansFantrayUpdateGivenTimeIntoRtc    OBJECT-TYPE
+                SYNTAX                  DisplayString
+                MAX-ACCESS              read-write
+                STATUS                  current
+                DESCRIPTION             " when we want to manually update RTC time
+                                                with the user provided time, we can use this OID.
+                                                With OID we need to provide time value which we
+                                                want to update in RTC.
+                                                -----------------------------
+                                                Interface : 0
+                                                -----------------------------
+                                                Value should be of given format:
+                                                YYYY-MM-DD H:M:S
+
+                                                Example: 2017-10-31 15:20:44
+                                                ---------------------------"
+
+                ::= { scuPlusEightFansFantrayConfigurationEntry 11 }
+
+        scuPlusEightFansFantraySystemTimeAndRtcTime      OBJECT-TYPE
+                SYNTAX                  DisplayString
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             " get the system time and time value present in RTC.
+                                                -----------------------------
+                                                Interface : 0
+                                                -----------------------------"
+
+                ::= { scuPlusEightFansFantrayConfigurationEntry 12 }
+
+        scuPlusEightFansFantrayConfigurationTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      " This is MIB realted property,
+                        NOT to be considered as a card property"
+              ::= { scuPlusEightFansFantrayConfigurationEntry 20 }
+
+
+--***************************************************************************** 
+
+        snmpcurrentGroup OBJECT-GROUP
+                OBJECTS {
+                                scuPlusEightFansFantrayInterface,
+                                scuPlusEightFansFantrayEepromCardId,
+                                scuPlusEightFansFantrayEepromCardName,
+                                scuPlusEightFansFantrayEepromPartCode,
+                                scuPlusEightFansFantrayEepromCardSerialNumber,
+                                scuPlusEightFansFantrayEepromHardwareExternalReleaseVersion,
+                                scuPlusEightFansFantraySoftwareExternalReleaseVersion,
+                                scuPlusEightFansFantrayEepromHardwareInternalReleaseVersion,
+                                scuPlusEightFansFantraySoftwareInternalReleaseVersion,
+                                scuPlusEightFansFantrayEepromCardUidNumber,
+                                scuPlusEightFansFantrayEepromCardEUI48Number,
+                                scuPlusEightFansFantrayEepromCardEUI64Number,
+                                scuPlusEightFansFantrayCardRootFileSystemVersion,
+                                scuPlusEightFansFantrayInstallationDate,
+                                scuPlusEightFansFantrayCommissionDate,
+                                scuPlusEightFansFantrayCardRunningTime,
+                                scuPlusEightFansFantrayCardRestartCount,
+                                scuPlusEightFansFantrayCardGeneralDetailsTableRowStatus,
+                                scuPlusEightFansFantrayCardSoftwareUpgrade,
+                                scuPlusEightFansFantraySoftReset,
+                                scuPlusEightFansFantraySyncSystemTimeWithNtpServer,
+                                scuPlusEightFansFantraySyncRtcWithNtpServer,
+                                scuPlusEightFansFantraySyncRtcWithSystemTime,
+                                scuPlusEightFansFantrayUpdateGivenTimeIntoSystem,
+                                scuPlusEightFansFantrayUpdateGivenTimeIntoRtc,
+                                scuPlusEightFansFantraySystemTimeAndRtcTime,
+                                scuPlusEightFansFantrayConfigurationTableRowStatus
+                        }
+                STATUS  current
+
+                DESCRIPTION
+                 "A collection of objects from RFC 1213 made current by this MIB module."
+
+                ::= { utlrnd 2 }
+
+END
+

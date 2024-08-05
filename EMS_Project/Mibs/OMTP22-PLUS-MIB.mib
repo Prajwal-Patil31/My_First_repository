@@ -1,0 +1,119 @@
+--*****************************************************************************
+--					MIB FILE FOR THE SAMPLE CARD
+--*****************************************************************************
+
+	OMTP22-PLUS-MIB DEFINITIONS ::= BEGIN
+ 
+          IMPORTS
+        	RowStatus      						FROM STANDARD-MIB
+			
+		DisplayString  						FROM RFC1213-MIB       
+    	
+    		OBJECT-IDENTITY,
+    		NOTIFICATION-TYPE,
+    		MODULE-IDENTITY,
+    		Integer32,
+    		Unsigned32,
+    		IpAddress,
+    		TimeTicks							FROM SNMPv2-SMI
+	 
+	 		OBJECT-TYPE    						FROM RFC-1212
+	 		
+			MODULE-COMPLIANCE,
+			OBJECT-GROUP,
+			NOTIFICATION-GROUP					FROM SNMPv2-CONF
+	
+			node,
+			rack,
+			subRack,
+			slot							FROM SCC-MIB	
+    
+   			enterprises							FROM RFC1155-SMI		
+	;
+
+ 
+
+	utl   MODULE-IDENTITY
+            LAST-UPDATED    	"1807130630Z"
+            ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+            CONTACT-INFO    	"Website: http://www.utlindia.com."                                           
+            DESCRIPTION     	"MIB module for UTL 40/80 channel DWDM."
+            REVISION 	    	"1807130630Z"
+            DESCRIPTION    	 	"MIB module for SAMPLE Card."
+            ::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+            STATUS  current
+            DESCRIPTION "UTL R and D."
+            ::= { utl 1 }
+
+
+	dwdm 	OBJECT IDENTIFIER								::=   { utlrnd 1 }
+	indus 	OBJECT IDENTIFIER								::=   { dwdm 1 }
+	omtp22Plus 	OBJECT IDENTIFIER 							::=   { indus 6 }
+
+	omtp22PlusAlarm OBJECT IDENTIFIER 							::=   { omtp22Plus 1 }
+
+
+--*****************************************************************************
+--				   CONFIGURATION
+--*****************************************************************************
+--  Omtp22PlusAlarmEntry first letter should be capital
+
+	omtp22PlusAlarmTable OBJECT-TYPE
+	      SYNTAX  SEQUENCE OF Omtp22PlusAlarmEntry 
+              MAX-ACCESS  not-accessible
+              STATUS  current
+              DESCRIPTION
+                      "Contains alarm queries of the omtp22 card"
+              ::= { omtp22PlusAlarm 1 }
+
+	omtp22PlusAlarmEntry  OBJECT-TYPE
+              SYNTAX  Omtp22AlarmEntry 
+              MAX-ACCESS  not-accessible
+              STATUS  current
+              DESCRIPTION 
+              	""
+		INDEX   { node, rack, subRack, slot, omtp22PlusIntefaceNumber }
+              ::= { omtp22AlarmTable 1 }
+	
+	 Omtp22PlusAlarmEntry  ::= 
+			SEQUENCE {
+					omtp22PlusIntefaceNumber						INTEGER,
+					omtp22PlusXfpInputPowerFailureAlarm					INTEGER
+			}
+		
+--*****************************************************************************
+--				   DESCRIPTION
+--*****************************************************************************
+
+	omtp22PlusIntefaceNumber	 OBJECT-TYPE
+              SYNTAX  INTEGER
+              MAX-ACCESS  read-only
+              STATUS  current
+              DESCRIPTION
+                      "read only  interface number of omtp22 Plus"
+              ::= { omtp22PlusAlarmEntry 1 } 
+		
+	omtp22PlusXfpInputPowerFailureAlarm	 OBJECT-TYPE
+              SYNTAX  INTEGER
+              MAX-ACCESS  read-only
+              STATUS  current
+              DESCRIPTION
+                      "get xfp input power failure alarm status"
+              ::= { omtp22PlusAlarmEntry 2 }          
+                  
+
+--******************************************************************************
+	snmpcurrentGroup OBJECT-GROUP
+   	 OBJECTS 	{ 	
+				omtp22PlusIntefaceNumber,
+				omtp22PlusXfpInputPowerFailureAlarm
+			}
+
+    STATUS  current
+    DESCRIPTION
+            "A collection of objects from RFC 1213 made current by this MIB module."
+    ::= { utlrnd 2 }
+
+END

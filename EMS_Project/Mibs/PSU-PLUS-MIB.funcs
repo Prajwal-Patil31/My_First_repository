@@ -1,0 +1,1 @@
+{ psuPlusAlarmQueryTable, { galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_alarm_query, [ [1,3,6,1,4,1,18036,1,1,1,56,1,1,1,1 ] ] } }.

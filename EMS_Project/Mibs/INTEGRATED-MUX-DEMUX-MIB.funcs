@@ -1,0 +1,3 @@
+{ integratedMuxDemuxCardGeneralDetailsTable,{ galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_general_details, [ [ 1, 3, 6, 1, 4, 1, 18036, 1, 1, 1, 186, 1, 1, 1 ] ] } }.
+
+{ integratedMuxDemuxConfigurationTable,{ galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_configuration_query, [ [ 1, 3, 6, 1, 4, 1, 18036, 1, 1, 1, 186, 2, 1, 1 ] ] } }.

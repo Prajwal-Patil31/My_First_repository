@@ -1,0 +1,4336 @@
+--*****************************************************************************
+--			MIB FILE FOR THE Neutron System Contol Card
+--*****************************************************************************
+
+SCC-MIB DEFINITIONS ::= BEGIN
+ 
+      IMPORTS
+        	
+		RowStatus      			FROM STANDARD-MIB
+			
+		DisplayString  			FROM RFC1213-MIB       
+    	
+		OBJECT-IDENTITY,
+		NOTIFICATION-TYPE,
+		MODULE-IDENTITY,
+		Integer32,
+		Unsigned32,
+		IpAddress,
+		TimeTicks				FROM SNMPv2-SMI
+	 
+	 	OBJECT-TYPE    			FROM RFC-1212
+	 		
+		MODULE-COMPLIANCE,
+		OBJECT-GROUP,
+		NOTIFICATION-GROUP		FROM SNMPv2-CONF
+    
+		enterprises				FROM RFC1155-SMI
+	;
+
+	utl   MODULE-IDENTITY
+        LAST-UPDATED    	"1807130630Z"
+        ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+        CONTACT-INFO    	"Website: http://www.utlindia.com."                                           
+        DESCRIPTION     	"MIB module for UTL 40/80 channel DWDM."
+        REVISION 	    	"1807130630Z"
+        DESCRIPTION    		"MIB module for NEUTRON SCC."
+        ::= { enterprises 18036 }
+        
+	utlrnd  OBJECT-IDENTITY
+        STATUS  current
+        DESCRIPTION "UTL Research and Development."
+        ::= { utl 1 }
+
+	dwdm 			OBJECT IDENTIFIER				::=	{ utlrnd 	1 }
+	indus 			OBJECT IDENTIFIER				::=	{ dwdm 		1 }
+	neutron 		OBJECT IDENTIFIER 				::= { indus 	1 }
+	
+	neutronCardGeneralDetails 	OBJECT IDENTIFIER	::=	{ neutron 1 }
+	neutronConfiguration 		OBJECT IDENTIFIER 	::=	{ neutron 2 }
+	neutronAlarm 				OBJECT IDENTIFIER 	::=	{ neutron 3 }
+	neutronPerformance 			OBJECT IDENTIFIER 	::=	{ neutron 4 }
+
+	neutronAlarmQuery 			OBJECT IDENTIFIER	::=	{ neutronAlarm 1 }
+	neutronAlarmNotification 	OBJECT IDENTIFIER	::=	{ neutronAlarm 2 }
+
+--*****************************************************************************
+--				CARD GENERAL DETAILS
+--*****************************************************************************
+
+	neutronCardGeneralDetailsTable	OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF NeutronCardGeneralDetailsEntry
+      	MAX-ACCESS  not-accessible
+      	STATUS  	current
+        DESCRIPTION	"Contains card general details' queries for the Neutron card"
+		::= { neutronCardGeneralDetails 1 }
+
+	neutronCardGeneralDetailsEntry OBJECT-TYPE
+ 		SYNTAX  	NeutronCardGeneralDetailsEntry
+        MAX-ACCESS  not-accessible
+        STATUS  	current
+        DESCRIPTION ""
+		INDEX   	{ node, rack, subRack, slot, port }
+      	::= { neutronCardGeneralDetailsTable 1 }
+      	
+	NeutronCardGeneralDetailsEntry ::= 
+		SEQUENCE {
+					node		INTEGER,
+					rack		INTEGER,
+					subRack		INTEGER,
+					slot		INTEGER,
+					port		INTEGER,
+					
+					racksPresentInSystem		DisplayString,
+					subracksPresentInRack		DisplayString,
+					cardsPresentInSubrack		OCTET STRING,
+					
+					neutronSystemName		DisplayString,
+					neutronSystemType		DisplayString,
+					
+					neutronEepromCardId 							INTEGER,
+					neutronEepromCardName 							DisplayString,
+					neutronEepromPartCode 							DisplayString,
+					neutronEepromCardSerialNumber 					DisplayString,
+					neutronEepromHardwareExternalReleaseVersion 	DisplayString,
+					neutronEepromSoftwareExternalReleaseVersion 	DisplayString,
+					neutronEepromHardwareInternalReleaseVersion 	DisplayString,
+					neutronEepromSoftwareInternalReleaseVersion 	DisplayString,
+					neutronEepromCardUidNumber						DisplayString,
+					neutronEepromCardEui48Number					DisplayString,
+					neutronEepromCardEui64Number					DisplayString,
+					neutronEepromBackplaneUidNumber					DisplayString,
+					neutronEepromBackplaneEui48Number				DisplayString,
+					neutronEepromBackplaneEui64Number				DisplayString,
+					neutronInstallationDate 						DisplayString,
+					neutronCommissionDate 							DisplayString,
+					neutronApplicationRunningTime					DisplayString,
+					neutronApplicationRestartCount 						INTEGER,
+					
+					neutronOscSfpVendorName							DisplayString,
+					neutronOscSfpSerialNumber						DisplayString,
+					neutronOscSfpPartNumber							DisplayString,
+					neutronOscSfpVendorIeeeId						DisplayString,
+					neutronOscSfpRevisionNumber						DisplayString,
+					neutronOscSfpManufacturingDate					DisplayString,
+					neutronOscSfpLaserWavelength					DisplayString,
+					neutronOscSfpLinkLength							DisplayString,
+					neutronOscSfpEepromPage							INTEGER,
+					neutronCheckCodeOfSfpEepromPage					INTEGER,
+					neutronExtendedCheckCodeOfSfpEepromPage			INTEGER,
+					neutronOscSfpConnectorType						DisplayString,
+					neutronOscSfpSignalEncodingTypesSupported		INTEGER,
+					neutronOscSfpTransceiverCodesSupported			INTEGER,
+					neutronOscSfpMaximumBitrateSupported			DisplayString,
+					neutronOscSfpMinimumBitrateSupported			DisplayString,
+					neutronOscSfpNominalBitrateSupported			DisplayString
+		}
+		
+		node	OBJECT-TYPE
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	not-accessible
+			STATUS  		current
+			DESCRIPTION		"Node Number"
+			::= { neutronCardGeneralDetailsEntry 1 }
+  
+    	rack OBJECT-TYPE
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	not-accessible
+			STATUS  		current
+			DESCRIPTION 	"Rack number"
+			::= { neutronCardGeneralDetailsEntry 2 }
+              
+    	subRack OBJECT-TYPE
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	not-accessible
+			STATUS  		current
+			DESCRIPTION 	"Subrack number"
+			::= { neutronCardGeneralDetailsEntry 3 }   
+              
+    	slot OBJECT-TYPE
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	not-accessible
+			STATUS  		current
+			DESCRIPTION 	"Slot number"
+			::= { neutronCardGeneralDetailsEntry 4 }
+		
+		port OBJECT-TYPE
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	not-accessible
+			STATUS  		current
+			DESCRIPTION 	"Port number"
+			::= { neutronCardGeneralDetailsEntry 5 }
+			
+		racksPresentInSystem OBJECT-TYPE
+            SYNTAX  		DisplayString (SIZE (0..255))
+            MAX-ACCESS  	read-only
+            STATUS  		current
+            DESCRIPTION		"To Get Racks Present in the node,
+            				 For Eg. To get Racks present in Node number - 1
+            				         Index will be : 1.0.0.0.0 "
+            ::= { neutronCardGeneralDetailsEntry 6}
+              
+    	subracksPresentInRack OBJECT-TYPE
+            SYNTAX  		DisplayString (SIZE (0..255))
+            MAX-ACCESS  	read-only
+            STATUS  		current
+            DESCRIPTION		"To Get Subracks Present in the Rack,
+            				 For Eg. To get Subracks present in Node - 1 and Rack - 1
+            				         Index will be : 1.1.0.0.0 "
+            ::= { neutronCardGeneralDetailsEntry 7 }        
+              
+    	cardsPresentInSubrack OBJECT-TYPE
+            SYNTAX  		OCTET STRING
+            MAX-ACCESS  	read-only
+            STATUS  		current
+            DESCRIPTION		"To Get Cards Present in the Subrack,
+            				 For Eg. To get Card Present in
+            				  		 Node - 1, Rack - 1 and Subrack - 1
+            				         Index will be : 1.1.1.0.0 "
+            ::= { neutronCardGeneralDetailsEntry 8 }
+            
+		neutronSystemName	OBJECT-TYPE
+            SYNTAX  		DisplayString (SIZE (0..255))
+            MAX-ACCESS  	read-write
+            STATUS  		current
+            DESCRIPTION		"To Set/Get System Name."
+            ::= { neutronCardGeneralDetailsEntry 9 }	
+       
+		neutronSystemType	OBJECT-TYPE
+            SYNTAX  		DisplayString (SIZE (0..255))
+            MAX-ACCESS  	read-write
+            STATUS  		current
+            DESCRIPTION		"To Set/Get System Type."
+            ::= { neutronCardGeneralDetailsEntry 10 }
+            
+		neutronEepromCardId OBJECT-TYPE
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get card ID present in the EEPROM"
+			::= { neutronCardGeneralDetailsEntry 11 }
+		
+		neutronEepromCardName OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get Card Name present in the EEPROM"
+			::= { neutronCardGeneralDetailsEntry 12 }
+		
+		neutronEepromPartCode OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get Part Code present in the EEPROM"
+			::= { neutronCardGeneralDetailsEntry 13 }
+			
+		neutronEepromCardSerialNumber	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-write
+			STATUS 			current
+			DESCRIPTION		"To Get Serial Number present in the EEPROM"
+			::= { neutronCardGeneralDetailsEntry 14 }
+			
+		neutronEepromHardwareExternalReleaseVersion	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get Hardware External Release Version 
+							 present in the EEPROM"
+			::= { neutronCardGeneralDetailsEntry 15 }
+		
+		neutronEepromSoftwareExternalReleaseVersion OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get Software External Release Version 
+							 present in the EEPROM"
+			::= { neutronCardGeneralDetailsEntry 16 }
+			
+		neutronEepromHardwareInternalReleaseVersion	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get Hardware Internal Release Version 
+							 present in the EEPROM"
+			::= { neutronCardGeneralDetailsEntry 17 }
+			
+		neutronEepromSoftwareInternalReleaseVersion OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get Software Release Version 
+							 present in the EEPROM"
+			::= { neutronCardGeneralDetailsEntry 18 }
+			
+		neutronEepromCardUidNumber	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get card Unique IDentification number."
+			::= { neutronCardGeneralDetailsEntry 19 }
+			
+		neutronEepromCardEui48Number	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To Get Card EUI-48 Number. 
+							 It is a 6 byte number."
+			::= { neutronCardGeneralDetailsEntry 20 }
+			
+		neutronEepromCardEui64Number	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To Get Card EUI-64 Number. 
+							 It is a 8 byte number."
+			::= { neutronCardGeneralDetailsEntry 21 }
+			
+		neutronEepromBackplaneUidNumber	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get Backplane Unique IDentification number."
+			::= { neutronCardGeneralDetailsEntry 22 }
+			
+		neutronEepromBackplaneEui48Number	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To Get Backplane EUI-48 Number. 
+							 It is a 6 byte number."
+			::= { neutronCardGeneralDetailsEntry 23 }
+			
+		neutronEepromBackplaneEui64Number	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To Get Backplane EUI-64 Number. 
+							 It is a 8 byte number."
+			::= { neutronCardGeneralDetailsEntry 24 }
+			
+		neutronInstallationDate	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-write
+			STATUS 			current
+			DESCRIPTION		"To Set/Get the card's installation date in
+							dd/mm/yyyy format
+							-----------------------------
+							Port: 0
+							-----------------------------
+							Value:
+						      	eg: 10/10/2016
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 25 }
+			
+		neutronCommissionDate OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-write
+			STATUS 			current
+			DESCRIPTION		"To Set/Get the card's Commision date in
+							dd/mm/yyyy format
+							-----------------------------
+							Port: 0
+							-----------------------------
+							Value:
+						      	eg: 10/10/2016
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 26 }
+		
+		neutronApplicationRunningTime OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"To get Neutron Application up Time
+							-----------------------------
+							Port : 0
+							-----------------------------
+							Values:
+						      	eg: 2d:0h:0m:0s
+							-----------------------------
+							NOTE: This OID won't give card running Time."
+			::= { neutronCardGeneralDetailsEntry 27 }
+			
+		neutronApplicationRestartCount OBJECT-TYPE		 
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"Get the number of times the Neutron application 
+							has been restarted.
+							NOTE : This wont give you the count for how many times
+							the card is restarted.
+							-----------------------------
+							Port : 0
+							-----------------------------
+							Values:
+						      	eg: 10
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 28 }
+			
+		neutronOscSfpVendorName	OBJECT-TYPE		 
+			SYNTAX  		DisplayString
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides Vendor Name for given SFP. 
+							The vendor name shall be the full name of the 
+							corporation, a commonly accepted abbreviation of 
+							the name of the corporation, the SCSI company code
+							for the corporation, or the stock exchange code for
+							the corporation.
+							-----------------------------
+							Port:
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: WTD
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 41 }
+		
+		neutronOscSfpSerialNumber	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides vendor serial number defining
+							the vendor’s serial number for the SFP. A value of all
+							zero in the 16-byte field indicates that the vendor
+							serial number is unspecified.
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: WXTRRPGEAS1
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 42 }
+			
+		neutronOscSfpPartNumber	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property defines the vendor part number or
+							product name of the SFP. A value of all zero
+							indicates that the vendor Part Number is unspecified.
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: WXTR15101000427
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 43 }
+			
+		neutronOscSfpVendorIeeeId	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property defines the IEEE company Identifier for
+							the vendor of SFP. A value of all zero in the 3-byte
+							field indicates that the Vendor OUI is unspecified.
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: 010
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 44 }
+			
+		neutronOscSfpRevisionNumber	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"The vendor revision number defining the vendor’s
+							product revision number. A value of all zero indicates
+							that the vendor revision number is unspecified
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: RT
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 45 }
+			
+		neutronOscSfpManufacturingDate	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property defines the manufacturing date for 
+							SFP. A value of 8-byte field in ASCII which represents
+							year, month and date of each two bytes. 
+							Extra two bytes may be blank
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: 160224
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 46 }
+			
+		neutronOscSfpLaserWavelength	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides transmitter LASER wavelength(nm)
+							of the SFP
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: 1310.0
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 47 }
+			
+		neutronOscSfpLinkLength	OBJECT-TYPE		 
+			SYNTAX  		DisplayString (SIZE (0..255))
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides link length suported by the SFP
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:
+							eg: 80.00
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 48 }
+			
+		neutronOscSfpEepromPage	OBJECT-TYPE	
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	read-write
+			STATUS 			current
+			DESCRIPTION		"This property sets/gets the SFP EEPROM page, 
+							the value represents the SFP EEPROM page number.
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: 1(EEPROM Page number)
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 49 }
+			
+		neutronCheckCodeOfSfpEepromPage	OBJECT-TYPE		 
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides the SFP
+							check code(checksum) value for bytes 128 to 190
+							present in SFP EEPROM Page number 1. 
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: 1(EEPROM Page number)
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 50 }
+			
+		neutronExtendedCheckCodeOfSfpEepromPage	OBJECT-TYPE		 
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides the SFP
+							extended check code(checksum) value for bytes 192 to 222
+							present in SFP EEPROM Page number 1. 
+							-----------------------------
+							Port Number -
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:			
+							eg: 1(EEPROM Page number)
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 51 }
+			
+		neutronOscSfpConnectorType	OBJECT-TYPE		 
+			SYNTAX  		DisplayString
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides information of the SFP
+							connector, value indicates the external connector
+							provided on the SFP.
+							-----------------------------
+							Port:
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:
+							eg: SC, LC etc.
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 52 }
+			
+		neutronOscSfpSignalEncodingTypesSupported OBJECT-TYPE		 
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property indicates the serial encoding mechanisms
+							that are supported by the SFP.
+							-----------------------------
+							Port:
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values:
+								1 - 64B/66B
+								2 - 8B10B
+								3 - SONET Scrambled
+								4 - NRZ
+								5 - RZ
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 53 }
+			
+		neutronOscSfpTransceiverCodesSupported OBJECT-TYPE		 
+			SYNTAX  		INTEGER
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"The identifier value specifies which transceiver
+							codes are supported by the SFP
+							-----------------------------
+							Port:
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values: Reserved for further study
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 54 }			
+							
+		neutronOscSfpMaximumBitrateSupported	 OBJECT-TYPE		 
+			SYNTAX  		DisplayString
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides maximum bit rate value(Gbps)
+							supported by the SFP
+							-----------------------------
+							Port:
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values: 4.5
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 55 }
+			
+		neutronOscSfpMinimumBitrateSupported	 OBJECT-TYPE		 
+			SYNTAX  		DisplayString
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides minimum bit rate value(Gbps)
+							supported by the SFP
+							-----------------------------
+							Port:
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values: 5.5
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 56 }
+			
+		neutronOscSfpNominalBitrateSupported	 OBJECT-TYPE		 
+			SYNTAX  		DisplayString
+			MAX-ACCESS  	read-only
+			STATUS 			current
+			DESCRIPTION		"This property provides nominal bit rate value(Gbps)
+							supported by the SFP
+							-----------------------------
+							Port:
+									1 :	OSC-1 
+									2 :	OSC-2 
+									3 :	OSC-3 
+									4 :	OSC-4 
+							-----------------------------
+							Values: 1.25
+							-----------------------------"
+			::= { neutronCardGeneralDetailsEntry 57 }
+			
+			
+--*****************************************************************************
+--				   CONFIGURATION
+--*****************************************************************************
+
+	neutronConfigurationTable OBJECT-TYPE
+		SYNTAX  		SEQUENCE OF NeutronConfigurationEntry 
+		MAX-ACCESS  	not-accessible
+		STATUS  		current
+		DESCRIPTION		"Contains configuration queries"
+		::= { neutronConfiguration 1 }
+
+	neutronConfigurationEntry  OBJECT-TYPE
+      	SYNTAX  		NeutronConfigurationEntry 
+      	MAX-ACCESS  	not-accessible
+     	STATUS  		current
+      	DESCRIPTION		""
+		INDEX   		{ node, rack , subRack , slot , port}
+		::= { neutronConfigurationTable 1 }
+	
+	NeutronConfigurationEntry  ::= 
+		SEQUENCE {
+					neutronTrapReceiverIpAddress			OCTET STRING,
+					neutronDeleteTrapReceiverIpAddress		DisplayString,
+					
+					neutronPortIpAddress					DisplayString,
+					
+					neutronAddRoute							DisplayString,
+					neutronDeleteRoute						DisplayString,
+					
+					neutronAddNtpServer						DisplayString,
+					neutronDeleteNtpServer					DisplayString,
+					
+					neutronRestartCard						INTEGER,
+					neutronCardSoftwareUpgrade 				DisplayString,
+					
+					neutronOscSfpLaserState					DisplayString,
+					neutronAutomaticLaserShutdownStatus		INTEGER,
+					neutronAlsPulseRepetitionTime			INTEGER,
+					neutronDeletePortIpAddress				DisplayString,
+					
+					mdroadmDirectionBoxInterconnection				DisplayString,
+					deleteMdroadmDirectionBoxInterconnection		DisplayString,
+					mdroadmAllDirectionBoxInterconnection			DisplayString,
+					deleteMdroadmAllDirectionBoxInterconnection		DisplayString,
+					
+					channelConfigurationsOfDirectionBoxes			DisplayString,
+					blockAllChannelsOfDirectionBoxPort				DisplayString,
+					
+					neutronCardFactoryReset							INTEGER,
+					generateAlarmHistoryLogFile						DisplayString,
+					allActiveAlarmsOfTerminal						DisplayString,			
+
+					neutronHighTemperatureAlarmThreshold			DisplayString,
+					neutronHighTemperatureWarningThreshold			DisplayString,
+					neutronLowTemperatureAlarmThreshold				DisplayString,
+					
+					neutronOscSfpHighBiasCurrentAlarmThreshold			DisplayString,
+					neutronOscSfpHighBiasCurrentWarningThreshold		DisplayString,
+					neutronOscSfpLowBiasCurrentAlarmThreshold			DisplayString,
+					neutronOscSfpLowBiasCurrentWarningThreshold			DisplayString,
+					neutronOscSfpHighSupplyVoltageAlarmThreshold		DisplayString,
+					neutronOscSfpHighSupplyVoltageWarningThreshold		DisplayString,
+					neutronOscSfpLowSupplyVoltageAlarmThreshold			DisplayString,
+					neutronOscSfpLowSupplyVoltageWarningThreshold		DisplayString,
+					neutronOscSfpHighOutputPowerAlarmThreshold			DisplayString,
+					neutronOscSfpHighOutputPowerWarningThreshold		DisplayString,
+					neutronOscSfpLowOutputPowerAlarmThreshold			DisplayString,
+					neutronOscSfpLowOutputPowerWarningThreshold			DisplayString,
+					neutronOscSfpHighInputPowerAlarmThreshold			DisplayString,
+					neutronOscSfpHighInputPowerWarningThreshold			DisplayString,
+					neutronOscSfpLowInputPowerAlarmThreshold			DisplayString,
+					neutronOscSfpLowInputPowerWarningThreshold			DisplayString,
+					neutronOscSfpHighTemperatureAlarmThreshold			DisplayString,
+					neutronOscSfpHighTemperatureWarningThreshold		DisplayString,
+					neutronOscSfpLowTemperatureAlarmThreshold			DisplayString,
+					neutronOscSfpLowTemperatureWarningThreshold			DisplayString,
+					
+					neutronHighTemperatureAlarmSeverity					DisplayString,
+					neutronHighTemperatureWarningSeverity				DisplayString,
+					neutronLowTemperatureAlarmSeverity					DisplayString,
+					neutronOscSfpHighBiasCurrentAlarmSeverity			DisplayString,
+					neutronOscSfpHighBiasCurrentWarningSeverity			DisplayString,
+					neutronOscSfpLowBiasCurrentAlarmSeverity			DisplayString,
+					neutronOscSfpLowBiasCurrentWarningSeverity			DisplayString,
+					neutronOscSfpHighSupplyVoltageAlarmSeverity			DisplayString,
+					neutronOscSfpHighSupplyVoltageWarningSeverity		DisplayString,
+					neutronOscSfpLowSupplyVoltageAlarmSeverity			DisplayString,
+					neutronOscSfpLowSupplyVoltageWarningSeverity		DisplayString,
+					neutronOscSfpHighOutputPowerAlarmSeverity			DisplayString,
+					neutronOscSfpHighOutputPowerWarningSeverity			DisplayString,
+					neutronOscSfpLowOutputPowerAlarmSeverity			DisplayString,
+					neutronOscSfpLowOutputPowerWarningSeverity			DisplayString,
+					neutronOscSfpHighInputPowerAlarmSeverity			DisplayString,
+					neutronOscSfpHighInputPowerWarningSeverity			DisplayString,
+					neutronOscSfpLowInputPowerAlarmSeverity				DisplayString,
+					neutronOscSfpLowInputPowerWarningSeverity			DisplayString,
+					neutronOscSfpLowTemperatureAlarmSeverity			DisplayString,
+					neutronOscSfpLowTemperatureWarningSeverity			DisplayString,
+					neutronOscSfpHighTemperatureAlarmSeverity			DisplayString,
+					neutronOscSfpHighTemperatureWarningSeverity			DisplayString,
+					neutronOscSfpOutputPowerFailureAlarmSeverity		DisplayString,
+					neutronOscSfpInputPowerFailureAlarmSeverity			DisplayString,
+					neutronOscSfpPresenceAbsenceNotificationSeverity	DisplayString,
+					linkFailureAlarmSeverity							DisplayString,
+					amplifierDirectionConflictAlarmSeverity				DisplayString,
+					mdroadmDirectionConflictAlarmSeverity				DisplayString,
+					muxDirectionConflictAlarmSeverity					DisplayString,
+					demuxDirectionConflictAlarmSeverity					DisplayString,
+					
+					neutronHighTemperatureAlarmInhibit					INTEGER,
+					neutronHighTemperatureWarningInhibit				INTEGER,
+					neutronLowTemperatureAlarmInhibit					INTEGER,
+					neutronOscSfpHighBiasCurrentAlarmInhibit			INTEGER,
+					neutronOscSfpHighBiasCurrentWarningInhibit			INTEGER,
+					neutronOscSfpLowBiasCurrentAlarmInhibit				INTEGER,
+					neutronOscSfpLowBiasCurrentWarningInhibit			INTEGER,
+					neutronOscSfpHighSupplyVoltageAlarmInhibit			INTEGER,
+					neutronOscSfpHighSupplyVoltageWarningInhibit		INTEGER,
+					neutronOscSfpLowSupplyVoltageAlarmInhibit			INTEGER,
+					neutronOscSfpLowSupplyVoltageWarningInhibit			INTEGER,
+					neutronOscSfpHighOutputPowerAlarmInhibit			INTEGER,
+					neutronOscSfpHighOutputPowerWarningInhibit			INTEGER,
+					neutronOscSfpLowOutputPowerAlarmInhibit				INTEGER,
+					neutronOscSfpLowOutputPowerWarningInhibit			INTEGER,
+					neutronOscSfpHighInputPowerAlarmInhibit				INTEGER,
+					neutronOscSfpHighInputPowerWarningInhibit			INTEGER,
+					neutronOscSfpLowInputPowerAlarmInhibit				INTEGER,
+					neutronOscSfpLowInputPowerWarningInhibit			INTEGER,
+					neutronOscSfpLowTemperatureAlarmInhibit				INTEGER,
+					neutronOscSfpLowTemperatureWarningInhibit			INTEGER,
+					neutronOscSfpHighTemperatureAlarmInhibit			INTEGER,
+					neutronOscSfpHighTemperatureWarningInhibit			INTEGER,
+					neutronOscSfpOutputPowerFailureAlarmInhibit			INTEGER,
+					neutronOscSfpInputPowerFailureAlarmInhibit			INTEGER,
+					neutronOscSfpPresenceAbsenceNotificationInhibit		INTEGER,
+					linkFailureAlarmInhibit								INTEGER,
+					amplifierDirectionConflictAlarmInhibit				INTEGER,
+					mdroadmDirectionConflictAlarmInhibit				INTEGER,
+					muxDirectionConflictAlarmInhibit					INTEGER,
+					demuxDirectionConflictAlarmInhibit					INTEGER,
+					
+					neutronSyncSystemTimeWithNtpServer					DisplayString,
+					neutronSyncRtcWithNtpServer							DisplayString,
+					neutronSyncRtcWithSystemTime						DisplayString,
+					neutronUpdateGivenTimeIntoSystem					DisplayString,
+					neutronUpdateGivenTimeIntoRtc						DisplayString,
+					neutronSystemTimeAndRtcTime							DisplayString,
+					listNeutronSoftwareReleases							OCTET STRING,
+					deleteNeutronSoftwareRelease						DisplayString,
+					listGalaxySoftwareReleases							OCTET STRING,
+					deleteGalaxySoftwareRelease							DisplayString,
+					neutronDisableOrEnableEmsAndLctPorts				DisplayString,
+					
+					neutronPortInterfaceReset							DisplayString,
+					neutronPortInterfaceMacAddress						DisplayString
+			}
+					
+	neutronTrapReceiverIpAddress  OBJECT-TYPE
+		SYNTAX  		OCTET STRING
+		MAX-ACCESS  	read-write
+		STATUS  		current
+		DESCRIPTION		"To Set/Get Trap Receiver IP address.
+						 -----------------------------
+						 Port Number : 0
+						 ----------------------------- "
+  		::= { neutronConfigurationEntry 1 }	
+		
+	neutronDeleteTrapReceiverIpAddress	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS  		current
+		DESCRIPTION		"To delete Trap Receiver IP address"
+  		::= { neutronConfigurationEntry 2}
+
+	neutronPortIpAddress OBJECT-TYPE
+      	SYNTAX  		DisplayString (SIZE (0..255))
+      	MAX-ACCESS  	read-write
+     	STATUS  		current
+     	DESCRIPTION		"To Change Ems OSC Ports and VoIP Ip address,
+			              the IP should be provided along with it's 
+			              net mask and gateway address separated by /
+			              ----------------------------------------------
+			              eg : 192.168.21.2/255.255.255.0/192.168.21.254
+			              ----------------------------------------------
+			              Port Number : 
+				              1 -> set/get OSC1 ip address
+				              2 -> set/get OSC2 ip address
+				              3 -> set/get OSC3 ip address
+				              4 -> set/get OSC4 ip address
+				              5 -> set/get EMS  ip address
+				              7 -> set/get VoIP ip address"
+		::= { neutronConfigurationEntry 3 }
+
+	neutronAddRoute OBJECT-TYPE
+    	SYNTAX  		DisplayString (SIZE (0..255))
+	    MAX-ACCESS  	read-write
+	    STATUS  		current
+	    DESCRIPTION		"To set/get Routing table entry"
+	    ::= { neutronConfigurationEntry 4 }
+
+	neutronDeleteRoute OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"To Delete Routing table entry"
+  		::= { neutronConfigurationEntry 5 }			
+					
+	neutronAddNtpServer	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"To Add NTP Server."
+  		::= { neutronConfigurationEntry 6 }
+  		
+	neutronDeleteNtpServer	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"To Delete NTP Server."
+  		::= { neutronConfigurationEntry 7 }
+	
+	neutronRestartCard	OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"To restart Card."
+  		::= { neutronConfigurationEntry 8 }
+	
+	neutronCardSoftwareUpgrade 	OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Valid only as SET command.
+						This property upgrades the software.
+						-----------------------------
+						Port Number : 0
+						-----------------------------
+						value - File path
+							For Eg. 
+								/home/root/rel-1.tar.gz "
+  		::= { neutronConfigurationEntry 9 }			
+	
+	neutronOscSfpLaserState	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"To Get Laser Status. and Turn On/Off OSC SFP Laser.
+  						 -----------------------------
+  						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+  						-----------------------------
+  						 NOTE : If Automatic Laser Shutdown(ALSD) is enable than 
+  						 		Laser cann't be contol( ie. Can't ON/OFF Laser ). "
+  		::= { neutronConfigurationEntry 10 }
+  		
+	neutronAutomaticLaserShutdownStatus	OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set the Automatic Laser Switching(ALS) mode for
+						for requested port. Based on the RX LOS state of the
+						port, the transmit LASER state will be controlled
+						according to the algorithm defined for ALS in
+						ITUT 664 Standard
+						-----------------------------
+						 Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						 Values: 
+							1 - Enable ALS state
+							0 - Disable ALS state "
+  		::= { neutronConfigurationEntry 11 }
+  
+  	neutronAlsPulseRepetitionTime OBJECT-TYPE
+      	SYNTAX  		INTEGER
+      	MAX-ACCESS  	read-write
+     	STATUS  		current
+     	DESCRIPTION		"Pulse repetition time is the time for automatic
+						restart of OSC SFP LASER once the ALS algorithm starts.
+						-----------------------------
+						Values:
+						100 seconds to 300 seconds
+						-----------------------------  "
+		::= { neutronConfigurationEntry 12 }
+  		
+  	neutronDeletePortIpAddress OBJECT-TYPE
+      	SYNTAX  		DisplayString (SIZE (0..255))
+      	MAX-ACCESS  	read-write
+     	STATUS  		current
+     	DESCRIPTION		"To Remove IP assigned to SCC's Ethernet Ports
+			              Port Number : 
+				              1 ->  OSC1 ip address
+				              2 ->  OSC2 ip address
+				              3 ->  OSC3 ip address
+				              4 ->  OSC4 ip address
+				              5 ->  EMS  ip address
+				              7 ->  VoIP ip address"
+		::= { neutronConfigurationEntry 13 }
+		
+  	mdroadmDirectionBoxInterconnection OBJECT-TYPE
+      	SYNTAX  		DisplayString (SIZE (0..255))
+      	MAX-ACCESS  	read-write
+     	STATUS  		current
+     	DESCRIPTION		"To set the Interconnection information between 
+     					two direction boxes of MDROADM node.
+     					
+     					Value: Direction-Port-Direction-Port
+     					
+     					Example: if we want to make connection between
+     					Direction1 port1 to direction2 port1, then the connection
+     					information should be provided as: 1-1-2-1
+     					-----------------------------
+						Port Number should be : 0 "
+						
+		::= { neutronConfigurationEntry 14 }
+		
+	deleteMdroadmDirectionBoxInterconnection OBJECT-TYPE
+      	SYNTAX  		DisplayString (SIZE (0..255))
+      	MAX-ACCESS  	read-write
+     	STATUS  		current
+     	DESCRIPTION		"To delete the Interconnection information between 
+     					two direction boxes of MDROADM node.
+     					
+     					Value: Direction-Port-Direction-Port
+     					
+     					Example: if we want to delete connection between
+     					Direction1 port1 to direction2 port1, then the connection
+     					information should be provided as: 1-1-2-1
+     					-----------------------------
+						Port Number should be : 0 "
+						
+		::= { neutronConfigurationEntry 15 }
+		
+	mdroadmAllDirectionBoxInterconnection OBJECT-TYPE
+      	SYNTAX  		DisplayString (SIZE (0..255))
+      	MAX-ACCESS  	read-write
+     	STATUS  		current
+     	DESCRIPTION		"To set and get Interconnection information of 
+     					all direction box present in MDROADM node.
+     					
+     					Here the connection information between direction boxes should be
+     					provided with comma separated.
+     					Value: Direction-Port-Direction-Port,Direction-Port-Direction-Port ..
+     					
+     					Example: 1-1-2-1,1-2-3-2,1-3-4-1,2-2-3-1,2-3-4-3,4-2-3-3
+     					-----------------------------
+						Port Number should be : 0 "
+						
+		::= { neutronConfigurationEntry 16 }
+						
+	deleteMdroadmAllDirectionBoxInterconnection OBJECT-TYPE
+      	SYNTAX  		DisplayString (SIZE (0..255))
+      	MAX-ACCESS  	read-write
+     	STATUS  		current
+     	DESCRIPTION		"To delete Interconnection information of 
+     					all direction box present in MDROADM node.
+     					
+     					Value: 0
+     					-----------------------------
+						Port Number should be : 0 "
+						
+		::= { neutronConfigurationEntry 17 }
+		
+	channelConfigurationsOfDirectionBoxes OBJECT-TYPE
+      	SYNTAX  		DisplayString (SIZE (0..255))
+      	MAX-ACCESS  	read-write
+     	STATUS  		current
+     	DESCRIPTION		"This OID can be used to:
+     					set channel port
+     					set channel attenuation 
+     					set channel to block state
+     					of direction box present in MDROADM node.
+     					
+     					Value: Direction-Port-Channel-Attenuation - for setting attenuation
+						Value: Direction-Port-Channel-Attenuation,Direction-Port-Channel-Attenuation - 
+								for setting channel port or channel state to block
+     					
+     					-----------------------------
+						Port Number should be : 0 "
+		::= { neutronConfigurationEntry 18 }
+						
+	blockAllChannelsOfDirectionBoxPort OBJECT-TYPE
+      	SYNTAX  		DisplayString (SIZE (0..255))
+      	MAX-ACCESS  	read-write
+     	STATUS  		current
+     	DESCRIPTION		"This OID can be used to block all channels of the given port and 
+     					all channels mapped between two direction boxes present in MDROADM node.
+     					
+						Value: Direction-Port - for blocking all channels mapped through the given port and direction
+						Value: Direction-Port,Direction-Port,Direction-Port - for blocking all mapped channels for multiple directions 
+     					-----------------------------
+						Port Number should be : 0 "
+		::= { neutronConfigurationEntry 19 }
+		
+	neutronCardFactoryReset	OBJECT-TYPE		 
+		SYNTAX  		INTEGER
+		MAX-ACCESS 		read-write
+		STATUS 			current
+		DESCRIPTION		"Valid only as a SET command.
+						This OID can be used to Sets SCC To Factory Default State
+						Following changes has been done,
+						- Deletes EMS/LCT Ip address and Set 192.168.21.46 IP address to EMS port
+						- Deletes All OSC Port IP address
+						- Deletes VoIP Port IP address
+						- Deletes NTP Sever IP address
+						- Deletes Trap Receiver IP address
+						- Deletes All log files.
+						- Deletes Datbase Tables
+						- All Defaults Thresholds and Severity will be loaded into Database Table.
+						- At last will Reboot Card.
+						-----------------------------
+						Port Number should be : 0 
+						-----------------------------
+						Values:
+						Dont care, any value
+						eg: 0
+						-----------------------------"
+		::= { neutronConfigurationEntry 20 }
+
+	generateAlarmHistoryLogFile OBJECT-TYPE		 
+			SYNTAX  		DisplayString
+			MAX-ACCESS  	read-write
+			STATUS 			current
+			DESCRIPTION		"Writes the complete alarm history logs in to a file
+							and returns the file path.
+							-----------------------------
+							Port : 0
+							-----------------------------
+							Values:
+						      	eg: /home/root/neutron/alarm_log_dump
+							-----------------------------"
+			::= { neutronConfigurationEntry 21 }
+
+	allActiveAlarmsOfTerminal OBJECT-TYPE
+      	SYNTAX  		DisplayString (SIZE (0..255))
+      	MAX-ACCESS  	read-only
+     	STATUS  		current
+     	DESCRIPTION		"Writes all active alarms in to a file
+						and returns the file path.
+						-----------------------------
+						Port : 0
+						-----------------------------
+						Values:
+					      	eg: /home/root/neutron/active_alarms.txt
+						-----------------------------"
+		::= { neutronConfigurationEntry 22 }
+	
+	neutronHighTemperatureAlarmThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Temperature Alarm Threshold
+						(in degree celsius) for the Neutron Card
+						-----------------------------
+						Port Number :
+  						 			0 - Neutron Card
+						-----------------------------
+						Values: 
+							eg: 65 
+						-----------------------------
+						NOTE : Value must be Integer."
+  		::= { neutronConfigurationEntry 31 }
+  		
+	neutronHighTemperatureWarningThreshold		OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Temperature Warning Threshold
+						(in degree celsius) for the Neutron Card
+						-----------------------------
+						Port Number :
+  						 			0 - Neutron Card
+						-----------------------------
+						Values: 
+							eg: 45
+						-----------------------------
+						NOTE : Value must be Integer."
+  		::= { neutronConfigurationEntry 32 }
+  		
+	neutronLowTemperatureAlarmThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Low Temperature Alarm Threshold
+						(in degree celsius) for the Neutron Card
+						-----------------------------
+						Port Number :
+  						 			0 - Neutron Card
+						-----------------------------
+						Values: 
+							eg: 5
+						-----------------------------
+						NOTE : Value must be Integer."
+  		::= { neutronConfigurationEntry 33 }
+	
+	neutronOscSfpHighBiasCurrentAlarmThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Bias Current Alarm Threshold
+						(in milli ampere) for the requested port
+						-----------------------------
+						Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: 35.6
+						-----------------------------"
+  		::= { neutronConfigurationEntry 41 }
+  		
+	neutronOscSfpHighBiasCurrentWarningThreshold		OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Bias Current Warning Threshold
+						(in milli ampere) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: 34.5
+						-----------------------------"
+  		::= { neutronConfigurationEntry 42 }
+  		
+	neutronOscSfpLowBiasCurrentAlarmThreshold		OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Low Bias Current Alarm Threshold
+						(in milli ampere) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: 31.1
+						-----------------------------"
+  		::= { neutronConfigurationEntry 43 }
+  		
+	neutronOscSfpLowBiasCurrentWarningThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Low Bias Current Alarm Threshold
+						(in milli ampere) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: 32.8
+						-----------------------------"
+  		::= { neutronConfigurationEntry 44 }
+  		
+	neutronOscSfpHighSupplyVoltageAlarmThreshold		OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Supply Voltage Alarm Threshold
+						(in volts) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: +3.3
+						-----------------------------"
+  		::= { neutronConfigurationEntry 45 }
+  		
+	neutronOscSfpHighSupplyVoltageWarningThreshold		OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Supply Voltage Warning Threshold
+						(in volts) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: +3.2
+						-----------------------------"
+  		::= { neutronConfigurationEntry 46 }
+  		
+	neutronOscSfpLowSupplyVoltageAlarmThreshold		OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Low Supply Voltage Alarm Threshold
+						(in volts) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: +3.0
+						-----------------------------"
+  		::= { neutronConfigurationEntry 47 }
+  		
+	neutronOscSfpLowSupplyVoltageWarningThreshold		OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Low Supply Voltage Warning Threshold
+						(in volts) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: +3.1
+						-----------------------------"
+  		::= { neutronConfigurationEntry 48 }
+  		
+	neutronOscSfpHighOutputPowerAlarmThreshold		OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Output Power Alarm Threshold
+						(in dbm) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: +2.0
+						-----------------------------"
+  		::= { neutronConfigurationEntry 49 }
+  		
+	neutronOscSfpHighOutputPowerWarningThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Output Power Warning Threshold
+						(in dbm) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: +1.3
+						-----------------------------"
+  		::= { neutronConfigurationEntry 50 }
+  		
+	neutronOscSfpLowOutputPowerAlarmThreshold		OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Output Low Power Alarm Threshold
+						(in dbm) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: -3.5
+						-----------------------------"
+  		::= { neutronConfigurationEntry 51 }
+  		
+	neutronOscSfpLowOutputPowerWarningThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Output Low Power Warning Threshold
+						(in dbm) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: -2.5
+						-----------------------------"
+  		::= { neutronConfigurationEntry 52 }
+  		
+	neutronOscSfpHighInputPowerAlarmThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Input High Power Alarm Threshold
+						(in dbm) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: -9.1
+						-----------------------------"
+  		::= { neutronConfigurationEntry 53 }
+  		
+	neutronOscSfpHighInputPowerWarningThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Input High Power Warning Threshold
+						(in dbm) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: -11.2
+						-----------------------------"
+  		::= { neutronConfigurationEntry 54 }
+  		
+	neutronOscSfpLowInputPowerAlarmThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Input Low Power Alarm Threshold
+						(in dbm) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: -35.6
+						-----------------------------"
+  		::= { neutronConfigurationEntry 55 }
+  		
+	neutronOscSfpLowInputPowerWarningThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Input Low Power Warning Threshold
+						(in dbm) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: -31.3
+						-----------------------------"
+  		::= { neutronConfigurationEntry 56 }
+  		
+	neutronOscSfpHighTemperatureAlarmThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Temperature Alarm Threshold
+						(in degree celsius) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values: 
+						eg: 65 
+						-----------------------------"
+  		::= { neutronConfigurationEntry 57 }
+  		
+	neutronOscSfpHighTemperatureWarningThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get High Temperature Warning Threshold
+						(in degree celsius) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values: 
+						eg: 60 
+						-----------------------------"
+  		::= { neutronConfigurationEntry 58 }
+  		
+	neutronOscSfpLowTemperatureAlarmThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Low Temperature Alarm Threshold
+						(in degree celsius) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values: 
+						eg: 5 
+						-----------------------------"
+  		::= { neutronConfigurationEntry 59 }
+  		
+	neutronOscSfpLowTemperatureWarningThreshold	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get Low Temperature Warning Threshold
+						(in degree celsius) for the requested port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values: 
+						eg: 10 
+						-----------------------------"
+  		::= { neutronConfigurationEntry 60 }		
+					
+	neutronHighTemperatureAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number : 0
+						-----------------------------
+						Value:
+							critical
+							major
+							minor
+							deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 71 }
+  		
+	neutronHighTemperatureWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number : 0
+						-----------------------------
+						Value:
+							critical
+							major
+							minor
+							deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 72 }
+  		
+	neutronLowTemperatureAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number : 0
+						-----------------------------
+						Value:
+							critical
+							major
+							minor
+							deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 73 }
+	
+	neutronOscSfpHighBiasCurrentAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 74 }
+  		
+	neutronOscSfpHighBiasCurrentWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 75 }
+  		
+	neutronOscSfpLowBiasCurrentAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 76 }
+  		
+	neutronOscSfpLowBiasCurrentWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 77 }
+  		
+	neutronOscSfpHighSupplyVoltageAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 78 }
+  		
+	neutronOscSfpHighSupplyVoltageWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 79 }
+  		
+	neutronOscSfpLowSupplyVoltageAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 80 }
+  		
+	neutronOscSfpLowSupplyVoltageWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 81 }
+  		
+	neutronOscSfpHighOutputPowerAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 82 }
+  		
+	neutronOscSfpHighOutputPowerWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 83 }
+  		
+	neutronOscSfpLowOutputPowerAlarmSeverity OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 84 }
+  		
+	neutronOscSfpLowOutputPowerWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 85 }
+  		
+	neutronOscSfpHighInputPowerAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 86 }
+  		
+	neutronOscSfpHighInputPowerWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 87 }
+  		
+	neutronOscSfpLowInputPowerAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 88 }
+  		
+	neutronOscSfpLowInputPowerWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 89 }
+  		
+	neutronOscSfpLowTemperatureAlarmSeverity OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 90 }
+  		
+	neutronOscSfpLowTemperatureWarningSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 91 }
+  		
+	neutronOscSfpHighTemperatureAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 92 }
+  		
+	neutronOscSfpHighTemperatureWarningSeverity OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 93 }
+  		
+  	neutronOscSfpOutputPowerFailureAlarmSeverity OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 94 }
+  		
+	neutronOscSfpInputPowerFailureAlarmSeverity OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm severity level
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 95 }
+  		
+	neutronOscSfpPresenceAbsenceNotificationSeverity OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the severity of the alarm
+  						---------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 96 }
+  		
+	linkFailureAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the severity of the alarm
+  						---------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 102 }
+  		
+ 	amplifierDirectionConflictAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the severity of the alarm
+  						---------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 103 }
+  		
+  	mdroadmDirectionConflictAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the severity of the alarm
+  						---------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 104 }
+  		
+	muxDirectionConflictAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the severity of the alarm
+  						---------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 105 }
+  		
+	demuxDirectionConflictAlarmSeverity	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the severity of the alarm
+  						---------------------------
+							Value:
+								critical
+								major
+								minor
+								deferred
+						---------------------------"
+  		::= { neutronConfigurationEntry 106 }
+	
+	neutronHighTemperatureAlarmInhibit	OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number : 0
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 111 }
+  		
+	neutronHighTemperatureWarningInhibit 	OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number : 0
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 112 }
+  		
+	neutronLowTemperatureAlarmInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number : 0
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 113 }
+	
+	neutronOscSfpHighBiasCurrentAlarmInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 121 }
+  		
+	neutronOscSfpHighBiasCurrentWarningInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 122 }
+  		
+	neutronOscSfpLowBiasCurrentAlarmInhibit  OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 123 }
+  		
+	neutronOscSfpLowBiasCurrentWarningInhibit  OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 124 }
+  		
+	neutronOscSfpHighSupplyVoltageAlarmInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 125 }
+  		
+	neutronOscSfpHighSupplyVoltageWarningInhibit  OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 126 }
+  		
+	neutronOscSfpLowSupplyVoltageAlarmInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 127 }
+  		
+	neutronOscSfpLowSupplyVoltageWarningInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 128 }
+  		
+	neutronOscSfpHighOutputPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 129 }
+  		
+	neutronOscSfpHighOutputPowerWarningInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 130 }
+  		
+	neutronOscSfpLowOutputPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 131 }
+  		
+	neutronOscSfpLowOutputPowerWarningInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 132 }
+  		
+	neutronOscSfpHighInputPowerAlarmInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 133 }
+  		
+	neutronOscSfpHighInputPowerWarningInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 134 }
+  		
+	neutronOscSfpLowInputPowerAlarmInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 135 }
+  		
+	neutronOscSfpLowInputPowerWarningInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 136 }
+  		
+	neutronOscSfpLowTemperatureAlarmInhibit OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 137 }
+  		
+	neutronOscSfpLowTemperatureWarningInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 138 }
+  		
+	neutronOscSfpHighTemperatureAlarmInhibit  OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 139 }
+  		
+	neutronOscSfpHighTemperatureWarningInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 140 }
+  		
+	neutronOscSfpOutputPowerFailureAlarmInhibit  OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 141 }
+  		
+	neutronOscSfpInputPowerFailureAlarmInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 142 }
+  		
+	neutronOscSfpPresenceAbsenceNotificationInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 143 }
+  		
+	linkFailureAlarmInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - Direction 1
+  						 			2 - Direction 2
+  						 			3 - Direction 3
+  						 			4 - Direction 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 155 }
+
+	amplifierDirectionConflictAlarmInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - Direction 1
+  						 			2 - Direction 2
+  						 			3 - Direction 3
+  						 			4 - Direction 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 156 }
+  		
+	mdroadmDirectionConflictAlarmInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - Direction 1
+  						 			2 - Direction 2
+  						 			3 - Direction 3
+  						 			4 - Direction 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 157 }
+
+	muxDirectionConflictAlarmInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - Direction 1
+  						 			2 - Direction 2
+  						 			3 - Direction 3
+  						 			4 - Direction 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 158 }
+  		
+	demuxDirectionConflictAlarmInhibit	 OBJECT-TYPE
+		SYNTAX  		INTEGER
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	"Set or Get the alarm Inhibition
+						-----------------------------
+							Port Number :
+  						 			1 - Direction 1
+  						 			2 - Direction 2
+  						 			3 - Direction 3
+  						 			4 - Direction 4
+						-----------------------------
+							Value:
+								1 - Inhibit
+								0 - Do Not Inhibit
+						---------------------------"
+  		::= { neutronConfigurationEntry 159 }
+
+	neutronSyncSystemTimeWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in linux kernel with the NTP server
+  						we can use this OID. We can provide NTP server
+  						ip address as a value to this OID and the time
+  						will be synced to that particular server. 
+  						If we are not providing NTP server IP address 
+  						then the system will be synced with the NTP server 
+  						which is already been registered with Neutron. 
+  						If both are absent then error message will be returned
+  						-----------------------------
+							Port Number : 0
+						-----------------------------
+							If we want to provide NTP server IP address then
+							Value should be a valid IP address as shown below
+							: 192.168.21.25
+							
+							If we don't want to provide NTP server address then no
+							need to pass any value. 
+						---------------------------"
+  						
+  		::= { neutronConfigurationEntry 165 }
+  		
+  	neutronSyncRtcWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in RTC with the NTP server
+  						we can use this OID. We can provide NTP server
+  						ip address as a value to this OID and the time
+  						will be synced to that particular server. 
+  						If we are not providing NTP server IP address 
+  						then the system will be synced with the NTP server 
+  						which is already been registered with Neutron. 
+  						If both are absent then error message will be returned.
+  						-----------------------------
+						Port Number : 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+							
+						If we don't want to provide NTP server address, then no
+						need to pass any value. 
+						---------------------------"
+  						
+  		::= { neutronConfigurationEntry 166 }
+  		
+  	neutronSyncRtcWithSystemTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in RTC with the time value in linux kernel
+  						we can use this OID. With this set operation, 
+  						the time available with linux kernel will be updated
+  						into RTC. It is not required to provide any value for 
+  						this operation"
+  						
+  		::= { neutronConfigurationEntry 167 }
+  		
+  	neutronUpdateGivenTimeIntoSystem	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update system time
+  						with the user provided time, we can use this OID.
+  						With OID we need to provide time value which we
+  						want to update in the system.
+  						-----------------------------
+						Port Number : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { neutronConfigurationEntry 168 }
+  		
+  	neutronUpdateGivenTimeIntoRtc	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update RTC time
+  						with the user provided time, we can use this OID.
+  						With OID we need to provide time value which we
+  						want to update in RTC.
+  						-----------------------------
+						Port Number : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { neutronConfigurationEntry 169 }
+  		
+  	neutronSystemTimeAndRtcTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-only
+  		STATUS  		current
+  		DESCRIPTION	 	" get the system time and time value present in RTC.
+  						-----------------------------
+						Port Number : 0
+						-----------------------------"
+						
+  		::= { neutronConfigurationEntry 170 }
+  		
+  	listNeutronSoftwareReleases	 OBJECT-TYPE
+		SYNTAX  		OCTET STRING
+  		MAX-ACCESS  	read-only
+  		STATUS  		current
+  		DESCRIPTION	 	" Gives what are the different versions
+  						of software releases for Neutron is available in SCC. 
+  						This OID can be used by EMS to list all available 
+  						neutron software releases present in SCC
+  						-----------------------------
+						Port Number : 0
+						-----------------------------"
+  						
+  		::= { neutronConfigurationEntry 171 }
+  		
+  	deleteNeutronSoftwareRelease	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" This OID can be used to delete any unwanted
+  						software release of Neutron present in SCC.
+  						-----------------------------
+						Port Number : 0
+						-----------------------------
+						Example for values:
+						
+						rel-1.0.0.130.tar.gz
+						---------------------------"
+  						
+  		::= { neutronConfigurationEntry 172 }
+  		
+  	listGalaxySoftwareReleases	 OBJECT-TYPE
+		SYNTAX  		OCTET STRING
+  		MAX-ACCESS  	read-only
+  		STATUS  		current
+  		DESCRIPTION	 	" Gives what are the different versions
+  						of Galaxy software releases are available in SCC. 
+  						This OID can be used by EMS to list all available 
+  						Galaxy software releases present in SCC
+  						-----------------------------
+						Port Number : 0
+						-----------------------------"
+  						
+  		::= { neutronConfigurationEntry 173 }
+  		
+  	deleteGalaxySoftwareRelease	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" This OID can be used to delete any unwanted
+  						Galaxy software release present in SCC.
+  						-----------------------------
+						Port Number : 0
+						-----------------------------
+						Example for values:
+						
+						rel-1.0.0.180.tar.gz
+						---------------------------"
+						
+  		::= { neutronConfigurationEntry 174 }
+  		
+ neutronDisableOrEnableEmsAndLctPorts	 OBJECT-TYPE
+	SYNTAX  		DisplayString
+	MAX-ACCESS  	read-write
+	STATUS  		current
+	DESCRIPTION	 	" This OID can be used to Enable/Disable the EMS/LCT
+					Ethernet ports present in SCC.
+					-----------------------------
+					Port Number : 5 ( For EMS )
+					Port Number : 6 ( For LCT )
+					-----------------------------
+					Values: 
+					1 - Enable EMS/LCT port
+					0 - Disable EMS/LCT port
+					-----------------------------"
+			
+	::= { neutronConfigurationEntry 175 }
+	
+neutronPortInterfaceReset	OBJECT-TYPE
+			SYNTAX  		DisplayString
+			MAX-ACCESS 		read-write
+			STATUS 			current
+			DESCRIPTION		"Valid only as a SET command.
+							This OID can be used to Reset Given Interface of SCC
+							- Resets EMS/LCT/OSC port interfaces
+							-----------------------------
+							Port Number should be interface number i.e, 0 to 7
+							eg: 
+								OSC1 -> 1
+								OSC2 -> 2
+								OSC3 -> 3
+								OSC4 -> 4
+								EMS/LCT -> 5
+								VoIP -> 7 
+							-----------------------------
+							Values: should be given 0
+							returns success, operation succeful tuple
+							-----------------------------"
+	::= { neutronConfigurationEntry 176 }
+	
+neutronPortInterfaceMacAddress		OBJECT-TYPE
+			SYNTAX  		DisplayString
+			MAX-ACCESS 		read-only
+			STATUS 			current
+			DESCRIPTION		"Valid only as a GET command.
+							This OID can be used to get Given Interface mac address
+							-----------------------------
+							Port Number should be interface number i.e, 0 to 7
+							eg: 
+								OSC1 -> 1
+								OSC2 -> 2
+								OSC3 -> 3
+								OSC4 -> 4
+								EMS/LCT -> 5
+								VoIP -> 7 
+							-----------------------------
+							Values: returns mac address for the interface
+							-----------------------------"
+	::= { neutronConfigurationEntry 177 }
+
+		
+--*****************************************************************************
+--				   ALARM
+--*****************************************************************************
+
+	neutronAlarmQueryTable OBJECT-TYPE
+  		SYNTAX  		SEQUENCE OF NeutronAlarmQueryEntry
+  		MAX-ACCESS  	not-accessible
+  		STATUS  		current
+  		DESCRIPTION		""
+  		::= { neutronAlarmQuery  1 }
+
+	neutronAlarmQueryEntry OBJECT-TYPE
+		SYNTAX  		NeutronAlarmQueryEntry
+      	MAX-ACCESS  	not-accessible
+      	STATUS  		current
+      	DESCRIPTION 	""
+		INDEX   		{ node, rack , subRack , slot, port }
+      	::= { neutronAlarmQueryTable 1 }
+
+	NeutronAlarmQueryEntry ::= 
+		SEQUENCE {
+		
+					cardJackIn			DisplayString,
+					cardJackOut 		DisplayString,
+					cardRegistered 		DisplayString,
+					 
+					neutronHighTemperatureAlarm			DisplayString,
+					neutronHighTemperatureWarning		DisplayString,
+					neutronLowTemperatureAlarm			DisplayString,
+					
+					neutronOscSfpHighBiasCurrentAlarm			DisplayString,
+					neutronOscSfpHighBiasCurrentWarning			DisplayString,
+					neutronOscSfpLowBiasCurrentAlarm			DisplayString,
+					neutronOscSfpLowBiasCurrentWarning			DisplayString,
+					neutronOscSfpHighSupplyVoltageAlarm			DisplayString,
+					neutronOscSfpHighSupplyVoltageWarning		DisplayString,
+					neutronOscSfpLowSupplyVoltageAlarm			DisplayString,
+					neutronOscSfpLowSupplyVoltageWarning		DisplayString,
+					neutronOscSfpHighOutputPowerAlarm			DisplayString,
+					neutronOscSfpHighOutputPowerWarning			DisplayString,
+					neutronOscSfpLowOutputPowerAlarm			DisplayString,
+					neutronOscSfpLowOutputPowerWarning			DisplayString,
+					neutronOscSfpHighInputPowerAlarm			DisplayString,
+					neutronOscSfpHighInputPowerWarning			DisplayString,
+					neutronOscSfpLowInputPowerAlarm				DisplayString,
+					neutronOscSfpLowInputPowerWarning			DisplayString,
+					neutronOscSfpLowTemperatureAlarm			DisplayString,
+					neutronOscSfpLowTemperatureWarning			DisplayString,
+					neutronOscSfpHighTemperatureAlarm			DisplayString,
+					neutronOscSfpHighTemperatureWarning			DisplayString,
+					neutronOscSfpPresenceAbsenceNotification	DisplayString,
+					neutronOscSfpOutputPowerFailureAlarm		DisplayString,
+					neutronOscSfpInputPowerFailureAlarm			DisplayString,
+					
+					neutronBmuAlarmSeverityIndicationStatus		DisplayString,
+					neutronApplicationReady						INTEGER,
+					
+					linkFailureAlarm							DisplayString,
+					cardSoftwareUpgradeStatus					DisplayString,
+					neutronDatabaseFailureAlarm 				DisplayString,
+					amplifierDirectionConflictAlarm				DisplayString,
+					mdroadmDirectionConflictAlarm				DisplayString,
+					muxDirectionConflictAlarm					DisplayString,
+					demuxDirectionConflictAlarm					DisplayString
+					
+			}
+
+	cardJackIn OBJECT-TYPE
+    	SYNTAX 			DisplayString
+        MAX-ACCESS  	read-only
+        STATUS  		current
+        DESCRIPTION		"This alarm generates when card detects through Hardware pin"
+        ::= { neutronAlarmQueryEntry 1 }
+
+	cardJackOut OBJECT-TYPE
+		SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+  		DESCRIPTION		"This alarm generates when card removal detects through Hardware pin"
+  		::= { neutronAlarmQueryEntry 2 }
+              
+	cardRegistered OBJECT-TYPE
+        SYNTAX 			DisplayString
+        MAX-ACCESS  	read-only
+        STATUS  		current
+        DESCRIPTION 	"This alarm generates when card register with SCC"
+        ::= { neutronAlarmQueryEntry 3 }
+
+	neutronHighTemperatureAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron card's Temperature
+						 Goes Above High Temperature Alarm Threshold
+						 ----------------------------------
+						 	Port Number : 0 
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 11 }
+		
+	neutronHighTemperatureWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This Warning is generated when Neutron card's Temperature
+						 Goes Above High Temperature Warning Threshold
+						 ----------------------------------
+						 	Port Number : 0 
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 12 }
+		
+	neutronLowTemperatureAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron card's Temperature
+						 Goes Below Low Temperature Alarm Threshold
+						 ----------------------------------
+						 	Port Number : 0 
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 13 }
+		
+	neutronOscSfpHighBiasCurrentAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's Bias Current
+						 Goes Above High Bias current Alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 21 }
+		
+	neutronOscSfpHighBiasCurrentWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's Bias Current
+						 Goes Above High Bias current Warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 22 }
+		
+	neutronOscSfpLowBiasCurrentAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's Bias Current
+						 Goes beow Low Bias current Alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 23 }
+		
+	neutronOscSfpLowBiasCurrentWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's Bias Current
+						 Goes Below low Bias current Warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 24 }
+		
+	neutronOscSfpHighSupplyVoltageAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's supply Voltage
+						 Goes Above High supply voltage alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 25 }
+		
+	neutronOscSfpHighSupplyVoltageWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's supply Voltage
+						 Goes Above High supply voltage warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 26 }
+		
+	neutronOscSfpLowSupplyVoltageAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's supply Voltage
+						 Goes Below Low supply voltage alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 27 }
+		
+	neutronOscSfpLowSupplyVoltageWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's supply Voltage
+						 Goes Below Low supply voltage warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 28 }
+		
+	neutronOscSfpHighOutputPowerAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's Output power
+						 Goes Above High output power alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 29 }
+		
+	neutronOscSfpHighOutputPowerWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's Output power
+						 Goes Above High output power warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 30 }
+		
+	neutronOscSfpLowOutputPowerAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's Output power
+						 Goes Below Low output power alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 31 }
+		
+	neutronOscSfpLowOutputPowerWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's Output power
+						 Goes below low output power warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 32 }
+		
+	neutronOscSfpHighInputPowerAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's Input power
+						 Goes Above High input power alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 33 }
+		
+	neutronOscSfpHighInputPowerWarning		OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's Input power
+						 Goes Above High input power warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 34 }
+		
+	neutronOscSfpLowInputPowerAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's Input power
+						 Goes below low input power alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 35 }
+		
+	neutronOscSfpLowInputPowerWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's Input power
+						 Goes below low input power warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 36 }
+		
+	neutronOscSfpLowTemperatureAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's Temperature
+						 Goes below Low temperature alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 37 }
+		
+	neutronOscSfpLowTemperatureWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's Temperature
+						 Goes below Low temperature warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 38 }
+		
+	neutronOscSfpHighTemperatureAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated when Neutron OSC SFP's Temperature
+						 Goes above High temperature alarm Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 39 }
+		
+	neutronOscSfpHighTemperatureWarning	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This warning is generated when Neutron OSC SFP's Temperature
+						 Goes above High temperature warning Threshold
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 40 }
+		
+	neutronOscSfpPresenceAbsenceNotification	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This Notification is generated when SFP is inserted/removed
+						 from Neutron Card
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 41 }
+		
+	neutronOscSfpOutputPowerFailureAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated Output power is not there in 
+						Neutron OSC SFP's Output port 
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 42 }
+		
+	neutronOscSfpInputPowerFailureAlarm	OBJECT-TYPE
+        SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is generated Input power is not there in 
+						Neutron OSC SFP's input port 
+						 ----------------------------------
+						 	Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						 ----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+		::= { neutronAlarmQueryEntry 43 }
+		
+	neutronBmuAlarmSeverityIndicationStatus		OBJECT-TYPE
+		SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+  		STATUS  		current
+  		DESCRIPTION	 	"This notification is Generated when BMU's LED indication is 
+  						changed with respect to Alarm Present in system.
+  						----------------------------------
+						 	Port Number ( BMU Rack Number ): 
+						 		1 - Rack 1 BMU
+						 		2 - Rack 2 BMU
+						----------------------------------		
+							Values 
+								major 		- Major Alarm LED is ON
+								minor 		- Minor Alarm LED is ON
+								major+minor - Major and Minor Alarm LED is ON
+								normal 		- Normal Alarm LED is ON
+						----------------------------------"
+  		::= { neutronAlarmQueryEntry 61 }
+	
+	neutronApplicationReady	OBJECT-TYPE
+		SYNTAX 			INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This Notification is Generated when neutron System Restarts."
+  		::= { neutronAlarmQueryEntry 62 }
+	
+	linkFailureAlarm	 OBJECT-TYPE
+		SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This Notification is Generated when there is a link
+						failure between two terminals "
+  		::= { neutronAlarmQueryEntry 64 }
+  		
+ 	cardSoftwareUpgradeStatus	 OBJECT-TYPE
+		SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		" software upgrade status "
+  		::= { neutronAlarmQueryEntry 65 }
+  	
+	neutronDatabaseFailureAlarm	 OBJECT-TYPE
+		SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This Alarm is generated when any database failure
+						happens in the system. The alarm value will tell what
+						is the failure happened in database"
+  		::= { neutronAlarmQueryEntry 66 } 
+
+	amplifierDirectionConflictAlarm	 OBJECT-TYPE
+		SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is Generated when two Same direction 
+						Amplifier cards are present in the same terminal
+						----------------------------------
+						 	Port Number :
+  						 			1 - Direction 1
+  						 			2 - Direction 2
+  						 			3 - Direction 3
+  						 			4 - Direction 4
+						----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+  		::= { neutronAlarmQueryEntry 67 }
+
+	mdroadmDirectionConflictAlarm	 OBJECT-TYPE
+		SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is Generated when two Same direction 
+						MDROADM cards are present in the same terminal
+						----------------------------------
+						 	Port Number :
+  						 			1 - Direction 1
+  						 			2 - Direction 2
+  						 			3 - Direction 3
+  						 			4 - Direction 4
+						----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+  		::= { neutronAlarmQueryEntry 68 }
+
+	muxDirectionConflictAlarm	 OBJECT-TYPE
+		SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is Generated when two Same direction 
+						MUX cards are present in the same terminal
+						----------------------------------
+						 	Port Number :
+  						 			1 - Direction 1
+  						 			2 - Direction 2
+  						 			3 - Direction 3
+  						 			4 - Direction 4
+						----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+  		::= { neutronAlarmQueryEntry 69 }
+
+	demuxDirectionConflictAlarm	 OBJECT-TYPE
+		SYNTAX 			DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"This alarm is Generated when two Same direction 
+						DEMUX cards are present in the same terminal
+						----------------------------------
+						 	Port Number :
+  						 			1 - Direction 1
+  						 			2 - Direction 2
+  						 			3 - Direction 3
+  						 			4 - Direction 4
+						----------------------------------		
+							Values 
+								0	-> No alarm
+								
+								If Time stamp comes as a reply for the get alarm query,
+								it indicates the presence of the alarm and the time is 
+								alarm generated time ( Eg : 2017-5-25,10:42:0.0,+5:30 )
+						----------------------------------"
+  		::= { neutronAlarmQueryEntry 70 }
+					
+--*****************************************************************************
+--				   ALARM TRAP
+--*****************************************************************************
+
+	cardJackInTrap NOTIFICATION-TYPE
+		OBJECTS 		{ cardJackIn }
+	    STATUS  		current
+        DESCRIPTION		"Alarm Trap, Will be Generated when Card hard presence Detects."
+      	::= { neutronAlarmNotification 1 }
+              
+    cardJackOutTrap NOTIFICATION-TYPE
+		OBJECTS 		{ cardJackOut }
+	    STATUS  		current
+        DESCRIPTION		"Alarm Trap, Will be Generated when Card hard Absence Detects"
+        ::= { neutronAlarmNotification 2 }
+              
+    cardRegisteredTrap NOTIFICATION-TYPE
+		OBJECTS 		{ cardRegistered }
+	    STATUS  		current
+        DESCRIPTION 	"Card Registration Trap will be generated when Card Registered itself with SCC."
+		::= { neutronAlarmNotification 3 }
+              
+	neutronHighTemperatureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronHighTemperatureAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 11 }
+		
+	neutronHighTemperatureWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronHighTemperatureWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 12 }
+		
+	neutronLowTemperatureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronLowTemperatureAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 13 }
+	
+	neutronOscSfpHighBiasCurrentAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighBiasCurrentAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 21 }
+		
+	neutronOscSfpHighBiasCurrentWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighBiasCurrentWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 22 }
+		
+	neutronOscSfpLowBiasCurrentAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowBiasCurrentAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 23 }
+		
+	neutronOscSfpLowBiasCurrentWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowBiasCurrentWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 24 }
+		
+	neutronOscSfpHighSupplyVoltageAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighSupplyVoltageAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 25 }
+		
+	neutronOscSfpHighSupplyVoltageWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighSupplyVoltageWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 26 }
+		
+	neutronOscSfpLowSupplyVoltageAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowSupplyVoltageAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 27 }
+		
+	neutronOscSfpLowSupplyVoltageWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowSupplyVoltageWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 28 }
+		
+	neutronOscSfpHighOutputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighOutputPowerAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 29 }
+		
+	neutronOscSfpHighOutputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighOutputPowerWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 30 }
+		
+	neutronOscSfpLowOutputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowOutputPowerAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 31 }
+		
+	neutronOscSfpLowOutputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowOutputPowerWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 32 }
+		
+	neutronOscSfpHighInputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighInputPowerAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 33 }
+		
+	neutronOscSfpHighInputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighInputPowerWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 34 }
+		
+	neutronOscSfpLowInputPowerAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowInputPowerAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 35 }
+		
+	neutronOscSfpLowInputPowerWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowInputPowerWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 36 }
+		
+	neutronOscSfpLowTemperatureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowTemperatureAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 37 }
+		
+	neutronOscSfpLowTemperatureWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpLowTemperatureWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 38 }
+		
+	neutronOscSfpHighTemperatureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighTemperatureAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 39 }
+		
+	neutronOscSfpHighTemperatureWarningTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpHighTemperatureWarning }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 40 }
+		
+	neutronOscSfpPresenceAbsenceNotificationTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpPresenceAbsenceNotification }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 41 }
+		
+	neutronOscSfpOutputPowerFailureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpOutputPowerFailureAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 42 }
+		
+	neutronOscSfpInputPowerFailureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronOscSfpInputPowerFailureAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 43 }
+	
+	neutronBmuAlarmSeverityIndicationStatusTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronBmuAlarmSeverityIndicationStatus }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 61 }
+		
+	neutronApplicationReadyTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronApplicationReady }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 62 }
+		
+	linkFailureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ linkFailureAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 64 }	
+		
+	cardSoftwareUpgradeStatusTrap NOTIFICATION-TYPE
+		OBJECTS 		{ cardSoftwareUpgradeStatus }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 65 }
+		
+	neutronDatabaseFailureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ neutronDatabaseFailureAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 66 }
+		
+	configurationUpdateTrap NOTIFICATION-TYPE
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 67 }
+		
+	amplifierDirectionConflictAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ amplifierDirectionConflictAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 68 }		
+
+	mdroadmDirectionConflictAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ mdroadmDirectionConflictAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 69 }
+		
+	muxDirectionConflictAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ muxDirectionConflictAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 70 }
+		
+	demuxDirectionConflictAlarmTrap NOTIFICATION-TYPE
+		OBJECTS 		{ demuxDirectionConflictAlarm }
+	    STATUS  		current
+        DESCRIPTION 	""
+		::= { neutronAlarmNotification 71 }	
+
+					
+--*****************************************************************************
+--				PERFORMANCE	
+--*****************************************************************************
+
+	neutronPerformanceTable OBJECT-TYPE
+  		SYNTAX  		SEQUENCE OF NeutronPerformanceEntry
+  		MAX-ACCESS  	not-accessible
+  		STATUS  		current
+  		DESCRIPTION		""
+  		::= { neutronPerformance  1 }
+
+	neutronPerformanceEntry OBJECT-TYPE
+		SYNTAX  		NeutronPerformanceEntry
+      	MAX-ACCESS  	not-accessible
+      	STATUS  		current
+      	DESCRIPTION 	""
+		INDEX   		{ node, rack , subRack , slot, port }
+      	::= { neutronPerformanceTable 1 }
+
+	NeutronPerformanceEntry ::= 
+		SEQUENCE {
+					neutronOscSfpInputPower			DisplayString,
+					neutronOscSfpOutputPower		DisplayString,
+					neutronOscSfpTemperature		DisplayString,
+					neutronOscSfpBiasCurrent		DisplayString,
+					neutronOscSfpSupplyVoltage		DisplayString,
+					neutronTemperature				DisplayString	
+			}
+			
+	neutronOscSfpInputPower	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"Gives the current Input power(dbm) received at the port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: -9.0
+						-----------------------------"
+  		::= { neutronPerformanceEntry 1 }
+  		
+	neutronOscSfpOutputPower 	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"Gives the current Output power(dbm) transmitted at the port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: -6.0
+						-----------------------------"
+  		::= { neutronPerformanceEntry 2 }
+  		
+	neutronOscSfpTemperature 	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"Gives the temperature(degree celcius) of the transmitter
+						at  the port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+						Values:
+						eg: 33.35
+						-----------------------------"
+  		::= { neutronPerformanceEntry 3 }
+  		
+	neutronOscSfpBiasCurrent 	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"Gives the bias current(mA) thats transmitted at the port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Values:
+								eg: 55
+						-----------------------------"
+  		::= { neutronPerformanceEntry 4 }
+  		
+	neutronOscSfpSupplyVoltage 	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"Gives the Supply Voltage of the port
+						-----------------------------
+							Port Number :
+  						 			1 - OSC 1
+  						 			2 - OSC 2
+  						 			3 - OSC 3
+  						 			4 - OSC 4
+						-----------------------------
+							Values:
+								eg: 3.3
+						-----------------------------"
+  		::= { neutronPerformanceEntry 5 }
+  		
+	neutronTemperature 	OBJECT-TYPE
+		SYNTAX  		DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS  		current
+		DESCRIPTION		"Gives the Current temperature of Neutron Card
+						-----------------------------
+							Port Number : 0
+						-----------------------------
+							Values:
+								eg: 37.0
+						-----------------------------"
+  		::= { neutronPerformanceEntry 21 }
+  	
+--*****************************************************************************
+	
+	snmpCurrentNotificationsGroup NOTIFICATION-GROUP
+  		NOTIFICATIONS {
+  							cardJackInTrap,
+							cardJackOutTrap,
+							cardRegisteredTrap,
+							neutronHighTemperatureAlarmTrap,
+							neutronHighTemperatureWarningTrap,
+							neutronLowTemperatureAlarmTrap,
+							neutronOscSfpHighBiasCurrentAlarmTrap,
+							neutronOscSfpHighBiasCurrentWarningTrap,
+							neutronOscSfpLowBiasCurrentAlarmTrap,
+							neutronOscSfpLowBiasCurrentWarningTrap,
+							neutronOscSfpHighSupplyVoltageAlarmTrap,
+							neutronOscSfpHighSupplyVoltageWarningTrap,
+							neutronOscSfpLowSupplyVoltageAlarmTrap,
+							neutronOscSfpLowSupplyVoltageWarningTrap,
+							neutronOscSfpHighOutputPowerAlarmTrap,
+							neutronOscSfpHighOutputPowerWarningTrap,
+							neutronOscSfpLowOutputPowerAlarmTrap,
+							neutronOscSfpLowOutputPowerWarningTrap,
+							neutronOscSfpHighInputPowerAlarmTrap,
+							neutronOscSfpHighInputPowerWarningTrap,
+							neutronOscSfpLowInputPowerAlarmTrap,
+							neutronOscSfpLowInputPowerWarningTrap,
+							neutronOscSfpLowTemperatureAlarmTrap,
+							neutronOscSfpLowTemperatureWarningTrap,
+							neutronOscSfpHighTemperatureAlarmTrap,
+							neutronOscSfpHighTemperatureWarningTrap,
+							neutronOscSfpPresenceAbsenceNotificationTrap,
+							neutronOscSfpOutputPowerFailureAlarmTrap,
+							neutronOscSfpInputPowerFailureAlarmTrap,
+							neutronBmuAlarmSeverityIndicationStatusTrap,
+							neutronApplicationReadyTrap,
+							linkFailureAlarmTrap,
+							cardSoftwareUpgradeStatusTrap,
+							neutronDatabaseFailureAlarmTrap,
+							configurationUpdateTrap,
+							amplifierDirectionConflictAlarmTrap,
+							mdroadmDirectionConflictAlarmTrap,
+							muxDirectionConflictAlarmTrap,
+							demuxDirectionConflictAlarmTrap
+  						}
+  		STATUS 			current
+  	  	DESCRIPTION		"The UTL DWDM current notifications group"
+  	  	::= { neutron 5 }
+  	  	
+	snmpcurrentGroup OBJECT-GROUP
+    	OBJECTS {
+    	
+    				node,
+					rack,
+					subRack,
+					slot,
+					port,
+					
+					racksPresentInSystem,
+					subracksPresentInRack,
+					cardsPresentInSubrack,
+					
+					neutronSystemName,
+					neutronSystemType,
+					
+					neutronEepromCardId, 
+					neutronEepromCardName, 
+					neutronEepromPartCode, 
+					neutronEepromCardSerialNumber, 
+					neutronEepromHardwareExternalReleaseVersion, 
+					neutronEepromSoftwareExternalReleaseVersion, 
+					neutronEepromHardwareInternalReleaseVersion, 
+					neutronEepromSoftwareInternalReleaseVersion,
+					neutronEepromCardUidNumber,
+					neutronEepromCardEui48Number,
+					neutronEepromCardEui64Number,
+					neutronEepromBackplaneUidNumber,
+					neutronEepromBackplaneEui48Number,
+					neutronEepromBackplaneEui64Number,
+					neutronInstallationDate, 
+					neutronCommissionDate,
+					neutronApplicationRunningTime, 
+					neutronApplicationRestartCount,
+					
+					neutronOscSfpVendorName,
+					neutronOscSfpSerialNumber,
+					neutronOscSfpPartNumber,
+					neutronOscSfpVendorIeeeId,
+					neutronOscSfpRevisionNumber,
+					neutronOscSfpManufacturingDate,
+					neutronOscSfpLaserWavelength,
+					neutronOscSfpLinkLength,
+					neutronOscSfpEepromPage,
+					neutronCheckCodeOfSfpEepromPage,
+					neutronExtendedCheckCodeOfSfpEepromPage,
+					neutronOscSfpConnectorType,
+					neutronOscSfpSignalEncodingTypesSupported,
+					neutronOscSfpTransceiverCodesSupported,
+					neutronOscSfpMaximumBitrateSupported,
+					neutronOscSfpMinimumBitrateSupported,
+					neutronOscSfpNominalBitrateSupported,
+					
+					neutronCardFactoryReset,
+					neutronTrapReceiverIpAddress,
+					neutronDeleteTrapReceiverIpAddress,
+					neutronPortIpAddress,
+					neutronDeletePortIpAddress,
+					neutronAddRoute,
+					neutronDeleteRoute,
+					neutronAddNtpServer,
+					neutronDeleteNtpServer,
+					neutronRestartCard,
+					neutronCardSoftwareUpgrade, 
+					neutronOscSfpLaserState,
+					neutronAutomaticLaserShutdownStatus,
+					neutronAlsPulseRepetitionTime,
+					mdroadmDirectionBoxInterconnection,
+					deleteMdroadmDirectionBoxInterconnection,
+					mdroadmAllDirectionBoxInterconnection,
+					deleteMdroadmAllDirectionBoxInterconnection,
+					channelConfigurationsOfDirectionBoxes,
+					blockAllChannelsOfDirectionBoxPort,
+					generateAlarmHistoryLogFile,
+					allActiveAlarmsOfTerminal,
+					neutronSyncSystemTimeWithNtpServer,
+					neutronSyncRtcWithNtpServer,
+					neutronSyncRtcWithSystemTime,
+					neutronUpdateGivenTimeIntoSystem,
+					neutronUpdateGivenTimeIntoRtc,
+					neutronSystemTimeAndRtcTime,
+					listNeutronSoftwareReleases,
+					deleteNeutronSoftwareRelease,
+					listGalaxySoftwareReleases,
+					deleteGalaxySoftwareRelease,
+					neutronDisableOrEnableEmsAndLctPorts,
+					
+					neutronPortInterfaceReset,
+					neutronPortInterfaceMacAddress,
+					
+					neutronHighTemperatureAlarmThreshold,
+					neutronHighTemperatureWarningThreshold,
+					neutronLowTemperatureAlarmThreshold,
+					
+					neutronOscSfpHighBiasCurrentAlarmThreshold,
+					neutronOscSfpHighBiasCurrentWarningThreshold,
+					neutronOscSfpLowBiasCurrentAlarmThreshold,
+					neutronOscSfpLowBiasCurrentWarningThreshold,
+					neutronOscSfpHighSupplyVoltageAlarmThreshold,
+					neutronOscSfpHighSupplyVoltageWarningThreshold,
+					neutronOscSfpLowSupplyVoltageAlarmThreshold,
+					neutronOscSfpLowSupplyVoltageWarningThreshold,
+					neutronOscSfpHighOutputPowerAlarmThreshold,
+					neutronOscSfpHighOutputPowerWarningThreshold,
+					neutronOscSfpLowOutputPowerAlarmThreshold,
+					neutronOscSfpLowOutputPowerWarningThreshold,
+					neutronOscSfpHighInputPowerAlarmThreshold,
+					neutronOscSfpHighInputPowerWarningThreshold,
+					neutronOscSfpLowInputPowerAlarmThreshold,
+					neutronOscSfpLowInputPowerWarningThreshold,
+					neutronOscSfpHighTemperatureAlarmThreshold,
+					neutronOscSfpHighTemperatureWarningThreshold,
+					neutronOscSfpLowTemperatureAlarmThreshold,
+					neutronOscSfpLowTemperatureWarningThreshold,
+					
+					neutronHighTemperatureAlarmSeverity,
+					neutronHighTemperatureWarningSeverity,
+					neutronLowTemperatureAlarmSeverity,
+					neutronOscSfpHighBiasCurrentAlarmSeverity,
+					neutronOscSfpHighBiasCurrentWarningSeverity,
+					neutronOscSfpLowBiasCurrentAlarmSeverity,
+					neutronOscSfpLowBiasCurrentWarningSeverity,
+					neutronOscSfpHighSupplyVoltageAlarmSeverity,
+					neutronOscSfpHighSupplyVoltageWarningSeverity,
+					neutronOscSfpLowSupplyVoltageAlarmSeverity,
+					neutronOscSfpLowSupplyVoltageWarningSeverity,
+					neutronOscSfpHighOutputPowerAlarmSeverity,
+					neutronOscSfpHighOutputPowerWarningSeverity,
+					neutronOscSfpLowOutputPowerAlarmSeverity,
+					neutronOscSfpLowOutputPowerWarningSeverity,
+					neutronOscSfpHighInputPowerAlarmSeverity,
+					neutronOscSfpHighInputPowerWarningSeverity,
+					neutronOscSfpLowInputPowerAlarmSeverity,
+					neutronOscSfpLowInputPowerWarningSeverity,
+					neutronOscSfpLowTemperatureAlarmSeverity,
+					neutronOscSfpLowTemperatureWarningSeverity,
+					neutronOscSfpHighTemperatureAlarmSeverity,
+					neutronOscSfpHighTemperatureWarningSeverity,
+					neutronOscSfpOutputPowerFailureAlarmSeverity,
+					neutronOscSfpInputPowerFailureAlarmSeverity,
+					neutronOscSfpPresenceAbsenceNotificationSeverity,
+					linkFailureAlarmSeverity,
+					amplifierDirectionConflictAlarmSeverity,
+					mdroadmDirectionConflictAlarmSeverity,
+					muxDirectionConflictAlarmSeverity,
+					demuxDirectionConflictAlarmSeverity,
+					
+					neutronHighTemperatureAlarmInhibit,
+					neutronHighTemperatureWarningInhibit,
+					neutronLowTemperatureAlarmInhibit,
+					neutronOscSfpHighBiasCurrentAlarmInhibit,
+					neutronOscSfpHighBiasCurrentWarningInhibit,
+					neutronOscSfpLowBiasCurrentAlarmInhibit,
+					neutronOscSfpLowBiasCurrentWarningInhibit,
+					neutronOscSfpHighSupplyVoltageAlarmInhibit,
+					neutronOscSfpHighSupplyVoltageWarningInhibit,
+					neutronOscSfpLowSupplyVoltageAlarmInhibit,
+					neutronOscSfpLowSupplyVoltageWarningInhibit,
+					neutronOscSfpHighOutputPowerAlarmInhibit,
+					neutronOscSfpHighOutputPowerWarningInhibit,
+					neutronOscSfpLowOutputPowerAlarmInhibit,
+					neutronOscSfpLowOutputPowerWarningInhibit,
+					neutronOscSfpHighInputPowerAlarmInhibit,
+					neutronOscSfpHighInputPowerWarningInhibit,
+					neutronOscSfpLowInputPowerAlarmInhibit,
+					neutronOscSfpLowInputPowerWarningInhibit,
+					neutronOscSfpLowTemperatureAlarmInhibit,
+					neutronOscSfpLowTemperatureWarningInhibit,
+					neutronOscSfpHighTemperatureAlarmInhibit,
+					neutronOscSfpHighTemperatureWarningInhibit,
+					neutronOscSfpOutputPowerFailureAlarmInhibit,
+					neutronOscSfpInputPowerFailureAlarmInhibit,
+					neutronOscSfpPresenceAbsenceNotificationInhibit,
+					linkFailureAlarmInhibit,
+					amplifierDirectionConflictAlarmInhibit,
+					mdroadmDirectionConflictAlarmInhibit,
+					muxDirectionConflictAlarmInhibit,
+					demuxDirectionConflictAlarmInhibit,
+					
+					cardJackIn,
+					cardJackOut, 
+					cardRegistered, 
+					
+					neutronHighTemperatureAlarm,
+					neutronHighTemperatureWarning,
+					neutronLowTemperatureAlarm,
+					
+					neutronOscSfpHighBiasCurrentAlarm,
+					neutronOscSfpHighBiasCurrentWarning,
+					neutronOscSfpLowBiasCurrentAlarm,
+					neutronOscSfpLowBiasCurrentWarning,
+					neutronOscSfpHighSupplyVoltageAlarm,
+					neutronOscSfpHighSupplyVoltageWarning,
+					neutronOscSfpLowSupplyVoltageAlarm,
+					neutronOscSfpLowSupplyVoltageWarning,
+					neutronOscSfpHighOutputPowerAlarm,
+					neutronOscSfpHighOutputPowerWarning,
+					neutronOscSfpLowOutputPowerAlarm,
+					neutronOscSfpLowOutputPowerWarning,
+					neutronOscSfpHighInputPowerAlarm,
+					neutronOscSfpHighInputPowerWarning,
+					neutronOscSfpLowInputPowerAlarm,
+					neutronOscSfpLowInputPowerWarning,
+					neutronOscSfpLowTemperatureAlarm,
+					neutronOscSfpLowTemperatureWarning,
+					neutronOscSfpHighTemperatureAlarm,
+					neutronOscSfpHighTemperatureWarning,
+					neutronOscSfpPresenceAbsenceNotification,
+					neutronOscSfpOutputPowerFailureAlarm,
+					neutronOscSfpInputPowerFailureAlarm,
+					
+					neutronBmuAlarmSeverityIndicationStatus,
+					neutronApplicationReady,
+					
+					linkFailureAlarm,
+					cardSoftwareUpgradeStatus,
+					neutronDatabaseFailureAlarm,
+					amplifierDirectionConflictAlarm,
+					mdroadmDirectionConflictAlarm,
+					muxDirectionConflictAlarm,
+					demuxDirectionConflictAlarm,
+					
+					neutronOscSfpInputPower,
+					neutronOscSfpOutputPower,
+					neutronOscSfpTemperature,
+					neutronOscSfpBiasCurrent,
+					neutronOscSfpSupplyVoltage,
+					neutronTemperature
+    				
+    			}
+    	STATUS  		current
+    	DESCRIPTION 	"A collection of objects from RFC 1213 made current by this MIB module."
+    	::= { utlrnd 2 }
+
+END	

@@ -1,0 +1,543 @@
+--*****************************************************************************
+--				UTL MUX PLUS MIB
+--*****************************************************************************
+
+MUX-PLUS-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+        	RowStatus      			FROM STANDARD-MIB
+
+        	DisplayString  			FROM RFC1213-MIB       
+			
+    		OBJECT-IDENTITY, 
+    		NOTIFICATION-TYPE, 
+    		MODULE-IDENTITY, 
+    		Integer32, 
+    		Unsigned32,
+    		IpAddress,
+    		TimeTicks			FROM SNMPv2-SMI
+    		
+	 	OBJECT-TYPE    			FROM RFC-1212
+	 		
+		MODULE-COMPLIANCE, 
+		OBJECT-GROUP, 
+		NOTIFICATION-GROUP		FROM SNMPv2-CONF
+			
+		node, 
+		rack, 
+		subRack, 
+		slot 				FROM SCC-MIB
+
+		enterprises 			FROM RFC1155-SMI		
+
+	;
+
+	utl   	MODULE-IDENTITY
+	
+            	LAST-UPDATED    	"1807130630Z"
+            	ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+            	CONTACT-INFO    	"Website: http://www.utlindia.com."                                           
+            	DESCRIPTION     	"MIB module for UTL DWDM."
+            	REVISION 	    	"1807130630Z"
+            	DESCRIPTION    	 	"MIB module for MUX Plus Card."
+            
+            	::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+            	STATUS  current
+            
+		DESCRIPTION "UTL R and D."
+            	
+		::= { utl 1 }
+
+	dwdm 				OBJECT IDENTIFIER	::=   { utlrnd 1 }
+	indus 				OBJECT IDENTIFIER	::=   { dwdm 1 }
+	muxPlus 			OBJECT IDENTIFIER 	::=   { indus 171 }
+
+	muxPlusCardGeneralDetails 	OBJECT IDENTIFIER 	::=   { muxPlus 1 }
+	muxPlusConfiguration 		OBJECT IDENTIFIER 	::=   { muxPlus 2 }
+
+--*****************************************************************************
+--			MUX PLUS CARD GENERAL DETAILS
+--*****************************************************************************
+
+	muxPlusCardGeneralDetailsTable OBJECT-TYPE 
+		SYNTAX 		SEQUENCE OF MuxPlusCardGeneralDetailsEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+
+		DESCRIPTION
+		 " we can get MUX Plus card general details "
+
+		::= { muxPlusCardGeneralDetails 1 }
+
+	muxPlusCardGeneralDetailsEntry OBJECT-TYPE
+		SYNTAX  	MuxPlusCardGeneralDetailsEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot and muxPlusInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, muxPlusInterface }
+		::= { muxPlusCardGeneralDetailsTable 1 }
+
+	MuxPlusCardGeneralDetailsEntry ::=
+		SEQUENCE {
+				muxPlusInterface				INTEGER,
+				muxPlusEepromCardId				INTEGER,
+				muxPlusEepromCardName				DisplayString,
+				muxPlusEepromPartCode				DisplayString,
+				muxPlusEepromCardSerialNumber			DisplayString,
+				muxPlusEepromHardwareExternalReleaseVersion	DisplayString,
+				muxPlusSoftwareExternalReleaseVersion		DisplayString,
+				muxPlusEepromHardwareInternalReleaseVersion	DisplayString,
+				muxPlusSoftwareInternalReleaseVersion		DisplayString,
+				muxPlusEepromCardUidNumber			DisplayString,
+				muxPlusEepromCardEUI48Number			DisplayString,
+				muxPlusEepromCardEUI64Number			DisplayString,
+				muxPlusCardRootFileSystemVersion		DisplayString,
+				muxPlusInstallationDate				DisplayString,
+				muxPlusCommissionDate				DisplayString,
+				muxPlusCardRunningTime				DisplayString,
+				muxPlusCardRestartCount				INTEGER,
+				muxPlusCardDirection				INTEGER,
+				muxPlusCardGeneralDetailsTableRowStatus	RowStatus
+			}
+
+	muxPlusInterface OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+		DESCRIPTION 	"muxPlusInterface number"
+		::= { muxPlusCardGeneralDetailsEntry 1 }
+
+	muxPlusEepromCardId OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " Tells the card ID of the MUX-PLUS card, present in the EEPROM "
+
+		::= { muxPlusCardGeneralDetailsEntry 2 }
+
+	muxPlusEepromCardName OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the card name of the MUX-PLUS card, present in the EEPROM "
+
+		::= { muxPlusCardGeneralDetailsEntry 3 }
+
+	muxPlusEepromPartCode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the part code of the MUX-PLUS card, present in the EEPROM "
+
+		::= { muxPlusCardGeneralDetailsEntry 4 }
+
+	muxPlusEepromCardSerialNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " This property get / set the information about MUX-PLUS 
+		 Card's Serial Number."
+
+		::= { muxPlusCardGeneralDetailsEntry 5 }
+
+	muxPlusEepromHardwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware External Release Version. This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product "
+
+		::= { muxPlusCardGeneralDetailsEntry 6 }
+
+	muxPlusSoftwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software External Release Version.  This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product "
+
+		::= { muxPlusCardGeneralDetailsEntry 7 }
+
+	muxPlusEepromHardwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware Internal Release Version. This detail 
+		 is used for development purposes only. It differs from the external 
+		 hardware version "
+
+		::= { muxPlusCardGeneralDetailsEntry 8 }
+
+	muxPlusSoftwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software Internal Release Version.  This detail 
+		 is used for development purposes only. It differs from the external 
+		 software version "
+
+		::= { muxPlusCardGeneralDetailsEntry 9 }
+
+	muxPlusEepromCardUidNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card Unique Identifier It is a 4 byte address used to 
+		 uniquely identify a card "
+
+		::= { muxPlusCardGeneralDetailsEntry 10 }
+
+	muxPlusEepromCardEUI48Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-48 Number. It’s a 6 byte address used to 
+		 uniquely identify a card "
+
+		::= { muxPlusCardGeneralDetailsEntry 11 }
+
+	muxPlusEepromCardEUI64Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-64 Number. It’s a 8 byte address "
+
+		::= { muxPlusCardGeneralDetailsEntry 12 }
+		
+        muxPlusCardRootFileSystemVersion OBJECT-TYPE		 
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS current
+		DESCRIPTION
+			"Tells the Card's Root File System Version
+			-----------------------------
+			muxPlusInterface: 0
+			-----------------------------
+			Value:
+		      	eg: 8
+			-----------------------------"
+		::= { muxPlusCardGeneralDetailsEntry 13 }
+
+	muxPlusInstallationDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the card's installation date in dd/mm/yyyy format "
+
+		::= { muxPlusCardGeneralDetailsEntry 21 }
+
+	muxPlusCommissionDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the card's commission date in  dd/mm/yyyy format "
+
+		::= { muxPlusCardGeneralDetailsEntry 22 }
+
+	muxPlusCardRunningTime OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the duration of time for which the card is operational/running "
+
+		::= { muxPlusCardGeneralDetailsEntry 23 }
+
+	muxPlusCardRestartCount OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the number of times the card has been soft reset. This value 
+		 will get reset to 0 on factory reset "
+
+		::= { muxPlusCardGeneralDetailsEntry 24 }
+
+	muxPlusCardDirection OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the direction "
+
+		::= { muxPlusCardGeneralDetailsEntry 25 }
+		
+	muxPlusCardGeneralDetailsTableRowStatus OBJECT-TYPE
+		SYNTAX		RowStatus
+		MAX-ACCESS	read-write
+		STATUS		current
+		DESCRIPTION
+			"This is MIB realted property,
+			NOT to be considered as a card property"
+
+		::= { muxPlusCardGeneralDetailsEntry 26 }
+
+--*****************************************************************************
+--				MUX PLUS CONFIGURATION
+--*****************************************************************************
+
+	muxPlusConfigurationTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF MuxPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " we can get MUX Plus configuration details "
+
+		::= { muxPlusConfiguration 1 }
+              
+        muxPlusConfigurationEntry OBJECT-TYPE
+		SYNTAX  	MuxPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot "
+
+		INDEX   { node, rack, subRack, slot, muxPlusInterface }
+
+		::= { muxPlusConfigurationTable 1 }
+	
+	MuxPlusConfigurationEntry ::= 
+		SEQUENCE {
+				muxPlusCardSoftwareUpgrade			DisplayString,
+				muxPlusSoftReset 				INTEGER,
+				muxPlusSyncSystemTimeWithNtpServer				DisplayString,
+				muxPlusSyncRtcWithNtpServer						DisplayString,
+				muxPlusSyncRtcWithSystemTime					DisplayString,
+				muxPlusUpdateGivenTimeIntoSystem				DisplayString,
+				muxPlusUpdateGivenTimeIntoRtc					DisplayString,
+				muxPlusSystemTimeAndRtcTime						DisplayString,
+				muxPlusConfigurationTableRowStatus		RowStatus
+			}
+
+	muxPlusCardSoftwareUpgrade OBJECT-TYPE
+		SYNTAX 		DisplayString
+		MAX-ACCESS 	read-write
+		STATUS 		current
+		DESCRIPTION
+			"Valid only as SET command.
+			This property upgrades the software of the MUX-PLUS card
+			It takes the path of the software release as
+			a value,
+			muxPlusInterface: 0
+			Values:
+			eg: /home/root/rel-2.0.0.tar.gz
+			-----------------------------"
+
+		::= { muxPlusConfigurationEntry 1 }
+
+ 	muxPlusSoftReset OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " soft reset the card with value 1.
+		 muxPlusInterface = 0 "
+
+		::= { muxPlusConfigurationEntry 2 }
+
+	muxPlusSyncSystemTimeWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+						present in linux kernel with the NTP server
+						we can use this OID. We can provide NTP server
+						ip address as a value to this OID and the time
+						will be synced to that ilarticular server. 
+						If we are not providing NTP server IP address 
+						then the system will be synced with the NTP server 
+						which is already been registered with card. 
+						If both are absent then error message will be returned
+						-----------------------------
+						Interface : 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+					
+						If we don't want to provide NTP server address then no
+						need to pass any value. 
+						---------------------------"
+  						
+  		::= { muxPlusConfigurationEntry 7 }
+  		
+  	muxPlusSyncRtcWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in RTC with the NTP server
+  						we can use this OID. We can provide NTP server
+  						ip address as a value to this OID and the time
+  						will be synced to that particular server. 
+  						If we are not providing NTP server IP address 
+  						then the system will be synced with the NTP server 
+  						which is already been registered with card. 
+  						If both are absent then error message will be returned.
+  						-----------------------------
+						Interface : 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+							
+						If we don't want to provide NTP server address, then no
+						need to ilass any value. 
+						---------------------------"
+  						
+  		::= { muxPlusConfigurationEntry 8 }
+  		
+  	muxPlusSyncRtcWithSystemTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+						present in RTC with the time value in linux kernel
+						we can use this OID. With this set operation, 
+						the time available with linux kernel will be updated
+						into RTC. It is not required to provide any value for 
+						this operation
+						-----------------------------
+						Interface : 0
+						-----------------------------"
+  						
+  		::= { muxPlusConfigurationEntry 9 }
+  		
+  	muxPlusUpdateGivenTimeIntoSystem	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update system time
+						with the user provided time, we can use this OID.
+						With OID we need to provide time value which we
+						want to update in the system.
+						-----------------------------
+						Interface : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { muxPlusConfigurationEntry 10 }
+  		
+  	muxPlusUpdateGivenTimeIntoRtc	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update RTC time
+						with the user provided time, we can use this OID.
+						With OID we need to provide time value which we
+						want to update in RTC.
+						-----------------------------
+						Interface : 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { muxPlusConfigurationEntry 11 }
+  		
+  	muxPlusSystemTimeAndRtcTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-only
+  		STATUS  		current
+  		DESCRIPTION	 	" get the system time and time value present in RTC.
+						-----------------------------
+						Interface : 0
+						-----------------------------"
+						
+  		::= { muxPlusConfigurationEntry 12 }
+
+	muxPlusConfigurationTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              ::= { muxPlusConfigurationEntry 20 }
+				
+--***************************************************************************** 
+		  	  
+	snmpcurrentGroup OBJECT-GROUP
+		OBJECTS {
+				muxPlusInterface,
+				muxPlusEepromCardId,
+				muxPlusEepromCardName,
+				muxPlusEepromPartCode,
+				muxPlusEepromCardSerialNumber,
+				muxPlusEepromHardwareExternalReleaseVersion,
+				muxPlusSoftwareExternalReleaseVersion,
+				muxPlusEepromHardwareInternalReleaseVersion,
+				muxPlusSoftwareInternalReleaseVersion,
+				muxPlusEepromCardUidNumber,
+				muxPlusEepromCardEUI48Number,
+				muxPlusEepromCardEUI64Number,
+				muxPlusCardRootFileSystemVersion,
+				muxPlusInstallationDate,
+				muxPlusCommissionDate,
+				muxPlusCardRunningTime,
+				muxPlusCardRestartCount,
+				muxPlusCardDirection,
+				muxPlusCardGeneralDetailsTableRowStatus,
+				muxPlusCardSoftwareUpgrade,
+				muxPlusSoftReset,
+				muxPlusSyncSystemTimeWithNtpServer,
+				muxPlusSyncRtcWithNtpServer,
+				muxPlusSyncRtcWithSystemTime,
+				muxPlusUpdateGivenTimeIntoSystem,
+				muxPlusUpdateGivenTimeIntoRtc,
+				muxPlusSystemTimeAndRtcTime,
+				muxPlusConfigurationTableRowStatus
+ 			}
+		STATUS  current
+
+		DESCRIPTION
+		 "A collection of objects from RFC 1213 made current by this MIB module."
+
+		::= { utlrnd 2 }
+	
+END	

@@ -1,0 +1,545 @@
+--*****************************************************************************
+--				UTL DEMUX PLUS MIB
+--*****************************************************************************
+
+DEMUX-PLUS-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+        	RowStatus      			FROM STANDARD-MIB
+
+        	DisplayString  			FROM RFC1213-MIB       
+			
+    		OBJECT-IDENTITY, 
+    		NOTIFICATION-TYPE, 
+    		MODULE-IDENTITY, 
+    		Integer32, 
+    		Unsigned32,
+    		IpAddress,
+    		TimeTicks			FROM SNMPv2-SMI
+    		
+	 	OBJECT-TYPE    			FROM RFC-1212
+	 		
+		MODULE-COMPLIANCE, 
+		OBJECT-GROUP, 
+		NOTIFICATION-GROUP		FROM SNMPv2-CONF
+			
+		node, 
+		rack, 
+		subRack, 
+		slot 				FROM SCC-MIB
+
+		enterprises 			FROM RFC1155-SMI		
+
+	;
+
+	utl   	MODULE-IDENTITY
+	
+            	LAST-UPDATED    	"1807130630Z"
+            	ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+            	CONTACT-INFO    	"Website: http://www.utlindia.com."                                           
+            	DESCRIPTION     	"MIB module for UTL DWDM."
+            	REVISION 	    	"1807130630Z"
+            	DESCRIPTION    	 	"MIB module for DEMUX Plus Card."
+            
+            	::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+            	STATUS  current
+            
+		DESCRIPTION "UTL R and D."
+            	
+		::= { utl 1 }
+
+	dwdm 				OBJECT IDENTIFIER	::=   { utlrnd 1 }
+	indus 				OBJECT IDENTIFIER	::=   { dwdm 1 }
+	demuxPlus 			OBJECT IDENTIFIER 	::=   { indus 181 }
+
+	demuxPlusCardGeneralDetails 	OBJECT IDENTIFIER 	::=   { demuxPlus 1 }
+	demuxPlusConfiguration 		OBJECT IDENTIFIER 	::=   { demuxPlus 2 }
+
+--*****************************************************************************
+--			DEMUX PLUS CARD GENERAL DETAILS
+--*****************************************************************************
+
+	demuxPlusCardGeneralDetailsTable OBJECT-TYPE 
+		SYNTAX 		SEQUENCE OF DemuxPlusCardGeneralDetailsEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+
+		DESCRIPTION
+		 " we can get DEMUX Plus card general details "
+
+		::= { demuxPlusCardGeneralDetails 1 }
+
+	demuxPlusCardGeneralDetailsEntry OBJECT-TYPE
+		SYNTAX  	DemuxPlusCardGeneralDetailsEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot and demuxPlusInterface numbers"
+
+		INDEX   { node, rack, subRack, slot, demuxPlusInterface }
+		::= { demuxPlusCardGeneralDetailsTable 1 }
+
+	DemuxPlusCardGeneralDetailsEntry ::=
+		SEQUENCE {
+				
+				demuxPlusInterface				INTEGER,
+				demuxPlusEepromCardId				INTEGER,
+				demuxPlusEepromCardName				DisplayString,
+				demuxPlusEepromPartCode				DisplayString,
+				demuxPlusEepromCardSerialNumber			DisplayString,
+				demuxPlusEepromHardwareExternalReleaseVersion	DisplayString,
+				demuxPlusSoftwareExternalReleaseVersion		DisplayString,
+				demuxPlusEepromHardwareInternalReleaseVersion	DisplayString,
+				demuxPlusSoftwareInternalReleaseVersion		DisplayString,
+				demuxPlusEepromCardUidNumber			DisplayString,
+				demuxPlusEepromCardEUI48Number			DisplayString,
+				demuxPlusEepromCardEUI64Number			DisplayString,
+				demuxPlusCardRootFileSystemVersion		DisplayString,
+				demuxPlusInstallationDate			DisplayString,
+				demuxPlusCommissionDate				DisplayString,
+				demuxPlusCardRunningTime			DisplayString,
+				demuxPlusCardRestartCount			INTEGER,
+				demuxPlusCardDirection				INTEGER,
+				demuxPlusCardGeneralDetailsTableRowStatus	RowStatus
+			}
+
+	demuxPlusInterface OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+		DESCRIPTION 	"demuxPlusInterface number"
+		::= { demuxPlusCardGeneralDetailsEntry 1 }
+
+	demuxPlusEepromCardId OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " Tells the card ID of the DEMUX-PLUS card, present in the EEPROM "
+
+		::= { demuxPlusCardGeneralDetailsEntry 2 }
+
+	demuxPlusEepromCardName OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the card name of the DEMUX-PLUS card, present in the EEPROM "
+
+		::= { demuxPlusCardGeneralDetailsEntry 3 }
+
+	demuxPlusEepromPartCode OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the part code of the DEMUX-PLUS card, present in the EEPROM "
+
+		::= { demuxPlusCardGeneralDetailsEntry 4 }
+
+	demuxPlusEepromCardSerialNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " This property get / set the information about DEMUX-PLUS 
+		 Card's Serial Number. "
+
+		::= { demuxPlusCardGeneralDetailsEntry 5 }
+
+	demuxPlusEepromHardwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware External Release Version. This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product "
+
+		::= { demuxPlusCardGeneralDetailsEntry 6 }
+
+	demuxPlusSoftwareExternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software External Release Version.  This detail 
+		 will be displayed to the customer. This version will increment 
+		 only if there are significant architectural changes in the product "
+
+		::= { demuxPlusCardGeneralDetailsEntry 7 }
+
+	demuxPlusEepromHardwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Hardware Internal Release Version. This detail 
+		 is used for development purposes only. It differs from the external 
+		 hardware version "
+
+		::= { demuxPlusCardGeneralDetailsEntry 8 }
+
+	demuxPlusSoftwareInternalReleaseVersion OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the Card's Software Internal Release Version.  This detail 
+		 is used for development purposes only. It differs from the external 
+		 software version "
+
+		::= { demuxPlusCardGeneralDetailsEntry 9 }
+
+	demuxPlusEepromCardUidNumber OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card Unique Identifier It is a 4 byte address used to 
+		 uniquely identify a card "
+
+		::= { demuxPlusCardGeneralDetailsEntry 10 }
+
+	demuxPlusEepromCardEUI48Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-48 Number. It’s a 6 byte address used to 
+		 uniquely identify a card "
+
+		::= { demuxPlusCardGeneralDetailsEntry 11 }
+
+	demuxPlusEepromCardEUI64Number OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " Tells the Card EUI-64 Number. It’s a 8 byte address "
+
+		::= { demuxPlusCardGeneralDetailsEntry 12 }
+		
+        demuxPlusCardRootFileSystemVersion OBJECT-TYPE		 
+		SYNTAX  DisplayString
+		MAX-ACCESS  read-only
+		STATUS current
+		DESCRIPTION
+			"Tells the Card's Root File System Version
+			-----------------------------
+			demuxPlusInterface: 0
+			-----------------------------
+			Value:
+		      	eg: 8
+			-----------------------------"
+		::= { demuxPlusCardGeneralDetailsEntry 13 }
+
+	demuxPlusInstallationDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the card's installation date in dd/mm/yyyy format "
+
+		::= { demuxPlusCardGeneralDetailsEntry 21 }
+
+	demuxPlusCommissionDate OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-write
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the card's commission date in  dd/mm/yyyy format "
+
+		::= { demuxPlusCardGeneralDetailsEntry 22 }
+
+	demuxPlusCardRunningTime OBJECT-TYPE
+		SYNTAX  	DisplayString (SIZE (0..255))
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the duration of time for which the card is operational/running "
+
+		::= { demuxPlusCardGeneralDetailsEntry 23 }
+
+	demuxPlusCardRestartCount OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the number of times the card has been soft reset. This value 
+		 will get reset to 0 on factory reset "
+
+		::= { demuxPlusCardGeneralDetailsEntry 24 }
+
+	demuxPlusCardDirection OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-only
+		STATUS		current
+
+		DESCRIPTION
+		 " To get the direction "
+
+		::= { demuxPlusCardGeneralDetailsEntry 25 }
+		
+	demuxPlusCardGeneralDetailsTableRowStatus OBJECT-TYPE
+		SYNTAX		RowStatus
+		MAX-ACCESS	read-write
+		STATUS		current
+		DESCRIPTION
+			"This is MIB realted property,
+			NOT to be considered as a card property"
+
+		::= { demuxPlusCardGeneralDetailsEntry 26 }
+
+--*****************************************************************************
+--				DEMUX PLUS CONFIGURATION
+--*****************************************************************************
+
+	demuxPlusConfigurationTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF DemuxPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " we can get DEMUX Plus configuration details "
+
+		::= { demuxPlusConfiguration 1 }
+              
+        demuxPlusConfigurationEntry OBJECT-TYPE
+		SYNTAX  	DemuxPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION 
+		 "Enter node rack, subrack, slot "
+
+		INDEX   { node, rack, subRack, slot, demuxPlusInterface }
+
+		::= { demuxPlusConfigurationTable 1 }
+	
+	DemuxPlusConfigurationEntry ::= 
+		SEQUENCE {
+				demuxPlusCardSoftwareUpgrade			DisplayString,
+				demuxPlusSoftReset 				INTEGER,
+				demuxPlusSyncSystemTimeWithNtpServer				DisplayString,
+				demuxPlusSyncRtcWithNtpServer						DisplayString,
+				demuxPlusSyncRtcWithSystemTime						DisplayString,
+				demuxPlusUpdateGivenTimeIntoSystem					DisplayString,
+				demuxPlusUpdateGivenTimeIntoRtc						DisplayString,
+				demuxPlusSystemTimeAndRtcTime						DisplayString,
+				demuxPlusConfigurationTableRowStatus		RowStatus
+			}
+
+	demuxPlusCardSoftwareUpgrade OBJECT-TYPE
+		SYNTAX 		DisplayString
+		MAX-ACCESS 	read-write
+		STATUS 		current
+		DESCRIPTION
+			"Valid only as SET command.
+			This property upgrades the software of the DEMUX-PLUS card
+			It takes the path of the software release as
+			a value,
+			muxPlusInterface: 0
+			Values:
+			eg: /home/root/rel-2.0.0.tar.gz
+			-----------------------------"
+
+		::= { demuxPlusConfigurationEntry 1 }
+
+ 	demuxPlusSoftReset OBJECT-TYPE
+		SYNTAX  	INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  	current
+
+		DESCRIPTION
+		 " soft reset the card with value 1.
+		 demuxPlusInterface = 0 "
+
+		::= { demuxPlusConfigurationEntry 2 }
+
+	demuxPlusSyncSystemTimeWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+						present in linux kernel with the NTP server
+						we can use this OID. We can provide NTP server
+						ip address as a value to this OID and the time
+						will be synced to that ilarticular server. 
+						If we are not providing NTP server IP address 
+						then the system will be synced with the NTP server 
+						which is already been registered with card. 
+						If both are absent then error message will be returned
+						-----------------------------
+							Interface 	: 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+						
+						If we don't want to provide NTP server address then no
+						need to pass any value. 
+						---------------------------"
+  						
+  		::= { demuxPlusConfigurationEntry 7 }
+  		
+  	demuxPlusSyncRtcWithNtpServer	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+  						present in RTC with the NTP server
+  						we can use this OID. We can provide NTP server
+  						ip address as a value to this OID and the time
+  						will be synced to that particular server. 
+  						If we are not providing NTP server IP address 
+  						then the system will be synced with the NTP server 
+  						which is already been registered with card. 
+  						If both are absent then error message will be returned.
+  						-----------------------------
+						Interface 	: 0
+						-----------------------------
+						If we want to provide NTP server IP address then
+						Value should be a valid IP address as shown below
+						: 192.168.21.25
+							
+						If we don't want to provide NTP server address, then no
+						need to ilass any value. 
+						---------------------------"
+  						
+  		::= { demuxPlusConfigurationEntry 8 }
+  		
+  	demuxPlusSyncRtcWithSystemTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually sync the time value
+						present in RTC with the time value in linux kernel
+						we can use this OID. With this set operation, 
+						the time available with linux kernel will be updated
+						into RTC. It is not required to provide any value for 
+						this operation
+						-----------------------------
+						Interface 	: 0
+						-----------------------------"
+  						
+  		::= { demuxPlusConfigurationEntry 9 }
+  		
+  	demuxPlusUpdateGivenTimeIntoSystem	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update system time
+						with the user provided time, we can use this OID.
+						With OID we need to provide time value which we
+						want to update in the system.
+						-----------------------------
+						Interface 	: 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { demuxPlusConfigurationEntry 10 }
+  		
+  	demuxPlusUpdateGivenTimeIntoRtc	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  	read-write
+  		STATUS  		current
+  		DESCRIPTION	 	" when we want to manually update RTC time
+						with the user provided time, we can use this OID.
+						With OID we need to provide time value which we
+						want to update in RTC.
+						-----------------------------
+						Interface 	: 0
+						-----------------------------
+						Value should be of given format:
+						YYYY-MM-DD H:M:S
+						
+						Example: 2017-10-31 15:20:44
+						---------------------------"
+						
+  		::= { demuxPlusConfigurationEntry 11 }
+  		
+  	demuxPlusSystemTimeAndRtcTime	 OBJECT-TYPE
+		SYNTAX  		DisplayString
+  		MAX-ACCESS  		read-only
+  		STATUS  		current
+  		DESCRIPTION	 	" get the system time and time value present in RTC.
+						-----------------------------
+						Interface 	: 0
+						-----------------------------"
+						
+  		::= { demuxPlusConfigurationEntry 12 }
+
+
+	demuxPlusConfigurationTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              ::= { demuxPlusConfigurationEntry 20 }
+		
+--***************************************************************************** 
+		  	  
+	snmpcurrentGroup OBJECT-GROUP
+		OBJECTS {
+				demuxPlusInterface,
+				demuxPlusEepromCardId,
+				demuxPlusEepromCardName,
+				demuxPlusEepromPartCode,
+				demuxPlusEepromCardSerialNumber,
+				demuxPlusEepromHardwareExternalReleaseVersion,
+				demuxPlusSoftwareExternalReleaseVersion,
+				demuxPlusEepromHardwareInternalReleaseVersion,
+				demuxPlusSoftwareInternalReleaseVersion,
+				demuxPlusEepromCardUidNumber,
+				demuxPlusEepromCardEUI48Number,
+				demuxPlusEepromCardEUI64Number,
+				demuxPlusCardRootFileSystemVersion,
+				demuxPlusInstallationDate,
+				demuxPlusCommissionDate,
+				demuxPlusCardRunningTime,
+				demuxPlusCardRestartCount,
+				demuxPlusCardDirection,
+				demuxPlusCardGeneralDetailsTableRowStatus,
+				demuxPlusCardSoftwareUpgrade,
+				demuxPlusSoftReset,
+				demuxPlusSyncSystemTimeWithNtpServer,
+				demuxPlusSyncRtcWithNtpServer,
+				demuxPlusSyncRtcWithSystemTime,
+				demuxPlusUpdateGivenTimeIntoSystem,
+				demuxPlusUpdateGivenTimeIntoRtc,
+				demuxPlusSystemTimeAndRtcTime,
+				demuxPlusConfigurationTableRowStatus
+ 			}
+		STATUS  current
+
+		DESCRIPTION
+		 "A collection of objects from RFC 1213 made current by this MIB module."
+
+		::= { utlrnd 2 }
+	
+END	

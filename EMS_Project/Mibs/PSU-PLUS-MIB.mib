@@ -1,0 +1,375 @@
+--*****************************************************************************
+--				UTL PSU PLUS MIB
+--*****************************************************************************
+
+PSU-PLUS-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+        	RowStatus      			FROM STANDARD-MIB
+
+        	DisplayString  			FROM RFC1213-MIB       
+			
+    		OBJECT-IDENTITY, 
+    		NOTIFICATION-TYPE, 
+    		MODULE-IDENTITY, 
+    		Integer32, 
+    		Unsigned32,
+    		IpAddress,
+    		TimeTicks			FROM SNMPv2-SMI
+    		
+	 	OBJECT-TYPE    			FROM RFC-1212
+	 		
+		MODULE-COMPLIANCE, 
+		OBJECT-GROUP, 
+		NOTIFICATION-GROUP		FROM SNMPv2-CONF
+			
+		node, 
+		rack, 
+		subRack, 
+		slot 				FROM SCC-MIB
+
+		enterprises 			FROM RFC1155-SMI		
+
+	;
+
+	utl   	MODULE-IDENTITY
+	
+            	LAST-UPDATED    	"1807130630Z"
+            	ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+            	CONTACT-INFO    	"Website: http://www.utlindia.com."                                           
+            	DESCRIPTION     	"MIB module for UTL DWDM."
+            	REVISION 	    	"1807130630Z"
+            	DESCRIPTION    	 	"MIB module for PSU Plus Card."
+            
+            	::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+            	STATUS  current
+            
+		DESCRIPTION "UTL R and D."
+            	
+		::= { utl 1 }
+
+	dwdm 				OBJECT IDENTIFIER	::=   { utlrnd 1 }
+	indus 				OBJECT IDENTIFIER	::=   { dwdm 1 }
+	psuPlus 			OBJECT IDENTIFIER 	::=   { indus 56 }
+	
+	psuPlusAlarm 			OBJECT IDENTIFIER 	::=   { psuPlus 1 }
+	psuPlusAlarmQuery 		OBJECT IDENTIFIER 	::=   { psuPlusAlarm 1 }
+	psuPlusAlarmNotification 	OBJECT IDENTIFIER 	::=   { psuPlusAlarm 2 }
+
+--*****************************************************************************
+--				PSU PLUS ALARMS
+--*****************************************************************************  
+
+	psuPlusAlarmQueryTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF PsuAlarmQueryEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " we can get alarm details of the system "
+
+		::= { psuPlusAlarmQuery 1 }
+              
+	psuPlusAlarmQueryEntry OBJECT-TYPE
+		SYNTAX  	PsuAlarmQueryEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " Enter node rack, subrack, slot numbers "
+
+		INDEX { node, rack, subRack, slot, psuPlusInterface, psuPlusSource }
+
+		::= { psuPlusAlarmQueryTable 1 }
+	
+	PsuAlarmQueryEntry ::= 
+		SEQUENCE {
+				psuPlusInterface			DisplayString,
+				psuPlusSource				DisplayString,
+				psuPlusOutputHealthStatus		DisplayString,
+				psuPlusInputOverVoltageAlarm		DisplayString,
+				psuPlusInputUnderVoltageAlarm		DisplayString,
+				psuPlusInputPowerFailureAlarm		DisplayString,
+				psuPlusPrewarnUnderVoltageAlarm		DisplayString,
+				psuPlusCardPresenceAbsenceNotification  DisplayString,
+				psuPlusAlarmQueryTableRowStatus		RowStatus
+			}
+		
+ 	psuPlusInterface OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " PSU slot number, possible values : 2,3 "
+
+		::= { psuPlusAlarmQueryEntry 1 }
+		
+	psuPlusSource OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " Source number, possible values : 1,2 "
+
+		::= { psuPlusAlarmQueryEntry 2 }
+		
+	psuPlusOutputHealthStatus OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " To get PSU Output Health status.
+		NOTE : Use BMU's node, rack, subrack and slot number.
+		For PSU 1 and Source 1
+			psuPlusInterface = 2 and psuPlusSource = 1	
+		For PSU 1 and Source 2
+			psuPlusInterface = 2 and psuPlusSource = 2
+			
+		For PSU 2 and Source 1
+			psuPlusInterface = 3 and psuPlusSource = 1	
+		For PSU 2 and Source 2
+			psuPlusInterface = 3 and psuPlusSource = 2
+
+		Values :
+		If alarm is Present - Date and Time stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+		If alarm is Absent - 0 "
+		
+		::= { psuPlusAlarmQueryEntry 3 }
+		
+	psuPlusInputOverVoltageAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+		DESCRIPTION
+		 " To get PSU Input over voltage alarm status.
+		NOTE : Use BMU's node, rack, subrack and slot number.
+		For PSU 1 and Source 1
+			psuPlusInterface = 2 and psuPlusSource = 1	
+		For PSU 1 and Source 2
+			psuPlusInterface = 2 and psuPlusSource = 2
+			
+		For PSU 2 and Source 1
+			psuPlusInterface = 3 and psuPlusSource = 1	
+		For PSU 2 and Source 2
+			psuPlusInterface = 3 and psuPlusSource = 2
+
+		Values :
+		If alarm is Present - Date and Time stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+		If alarm is Absent - 0 "
+		
+		::= { psuPlusAlarmQueryEntry 4 }
+		
+	psuPlusInputUnderVoltageAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " To get PSU Input voltage alarm status.
+		NOTE : Use BMU's node, rack, subrack and slot number.
+		For PSU 1 and Source 1
+			psuPlusInterface = 2 and psuPlusSource = 1	
+		For PSU 1 and Source 2
+			psuPlusInterface = 2 and psuPlusSource = 2
+			
+		For PSU 2 and Source 1
+			psuPlusInterface = 3 and psuPlusSource = 1	
+		For PSU 2 and Source 2
+			psuPlusInterface = 3 and psuPlusSource = 2
+
+		Values :
+		If alarm is Present - Date and Time stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+		If alarm is Absent - 0 "
+		
+		::= { psuPlusAlarmQueryEntry 5 }
+		
+	psuPlusInputPowerFailureAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " To get PSU Input power failure alarm status.
+		NOTE : Use BMU's node, rack, subrack and slot number.
+		For PSU 1 and Source 1
+			psuPlusInterface = 2 and psuPlusSource = 1	
+		For PSU 1 and Source 2
+			psuPlusInterface = 2 and psuPlusSource = 2
+			
+		For PSU 2 and Source 1
+			psuPlusInterface = 3 and psuPlusSource = 1	
+		For PSU 2 and Source 2
+			psuPlusInterface = 3 and psuPlusSource = 2
+
+		Values :
+		If alarm is Present - Date and Time stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+		If alarm is Absent - 0 "
+		
+		::= { psuPlusAlarmQueryEntry 6 }	
+		
+	psuPlusPrewarnUnderVoltageAlarm OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  	read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " To get PSU Prewarn under voltage alarm status.
+		NOTE : Use BMU's node, rack, subrack and slot number.
+		For PSU 1 and Source 1
+			psuPlusInterface = 2 and psuPlusSource = 1	
+		For PSU 1 and Source 2
+			psuPlusInterface = 2 and psuPlusSource = 2
+			
+		For PSU 2 and Source 1
+			psuPlusInterface = 3 and psuPlusSource = 1	
+		For PSU 2 and Source 2
+			psuPlusInterface = 3 and psuPlusSource = 2
+
+		Values :
+		If alarm is Present - Date and Time stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+		If alarm is Absent - 0 "
+
+		::= { psuPlusAlarmQueryEntry 7 }
+
+	psuPlusCardPresenceAbsenceNotification OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " To get PSU card presence/absence notification status.
+		NOTE : Use BMU's node, rack, subrack and slot number.
+		For PSU 1 psuPlusInterface = 2	
+		For PSU 2 psuPlusInterface = 3
+
+		Values :
+		If alarm is Present - Date and Time stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+		If alarm is Absent - 0 "
+
+		::= { psuPlusAlarmQueryEntry 8 }
+
+	psuPlusAlarmQueryTableRowStatus OBJECT-TYPE
+              SYNTAX      RowStatus
+              MAX-ACCESS  read-write
+              STATUS      current
+              DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+              ::= { psuPlusAlarmQueryEntry 9 }
+
+	
+--*****************************************************************************
+--		 	 PSU PLUS Alarm Notification Table
+--*****************************************************************************  
+
+	psuPlusOutputHealthStatusTrap NOTIFICATION-TYPE
+		OBJECTS  { psuPlusOutputHealthStatus
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This traps indicates PSU's output health status."
+		
+		::= { psuPlusAlarmNotification 1 }
+      	
+ 	psuPlusInputOverVoltageAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { psuPlusInputOverVoltageAlarm
+			}
+		STATUS  current
+		DESCRIPTION
+		 " This traps is sent when PSU's Input over voltage alarm state changes "
+
+		::= { psuPlusAlarmNotification 2 }
+      	
+ 	psuPlusInputUnderVoltageAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { psuPlusInputUnderVoltageAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This traps is sent when PSU's Input under voltage alarm state changes "
+
+		::= { psuPlusAlarmNotification 3 }
+      	
+ 	psuPlusInputPowerFailureAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { psuPlusInputPowerFailureAlarm
+			}
+		STATUS 	current
+		DESCRIPTION
+		 " This traps is sent when PSU's input power failure alarm state changes "
+		
+		::= { psuPlusAlarmNotification 4 }
+      	
+ 	psuPlusPrewarnUnderVoltageAlarmTrap NOTIFICATION-TYPE
+		OBJECTS  { psuPlusPrewarnUnderVoltageAlarm
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This traps is sent when PSU's prewarn under voltage alarm state changes "
+
+		::= { psuPlusAlarmNotification 5 }
+
+ 	psuPlusCardPresenceAbsenceNotificationTrap NOTIFICATION-TYPE
+		OBJECTS  { psuPlusCardPresenceAbsenceNotification
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This traps is sent when PSU card presence/absence notification state changes
+			presence = 0
+		 	absence = 1 "
+
+		::= { psuPlusAlarmNotification  6 }
+
+--***************************************************************************** 
+    	
+	snmpCurrentNotificationsGroup NOTIFICATION-GROUP
+		NOTIFICATIONS	{ 
+					psuPlusOutputHealthStatusTrap,
+					psuPlusInputOverVoltageAlarmTrap,
+					psuPlusInputUnderVoltageAlarmTrap,
+					psuPlusInputPowerFailureAlarmTrap,
+					psuPlusPrewarnUnderVoltageAlarmTrap,
+					psuPlusCardPresenceAbsenceNotificationTrap
+				}
+  	  	STATUS 	current
+
+  	  	DESCRIPTION
+		 " The UTL DWDM current notifications group "
+
+  	  	::= { psuPlus 2 } 
+
+--***************************************************************************** 
+ 	  
+	snmpcurrentGroup OBJECT-GROUP
+		OBJECTS {
+				psuPlusInterface,
+				psuPlusSource,
+				psuPlusOutputHealthStatus,
+				psuPlusInputOverVoltageAlarm,
+				psuPlusInputUnderVoltageAlarm,
+				psuPlusInputPowerFailureAlarm,
+				psuPlusPrewarnUnderVoltageAlarm,
+				psuPlusCardPresenceAbsenceNotification,
+				psuPlusAlarmQueryTableRowStatus
+ 			}
+		STATUS  current
+
+		DESCRIPTION
+		 " A collection of objects from RFC 1213 made current by this MIB module."
+
+		::= { utlrnd 2 }
+	
+END	

@@ -1,0 +1,223 @@
+--*****************************************************************************
+--					UTL BUZZER PLUS MIB
+--*****************************************************************************
+BUZZER-PLUS-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+		
+        	RowStatus      		FROM STANDARD-MIB
+        	
+		DisplayString  		FROM RFC1213-MIB       
+			
+    		OBJECT-IDENTITY, 
+    		NOTIFICATION-TYPE, 
+    		MODULE-IDENTITY, 
+    		Integer32, 
+    		Unsigned32,
+    		IpAddress,
+    		TimeTicks		FROM SNMPv2-SMI
+    		
+	 	OBJECT-TYPE    		FROM RFC-1212
+	 		
+		MODULE-COMPLIANCE, 
+		OBJECT-GROUP, 
+		NOTIFICATION-GROUP	FROM SNMPv2-CONF
+			
+		node, 
+		rack , 
+		subRack , 
+		slot 			FROM SCC-MIB
+
+  		enterprises 		FROM RFC1155-SMI		
+
+		;
+
+	utl   MODULE-IDENTITY
+	
+            LAST-UPDATED    	"1807130630Z"
+            ORGANIZATION    	"United Telecoms Limited, Bangalore-560048."
+            CONTACT-INFO    	"Website: http://www.utlindia.com."
+            DESCRIPTION     	"MIB module for UTL DWDM."
+            REVISION 	    	"1807130630Z"
+            DESCRIPTION    	"MIB module for BMU Card."
+            
+            ::= { enterprises 18036 }
+
+	utlrnd  OBJECT-IDENTITY
+            STATUS  current
+            DESCRIPTION "UTL R and D."
+            ::= { utl 1 }
+
+	dwdm 				OBJECT IDENTIFIER	::=   { utlrnd 1 }
+	indus 				OBJECT IDENTIFIER	::=   { dwdm 1 }
+	buzzerPlus 			OBJECT IDENTIFIER 	::=   { indus 61 }
+	
+	buzzerPlusConfiguration 	OBJECT IDENTIFIER 	::=   { buzzerPlus 1 }
+	buzzerPlusAlarm 		OBJECT IDENTIFIER 	::=   { buzzerPlus 2 }
+	
+	buzzerPlusAlarmQuery 		OBJECT IDENTIFIER 	::=   { buzzerPlusAlarm 1 }
+	buzzerPlusAlarmNotification 	OBJECT IDENTIFIER 	::=   { buzzerPlusAlarm 2 }	
+
+--*****************************************************************************
+--			BUZZER PLUS CARD CONFIGURATION DETAILS
+--*****************************************************************************
+
+	buzzerPlusConfigurationTable 	OBJECT-TYPE
+		SYNTAX  		SEQUENCE OF BuzzerPlusConfigurationEntry
+		MAX-ACCESS  	not-accessible
+		STATUS  		current
+		DESCRIPTION   	"For Get or Set BUZZER PLUS's configuration."
+		::= { buzzerPlusConfiguration 1 }
+              
+    buzzerPlusConfigurationEntry OBJECT-TYPE
+		 SYNTAX  		BuzzerPlusConfigurationEntry
+		 MAX-ACCESS  	not-accessible
+		 STATUS  		current
+		 DESCRIPTION 	"Enter node rack, sub-rack, slot and buzzerPlusInterface numbers"
+		 INDEX   		{ node, rack , subRack , slot, buzzerPlusInterface }
+		 ::= { buzzerPlusConfigurationTable 1 }
+	
+	BuzzerPlusConfigurationEntry ::= 
+		  SEQUENCE {
+		  
+		  		buzzerPlusInterface				INTEGER,
+				buzzerPlusActiveStatus	 			INTEGER,
+				buzzerPlusConfigurationTableRowStatus		RowStatus
+			}
+		
+	buzzerPlusInterface OBJECT-TYPE
+		SYNTAX  		INTEGER
+		MAX-ACCESS  	not-accessible
+		STATUS  		current
+		DESCRIPTION 	"buzzer plus card interface number"
+		::= { buzzerPlusConfigurationEntry 1 }
+		
+	buzzerPlusActiveStatus OBJECT-TYPE
+		SYNTAX  		INTEGER
+		MAX-ACCESS  	read-write
+		STATUS  		current
+		DESCRIPTION
+			"For Activate and De-activate Buzzer Plus.
+			1 => Active,
+			0 => De-active
+			-------------------------
+			Use BMU's Node, Rack, Subrack and Slot number.
+			buzzerPlusInterface should be 4 always."
+
+		::= { buzzerPlusConfigurationEntry 2 }
+		
+	buzzerPlusConfigurationTableRowStatus OBJECT-TYPE
+		SYNTAX		RowStatus
+		MAX-ACCESS	read-write
+		STATUS		current
+		DESCRIPTION
+			"This is MIB realted property,
+			NOT to be considered as a card property"
+
+		::= { buzzerPlusConfigurationEntry 3 }
+		
+		
+--*****************************************************************************
+--				BUZZER PLUS ALARMS
+--***************************************************************************** 	
+
+	buzzerPlusAlarmQueryTable OBJECT-TYPE
+		SYNTAX  	SEQUENCE OF BuzzerPlusAlarmQueryEntry
+		MAX-ACCESS  not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " we can get alarm details of Buzzer "
+
+		::= { buzzerPlusAlarmQuery 1 }
+              
+	buzzerPlusAlarmQueryEntry OBJECT-TYPE
+		SYNTAX  	BuzzerPlusAlarmQueryEntry
+		MAX-ACCESS  not-accessible
+		STATUS  	current
+
+		DESCRIPTION
+		 " Enter node rack, subrack, slot buzzerPlusInterface numbers "
+
+		INDEX { node, rack, subRack, slot, buzzerPlusInterface }
+
+		::= { buzzerPlusAlarmQueryTable 1 }
+	
+	BuzzerPlusAlarmQueryEntry ::= 
+		SEQUENCE {
+				buzzerPlusCardPresenceAbsenceNotification	DisplayString,
+				buzzerPlusAlarmQueryTableRowStatus		RowStatus
+			}
+	
+	buzzerPlusCardPresenceAbsenceNotification OBJECT-TYPE
+		SYNTAX  	DisplayString
+		MAX-ACCESS  read-only
+		STATUS  	current
+
+		DESCRIPTION
+		 " To get Buzzer card presence/absence notification status.
+		NOTE : Use BMU's node, rack, subrack and slot number.
+		buzzerPlusInterface = 4 
+
+		Values :
+		If alarm is Present - Date and Time stamp
+			eg:2017-5-18,9:47:20.0,+5:30
+		If alarm is Absent - 0 "
+
+		::= { buzzerPlusAlarmQueryEntry 1 }
+
+	buzzerPlusAlarmQueryTableRowStatus OBJECT-TYPE
+		SYNTAX      RowStatus
+		MAX-ACCESS  read-write
+		STATUS      current
+		DESCRIPTION
+                      "	This is MIB realted property,
+			NOT to be considered as a card property"
+
+              ::= { buzzerPlusAlarmQueryEntry 2 }
+	
+--*****************************************************************************
+--		 	 BUZZER PLUS Alarm Notification Table
+--*****************************************************************************  
+		  
+ 	buzzerPlusCardPresenceAbsenceNotificationTrap NOTIFICATION-TYPE
+		OBJECTS  { buzzerPlusCardPresenceAbsenceNotification
+			}
+		STATUS  current
+
+		DESCRIPTION
+		 " This traps is sent when Buzzer card presence/absence notification state changes 
+		 	presence = 0
+		 	absence = 1 "
+
+		::= { buzzerPlusAlarmNotification  1 }
+
+--***************************************************************************** 
+    	
+	snmpCurrentNotificationsGroup NOTIFICATION-GROUP
+		NOTIFICATIONS	{ 
+					buzzerPlusCardPresenceAbsenceNotificationTrap
+				}
+  	  	STATUS 	current
+
+  	  	DESCRIPTION
+		 " The UTL DWDM current notifications group "
+
+  	  	::= { buzzerPlus 3 } 
+
+--***************************************************************************** 
+		  	  
+	snmpcurrentGroup OBJECT-GROUP
+	OBJECTS {
+			buzzerPlusInterface,	
+			buzzerPlusActiveStatus,
+			buzzerPlusConfigurationTableRowStatus,
+			buzzerPlusCardPresenceAbsenceNotification,
+			buzzerPlusAlarmQueryTableRowStatus
+ 		}
+
+	STATUS  		current
+	DESCRIPTION		"A collection of objects from RFC 1213 made current by this MIB module."
+	::= { utlrnd 2 }
+	
+END	

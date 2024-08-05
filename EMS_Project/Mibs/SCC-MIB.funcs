@@ -1,0 +1,4 @@
+{ neutronCardGeneralDetailsTable,	{ scc_snmp_instrumentation, configuration, 		[[	1,3,6,1,4,1,18036,1,1,1,1,1,1,1		]]}}.
+{ neutronConfigurationTable, 	 	{ scc_snmp_instrumentation, configuration, 		[[	1,3,6,1,4,1,18036,1,1,1,1,2,1,1		]]}}.
+{ neutronAlarmQueryTable, 			{ scc_snmp_instrumentation, alarmQuery, 		[[	1,3,6,1,4,1,18036,1,1,1,1,3,1,1,1	]]}}.
+{ neutronPerformanceTable, 			{ scc_snmp_instrumentation, performanceQuery, 	[[	1,3,6,1,4,1,18036,1,1,1,1,4,1,1		]]}}.

@@ -1,0 +1,8 @@
+{mantisPlusCardGeneralDetailsTable,  { galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_configuration_query, [ [ 1, 3, 6, 1, 4, 1, 18036, 1, 1, 1, 191, 1, 1, 1 ] ] } }.
+
+{mantisPlusCardConfigurationTable, { galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_configuration_query, [ [ 1, 3, 6, 1, 4, 1, 18036, 1, 1, 1, 191, 2, 1, 1 ] ] } }.
+
+{mantisPlusAlarmQueryTable, { galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_alarm_query, [ [ 1, 3, 6, 1, 4, 1, 18036, 1, 1, 1, 191, 3, 1, 1, 1 ] ] } }.
+
+{mantisPlusPerformanceQueryTable, { galaxy_supported_cards_snmp_instrumentation, galaxy_supported_cards_performance_query, [ [ 1, 3, 6, 1, 4, 1, 18036, 1, 1, 1, 191, 4, 1, 1 ] ] } }.
+
