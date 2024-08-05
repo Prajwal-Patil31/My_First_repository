@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linux commands &mdash; Nginx_document 1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Nginx documentation" href="nginxdocument.html" />
+    <link rel="prev" title="Welcome to my tech stack documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Nginx_document
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Linux commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#directory-commands">1. Directory Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-commands">2. File commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-content-commands">3. File content commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filter-commands">4. Filter commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#help-commands">5. Help commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#miscellaneous-commands">6. Miscellaneous commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-commands">7. Network commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shell-command">8. Shell command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tool-command">9. tool command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-commands">10.User Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utility-command">11. Utility Command</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nginxdocument.html">Nginx documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git_tool.html">Git tool documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Snmpagent.html">SNMP Agent source code documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="react.html">How to Setup React.js from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conceptual.html">Conceptual Idea of building ‘SNMP agent and manager application’.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seminardoc.html">Documentation of understanding from the seminar-30/09/2023</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Nginx_document</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Linux commands</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/linux.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="linux-commands">
+<h1>Linux commands<a class="headerlink" href="#linux-commands" title="Permalink to this headline"></a></h1>
+<p>Contents:</p>
+<ol class="arabic simple">
+<li><p>Directory commands</p></li>
+<li><p>File commands</p></li>
+<li><p>File content commands</p></li>
+<li><p>Filter commands</p></li>
+<li><p>Help commands</p></li>
+<li><p>Miscellaneous commands</p></li>
+<li><p>Network commands</p></li>
+<li><p>Shell commands</p></li>
+<li><p>Tool commands</p></li>
+<li><p>User commands</p></li>
+<li><p>Utility commands</p></li>
+</ol>
+<section id="directory-commands">
+<h2>1. Directory Commands<a class="headerlink" href="#directory-commands" title="Permalink to this headline"></a></h2>
+<p><cite>pwd:</cite>
+It will display the current directory.</p>
+<p>Syntax: pwd</p>
+<p><cite>mkdir:</cite>
+It will creates the new directory.</p>
+<p>Syntax: mkdir dir_name</p>
+<p><cite>rmdir:</cite>
+It will removes the specified directory.</p>
+<p>Syntax: rmdir dir_name</p>
+<p><cite>cd:</cite>
+It is used to change the directory.</p>
+<p>Syntax: cd dir_name</p>
+<p><cite>ls:</cite>
+It will display the list of contents or files of a directory.</p>
+<p>Syntax: ls</p>
+<p>With ls commands we can use options also, some of them are:</p>
+<p><cite>a) ls -l:</cite>
+It will display the information about the files and contents of directory in long list format.</p>
+<p>Syntax: ls -l</p>
+<p><cite>b) ls -li:</cite>
+This command is used to print the index number if files is in the first column.</p>
+<p>Syntax: ls -li</p>
+<p><cite>c) ls -r:</cite>
+It is used to print the list in reverse order.</p>
+<p>Syntax: ls -r</p>
+<p><cite>d) ls -lh:</cite>
+It shows the result size in human uderstable format.</p>
+<p>Syntax: ls -lh</p>
+<p><cite>e) ls -R:</cite>
+It will shows the contents of subdirectories also.</p>
+<p>Syntax: ls -R</p>
+<p><cite>f) ls -n:</cite>
+It is used to print the groupid and userid.</p>
+<p>Syntax: ls -n</p>
+<p><cite>g) ls -lX:</cite>
+It will group the  files with same extensions together in list.</p>
+<p>Syntax:  ls -lX</p>
+<p><cite>h) ls ../:</cite>
+It will give the contents of the parent directory.</p>
+<p>Syntax: ls ../</p>
+</section>
+<section id="file-commands">
+<h2>2. File commands<a class="headerlink" href="#file-commands" title="Permalink to this headline"></a></h2>
+<p><cite>touch:</cite>
+It is used to create empty file.</p>
+<p>Syntax: touch file_name</p>
+<p><cite>cat:</cite>
+It is used to create a file,display content of the file, copy the content of one file to another file and more.</p>
+<p>Syntax: cat file_name</p>
+<p>Using cat we can do so many operations, some of them are:</p>
+<p><cite>a) cat -n:</cite>
+If we want to display the content precending with line number we have to use -n option with  cat command.</p>
+<p>Syntax: cat -n file_name</p>
+<p><cite>b) cat file1 file2:</cite>
+At a time we can use two files using cat command.</p>
+<p>Syntax: cat file1_name file2_name</p>
+<p><cite>c) cat -E:</cite>
+using cat command we can highlight the end of the line.</p>
+<p>Syntax: cat -E file_name</p>
+<p><cite>d) cat &gt;&gt; :</cite>
+we can write a content inside the excisting file using cat command.</p>
+<p>Syntax: cat &gt;&gt; file_name</p>
+<p><cite>rm:</cite>
+By using this we can remove the specified file.</p>
+<p>Syntax: rm file_name</p>
+<p><cite>cp:</cite>
+It is used to copy the file or directory.</p>
+<p>Syntax: cp ex_file new_file</p>
+<p><cite>mv:</cite>
+It will move file or directory from one location to another.</p>
+<p>Syntax: mv file1_name file2_name</p>
+</section>
+<section id="file-content-commands">
+<h2>3. File content commands<a class="headerlink" href="#file-content-commands" title="Permalink to this headline"></a></h2>
+<p><cite>head:</cite>
+It will displays the first 10 lines of the file.</p>
+<p>Syntax: head file_name</p>
+<p><cite>tail:</cite>
+It will displays the last 10 lines of the file.</p>
+<p>Syntax: tail file_name</p>
+<p><cite>tac:</cite>
+It works reverse as cat command,it will displays the file content in reverse order(last to first).</p>
+<p>Syntax: tac file_name</p>
+<p><cite>more:</cite>
+The more command is quite similar to cat command, as it is used to display the file content in the same way the cat command does. The only difference b/w both command is that, in case of larger file, the more command displays screenful output at a time . In more command, the following keys are used to scroll the page: enter key - To scroll down page by line. space bar - To move to the next page. b key - To move to the previous page. / key - To search the starting.</p>
+<p>Syntax: more file_name</p>
+<p><cite>less:</cite>
+Less command is similar to the more command. It also includes some extra features such as adjustment in width and height of the terminal, comparatively, the more command cuts the output in the width of the terminal.</p>
+<p>Syntax: less file_name</p>
+<p><cite>which:</cite>
+It is basically used to find the executed file associated with the command.</p>
+<p>Syntax: which command</p>
+</section>
+<section id="filter-commands">
+<h2>4. Filter commands<a class="headerlink" href="#filter-commands" title="Permalink to this headline"></a></h2>
+<p><cite>cut:</cite>
+Used to select specific column of a file along with this command we have to use ‘-d ‘ and ‘-f ‘ options.</p>
+<p>Syntax: cut  - d - -f2  file_name</p>
+<p><cite>grep:</cite>
+Used to search content from a file. Generaly it is used with pipe operator.</p>
+<p>Syntax: cat file_name | grep ‘character’</p>
+<p><cite>comm:</cite>
+It is used to compare the two files.</p>
+<p>Syntax: comm file1_name file2_name</p>
+<p><cite>tr:</cite>
+Used to translate the file content like from uppercase to lowercase.</p>
+<p>Syntax: Cat file_name | tr ‘old’  ‘new’</p>
+<p><cite>uniq:</cite>
+It displays the words only once. It doesn’t displays the duplicate words.</p>
+<p>Syntax: sort file_name | uniq</p>
+<p><cite>od:</cite>
+It is used  to display the content of the file in different style such as hexadecimal,octal and ASCII.</p>
+<p><cite>a) od -b:</cite>
+It will convert to octal format.</p>
+<p>Syntax: od -b file_name</p>
+<p><cite>b) od -t x1:</cite>
+It will convert to hexadecimal format.</p>
+<p>Syntax: od -t x1 file_name</p>
+<p><cite>c) od -c:</cite>
+It will convert to ASCII character format.</p>
+<p>Syntax: od -c file_name</p>
+<p><cite>wc:</cite>
+Counts line, words and characters in a file.</p>
+<p>Syntax: wc file_name</p>
+<p><cite>sort:</cite>
+Used to sort files in alphabetical order.</p>
+<p>Syntax: sort file_name</p>
+<p><cite>gzip:</cite>
+It is used to compress the file. It will replace the original file by compressed file and compressed file save with ‘.gz’ extension.</p>
+<p>Syntax: gzip file_name</p>
+<p><cite>gunzip:</cite>
+It is used to decompress the file. It works reverse of gzip command.</p>
+<p>Syntax: gunzip file_name</p>
+<p><cite>tee:</cite>
+The tee command is quite similar to the cat command. The only difference b/w both filters is that it puts standard i/p on standard o/p and also write them into a file.</p>
+<p>Syntax: cat file_name | tee new_file</p>
+<p><cite>sed:</cite>
+It is also known as stream editor. It is used to edit files using a regular expression. It doesn’t permanently edit files, instead content remains only on display . It doesn’t affect the actual file.</p>
+<p>Syntax: command | sed ‘s/oldword/newword/’</p>
+<p><cite>diff:</cite>
+It compares two files line by line and after comparing them, it will displays the parts that do not match.</p>
+<p>Syntax: diff file1 file2</p>
+</section>
+<section id="help-commands">
+<h2>5. Help commands<a class="headerlink" href="#help-commands" title="Permalink to this headline"></a></h2>
+<p><cite>man:</cite>
+It displays the user manual of any command.
+<cite>a) man -selection_num:</cite>
+This option is used to display only a specific section of a manual.</p>
+<p>Syntax: man -selection_num command</p>
+<p><cite>b) man -a:</cite>
+Display all the available manual pages in succession.</p>
+<p>Syntax: man -a command</p>
+<p><cite>c) man -w:</cite>
+This option return the location in which the manual page of given command is present.</p>
+<p>Syntax: man -w command</p>
+<p><cite>info:</cite>
+It gives detailed information of commands.</p>
+<p>Syntax: info command</p>
+<p><cite>–h or –help:</cite>
+Provides information about in-built commands.</p>
+<p>Syntax: –help command</p>
+</section>
+<section id="miscellaneous-commands">
+<h2>6. Miscellaneous commands<a class="headerlink" href="#miscellaneous-commands" title="Permalink to this headline"></a></h2>
+<p><cite>echo:</cite>
+It is used to insert or print information.</p>
+<p>Syntax: echo name</p>
+<p><cite>nano:</cite>
+To create and open a new file by using text editor.</p>
+<p>Syntax: nano file_name</p>
+<p><cite>uname:</cite>
+It will displays the detailed information about the linux software and hardware. It includes machine name, operating system, kernel.</p>
+<p>Syntax: uname</p>
+<p><cite>options:</cite>
+-a: Prints all the system information.
+-s: Prints the kernel name.
+-n: Prints the system’s node hostname.</p>
+<p><cite>who:</cite>
+Let’s you to display the users currently logged in to your linux OS.</p>
+<p>Syntax: who</p>
+</section>
+<section id="network-commands">
+<h2>7. Network commands<a class="headerlink" href="#network-commands" title="Permalink to this headline"></a></h2>
+<p><cite>hostname:</cite>
+To know the system’s hostname.</p>
+<p>Syntax: hostname</p>
+<p><cite>ping:</cite>
+Ping command  pings a specific network host, on the local network on the internet.</p>
+<p>Syntax: ping google.com</p>
+<p><cite>ip:</cite>
+It displays the ip address.</p>
+<p>Syntax: ip</p>
+</section>
+<section id="shell-command">
+<h2>8. Shell command<a class="headerlink" href="#shell-command" title="Permalink to this headline"></a></h2>
+<p><cite>history:</cite>
+It will listout up to 500 previously executed commands.</p>
+<p>Syntax: history</p>
+<p>option: -c: It will clear all the history.</p>
+<p><cite>alias:</cite>
+Alias command replace one string from another string and aliases are only available until you exit the shell.</p>
+<p>Syntax: alias alias_name = “command”</p>
+<p><cite>unalias:</cite>
+we can remove an alias by using unalias.</p>
+<p>Syntax: unalias alias_name</p>
+</section>
+<section id="tool-command">
+<h2>9. tool command<a class="headerlink" href="#tool-command" title="Permalink to this headline"></a></h2>
+<p><cite>locate:</cite>
+Used to search a file by file_name.</p>
+<p>Syntax: locate file_name</p>
+</section>
+<section id="user-commands">
+<h2>10.User Commands<a class="headerlink" href="#user-commands" title="Permalink to this headline"></a></h2>
+<p><cite>id:</cite>
+id command is used to display the userid or groupid.</p>
+<p>Syntax: id</p>
+<p><cite>useradd:</cite>
+It is used to add user.</p>
+<p>Syntax: useradd user_name</p>
+<p><cite>userdel:</cite>
+To delete a user account we use userdel command.</p>
+<p>Syntax: userdel user_del.</p>
+<p><cite>passwd:</cite>
+used to create and change the password for a user.</p>
+<p>Syntax: passwd</p>
+<p><cite>groupadd:</cite>
+used to create to user group.</p>
+<p>Syntax: groupadd group_name</p>
+<p><cite>su:</cite>
+This command provides administrative access to other user. In other words, it allows acess of the linux shell to another user.</p>
+<p>Syntax: su user_name</p>
+</section>
+<section id="utility-command">
+<h2>11. Utility Command<a class="headerlink" href="#utility-command" title="Permalink to this headline"></a></h2>
+<p><cite>date:</cite>
+used to display the date,time,timezone</p>
+<p>Syntax: date</p>
+<p><cite>cal:</cite>
+It will displays the current month calendar</p>
+<p>Syntax: cal</p>
+<p><cite>time:</cite>
+It displays the time to execute a command</p>
+<p>Syntax: time</p>
+<p><cite>exit:</cite>
+used to exit from the current shell</p>
+<p>Syntax: exit</p>
+<p><cite>clear:</cite>
+clear the terminal sreen</p>
+<p>Syntax: clear</p>
+<p><cite>sleep:</cite>
+It holds the terminals by specified time</p>
+<p>Syntax: sleep 4</p>
+<p><cite>zcat:</cite>
+It is used to display the content of the compressed file</p>
+<p>Syntax: zcat filename</p>
+<p><cite>find:</cite>
+It is used for finding perticular file within a directory</p>
+<p>Syntax: find file_name</p>
+<p><cite>df:</cite>
+The df command is used to display the disk space used to display the disk space used in the file system.
+It displays the output as in the number of used blocks, available blocks and the mounted directory</p>
+<p>Syntax: df</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to my tech stack documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nginxdocument.html" class="btn btn-neutral float-right" title="Nginx documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 1.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building client application for gremlin server &mdash; Nginx_document 1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Building Netconf client application from scratch!!" href="netconfClient_Server.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Nginx_document
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="linux.html">Linux commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nginxdocument.html">Nginx documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git_tool.html">Git tool documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Snmpagent.html">SNMP Agent source code documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="react.html">How to Setup React.js from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conceptual.html">Conceptual Idea of building ‘SNMP agent and manager application’.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seminardoc.html">Documentation of understanding from the seminar-30/09/2023</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Documentation on the installation of Docker and hosting nginx documentation on the Docker container</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netconfClient_Server.html">Building Netconf client application from scratch!!</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building client application for gremlin server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-gremlin-server-locally">Connecting gremlin server locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-gremlin-server-through-java-code">Connecting gremlin server through java code</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Nginx_document</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Building client application for gremlin server</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/gremlin.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="building-client-application-for-gremlin-server">
+<h1>Building client application for gremlin server<a class="headerlink" href="#building-client-application-for-gremlin-server" title="Permalink to this headline"></a></h1>
+<p><strong>Overview</strong></p>
+<p>Building client application for gremlin server running with janusgraph. First, if your gremlin server is up in janusgraph then with the gremlin console try to add vertex and fetch it.
+To run the gremlin console you need to run ./bin/gremlin.sh. Once you have successfully executed remotely, then try to connect the gremlin client with your local system by following the below steps. Later write simple Java code to connect with the gremlin server running on your virtual machine.</p>
+<p><strong>Steps to connect gremlin client to gremlin server remotely</strong></p>
+<p>1) First verify that your janusgraph and gremlin server is up, by giving below command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="nb">bin</span><span class="o">/</span><span class="n">janusgraph</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">v</span> <span class="n">status</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>If you are able to see PID then start gremlin console in it by below given command.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="nb">bin</span><span class="o">/</span><span class="n">gremlin</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Then you will see below logs like below mentioned.</p></li>
+</ol>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><strong>Output</strong></span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>         \,,,/
+         (o o)
+-----oOOo-(3)-oOOo-----
+plugin activated: tinkerpop.server
+plugin activated: tinkerpop.utilities
+plugin activated: tinkerpop.tinkergraph
+gremlin&gt;
+</pre></div>
+</div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Now enter into remote console by giving perticular command.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">remote</span> <span class="n">connect</span> <span class="n">tinkerpop</span><span class="o">.</span><span class="n">server</span> <span class="n">conf</span><span class="o">/</span><span class="n">remote</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Once you are successfully connected you will receive logs as below.</p></li>
+</ol>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><strong>Output</strong></span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="o">==&gt;</span><span class="n">Configured</span><span class="w"> </span><span class="mf">192.168.21.121</span><span class="o">/</span><span class="mf">192.168.21.121</span><span class="o">:</span><span class="mi">8182</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Now switch your console to remote by below command and you will receive certain logs as follows.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">remote</span> <span class="n">console</span>
+</pre></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><strong>Output</strong></span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span> ==&gt;All scripts will now be sent to Gremlin Server - [192.168.21.121/192.168.21.121:8182] - type &#39;:remote console&#39; to return to local mode
+</pre></div>
+</div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>Try to add and fetch vertex by below given command.</p></li>
+</ol>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text"><strong>Add vertex</strong></span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>g.addV(&#39;company&#39;).property(&#39;name&#39;,&#39;United&#39;)
+==&gt;v[4232]
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text"><strong>Fetch vertex</strong></span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">gremlin</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g</span><span class="p">.</span><span class="n">V</span><span class="p">(</span><span class="mi">4232</span><span class="p">).</span><span class="n">valueMap</span><span class="p">()</span><span class="w"></span>
+<span class="o">==&gt;</span><span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="p">[</span><span class="n">United</span><span class="p">]}</span><span class="w"></span>
+<span class="n">gremlin</span><span class="o">&gt;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>To check whether my vertex is getting stored or not below is the log output which shows that the data is present in cassendrs.</p></li>
+</ol>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>prajwal@prajwal:~/noa/janusgraph-full-1.0.0$ ls
+bin  cassandra  conf  data  db  elasticsearch  examples  ext  javadocs  lib  LICENSE.txt  logs  NOTICE.txt  scripts
+prajwal@prajwal:~/noa/janusgraph-full-1.0.0$ cd cassandra/
+prajwal@prajwal:~/noa/janusgraph-full-1.0.0/cassandra$ ls
+bin  CASSANDRA-14092.txt  CHANGES.txt  conf  data  lib  LICENSE.txt  logs  NEWS.txt  NOTICE.txt  pylib  tools
+prajwal@prajwal:~/noa/janusgraph-full-1.0.0/cassandra$ cd bin/
+prajwal@prajwal:~/noa/janusgraph-full-1.0.0/cassandra/bin$ ls
+cassandra  cassandra.in.sh  cqlsh  cqlsh.py  debug-cql  nodetool  sstableloader  sstablescrub  sstableupgrade  sstableutil  sstableverify  stop-server
+prajwal@prajwal:~/noa/janusgraph-full-1.0.0/cassandra/bin$ ./cqlsh
+Connected to JanusGraph Cassandra Cluster at 127.0.0.1:9042
+[cqlsh 6.0.0 | Cassandra 4.0.6 | CQL spec 3.4.5 | Native protocol v5]
+Use HELP for help.
+cqlsh&gt; DESCRIBE KEYSPACES;
+
+janusgraph  system_auth         system_schema  system_views
+system      system_distributed  system_traces  system_virtual_schema
+
+cqlsh&gt; USE janusgraph ;
+cqlsh:janusgraph&gt; DESCRIBE TABLES;
+
+edgestore        graphindex_lock_   system_properties_lock_
+edgestore_lock_  janusgraph_ids     systemlog
+graphindex       system_properties  txlog
+
+cqlsh:janusgraph&gt; SELECT * FROM edgestore;
+
+key | column1 | value
+-----+---------+-------
+
+(0 rows)
+cqlsh:janusgraph&gt;
+</pre></div>
+</div>
+<section id="connecting-gremlin-server-locally">
+<h2>Connecting gremlin server locally<a class="headerlink" href="#connecting-gremlin-server-locally" title="Permalink to this headline"></a></h2>
+<ol class="arabic simple">
+<li><p>I had followed following document the link is given below.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">docs</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">amazon</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">neptune</span><span class="o">/</span><span class="n">latest</span><span class="o">/</span><span class="n">userguide</span><span class="o">/</span><span class="n">access</span><span class="o">-</span><span class="n">graph</span><span class="o">-</span><span class="n">gremlin</span><span class="o">-</span><span class="n">console</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Remember you need to connect server with below given command</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">remote</span> <span class="n">connect</span> <span class="n">tinkerpop</span><span class="o">.</span><span class="n">server</span> <span class="n">conf</span><span class="o">/</span><span class="n">remote</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>In this remote.yaml file you will havae to configure ip address of your host system.</p></li>
+</ol>
+</section>
+<section id="connecting-gremlin-server-through-java-code">
+<h2>Connecting gremlin server through java code<a class="headerlink" href="#connecting-gremlin-server-through-java-code" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Below is the code given to connect with gremlin server follow make shure the version of janusgraph and serilization of data.</p></li>
+</ul>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">import</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">tinkerpop</span><span class="p">.</span><span class="n">gremlin</span><span class="p">.</span><span class="n">driver</span><span class="p">.</span><span class="n">remote</span><span class="p">.</span><span class="n">DriverRemoteConnection</span><span class="p">;</span><span class="w"></span>
+<span class="n">import</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">tinkerpop</span><span class="p">.</span><span class="n">gremlin</span><span class="p">.</span><span class="n">driver</span><span class="p">.</span><span class="n">ser</span><span class="p">.</span><span class="n">Serializers</span><span class="p">;</span><span class="w"></span>
+<span class="n">import</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">tinkerpop</span><span class="p">.</span><span class="n">gremlin</span><span class="p">.</span><span class="n">process</span><span class="p">.</span><span class="n">traversal</span><span class="p">.</span><span class="n">dsl</span><span class="p">.</span><span class="n">graph</span><span class="p">.</span><span class="n">GraphTraversalSource</span><span class="p">;</span><span class="w"></span>
+<span class="n">import</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">tinkerpop</span><span class="p">.</span><span class="n">gremlin</span><span class="p">.</span><span class="n">driver</span><span class="p">.</span><span class="n">Cluster</span><span class="p">;</span><span class="w"></span>
+<span class="n">import</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">tinkerpop</span><span class="p">.</span><span class="n">gremlin</span><span class="p">.</span><span class="n">process</span><span class="p">.</span><span class="n">traversal</span><span class="p">.</span><span class="n">AnonymousTraversalSource</span><span class="p">.</span><span class="n">traversal</span><span class="p">;</span><span class="w"></span>
+<span class="n">import</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">tinkerpop</span><span class="p">.</span><span class="n">gremlin</span><span class="p">.</span><span class="n">structure</span><span class="p">.</span><span class="n">Vertex</span><span class="p">;</span><span class="w"></span>
+
+<span class="w"> </span><span class="n">public</span><span class="w"> </span><span class="n">class</span><span class="w"> </span><span class="n">App</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="n">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="n">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"></span>
+<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">Cluster</span><span class="w"> </span><span class="n">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">null</span><span class="p">;</span><span class="w"></span>
+<span class="w">     </span><span class="n">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">         </span><span class="n">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remoteAddVertex</span><span class="p">();</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">           </span><span class="n">finally</span><span class="w"></span>
+<span class="w">           </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cluster</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">null</span><span class="p">)</span><span class="w"></span>
+<span class="w">             </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="n">cluster</span><span class="p">.</span><span class="n">close</span><span class="p">();</span><span class="w"></span>
+<span class="w">             </span><span class="p">}</span><span class="w"></span>
+<span class="w">           </span><span class="p">}</span><span class="w"></span>
+<span class="w"> </span><span class="p">}</span><span class="w"></span>
+
+<span class="w"> </span><span class="n">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">Cluster</span><span class="w"> </span><span class="n">remoteAddVertex</span><span class="p">()</span><span class="w"> </span><span class="n">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"></span>
+<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">Cluster</span><span class="w"> </span><span class="n">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createCluster</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">GraphTraversalSource</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">traversal</span><span class="p">().</span><span class="n">withRemote</span><span class="p">(</span><span class="n">DriverRemoteConnection</span><span class="p">.</span><span class="n">using</span><span class="p">(</span><span class="n">cluster</span><span class="p">));</span><span class="w"></span>
+<span class="w">  </span><span class="n">try</span><span class="w"></span>
+<span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">Vertex</span><span class="w"> </span><span class="n">addedVertex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g</span><span class="p">.</span><span class="n">addV</span><span class="p">(</span><span class="s">&quot;province&quot;</span><span class="p">).</span><span class="n">property</span><span class="p">(</span><span class="s">&quot;country&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;british colombia&quot;</span><span class="p">).</span><span class="n">next</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="n">out</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Vertex added with ID: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">addedVertex</span><span class="p">.</span><span class="n">id</span><span class="p">());</span><span class="w"></span>
+<span class="w">     </span><span class="p">}</span><span class="w"></span>
+<span class="w">     </span><span class="n">finally</span><span class="w"></span>
+<span class="w">     </span><span class="p">{</span><span class="w"></span>
+<span class="w">     </span><span class="n">g</span><span class="p">.</span><span class="n">close</span><span class="p">();</span><span class="w"> </span><span class="c1">// Close the traversal source</span>
+<span class="w">     </span><span class="p">}</span><span class="w"></span>
+<span class="w">     </span><span class="k">return</span><span class="w"> </span><span class="n">cluster</span><span class="p">;</span><span class="w"></span>
+<span class="w"> </span><span class="p">}</span><span class="w"></span>
+
+
+
+<span class="w"> </span><span class="n">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">Cluster</span><span class="w"> </span><span class="n">createCluster</span><span class="p">()</span><span class="w"></span>
+<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Cluster</span><span class="p">.</span><span class="n">build</span><span class="p">()</span><span class="w"></span>
+<span class="w"> </span><span class="p">.</span><span class="n">addContactPoint</span><span class="p">(</span><span class="s">&quot;192.168.21.121&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w"> </span><span class="p">.</span><span class="n">port</span><span class="p">(</span><span class="mi">8182</span><span class="p">)</span><span class="w"></span>
+<span class="w"> </span><span class="p">.</span><span class="n">enableSsl</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span><span class="w"></span>
+<span class="w"> </span><span class="p">.</span><span class="n">minConnectionPoolSize</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w"> </span><span class="p">.</span><span class="n">maxConnectionPoolSize</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+<span class="w"> </span><span class="p">.</span><span class="n">maxWaitForConnection</span><span class="p">(</span><span class="mi">200000</span><span class="p">)</span><span class="w"></span>
+<span class="w"> </span><span class="p">.</span><span class="n">serializer</span><span class="p">(</span><span class="n">Serializers</span><span class="p">.</span><span class="n">GRAPHSON</span><span class="p">)</span><span class="w"></span>
+<span class="w"> </span><span class="p">.</span><span class="n">create</span><span class="p">();</span><span class="w"></span>
+<span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w"> </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Here are the required dependencies to run this code.</p></li>
+</ul>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">com</span><span class="p">.</span><span class="n">tinkerpop</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w"> </span><span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">gremlin</span><span class="o">-</span><span class="n">core</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">3.0.0</span><span class="p">.</span><span class="n">M7</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">org</span><span class="p">.</span><span class="n">janusgraph</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">janusgraph</span><span class="o">-</span><span class="n">core</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">0.5.2</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">org</span><span class="p">.</span><span class="n">janusgraph</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">janusgraph</span><span class="o">-</span><span class="n">cql</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">0.5.3</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">scope</span><span class="o">&gt;</span><span class="n">test</span><span class="o">&lt;/</span><span class="n">scope</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">org</span><span class="p">.</span><span class="n">janusgraph</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">janusgraph</span><span class="o">-</span><span class="n">es</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">0.5.3</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">exclusions</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">exclusion</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">org</span><span class="p">.</span><span class="n">elasticsearch</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">elasticsearch</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;/</span><span class="n">exclusion</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;/</span><span class="n">exclusions</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">software</span><span class="p">.</span><span class="n">amazon</span><span class="p">.</span><span class="n">neptune</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">gremlin</span><span class="o">-</span><span class="n">client</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">1.0.2</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">tinkerpop</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">tinkergraph</span><span class="o">-</span><span class="n">gremlin</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">3.3.3</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">com</span><span class="p">.</span><span class="n">tinkerpop</span><span class="p">.</span><span class="n">gremlin</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">gremlin</span><span class="o">-</span><span class="n">java</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">2.6.0</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span><span class="w"></span>
+<span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="netconfClient_Server.html" class="btn btn-neutral float-left" title="Building Netconf client application from scratch!!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 1.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
