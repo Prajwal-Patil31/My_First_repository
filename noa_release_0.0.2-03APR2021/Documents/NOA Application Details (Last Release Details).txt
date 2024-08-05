@@ -1,0 +1,94 @@
+Dear Sir, Rajaram,
+
+I am pleased to make the latest release of NoA with completely redesigned UX. It also comes packaged with everything that we have been developing from September last year. It took more time than it should have, due to all the reasons that you are well aware of. If you spend quality time and analyse this release, you would realize that it is now a 'Framework' that allows development of any kind of modern Network or Telecom solution. I also listed, for your understanding, the functionalities that are yet to be developed to get this into a deployable solution.
+
+ 
+
+I have uploaded the code and binaries here at the links below. Build and Setup instructions for GDB, PGSQL and Application and Network Settings are the same as previous releases.
+
+Source Code : https://drive.google.com/file/d/1yhHf3ax5tTW37KzHJ8FT36wePRRQJof-/view?usp=sharing
+
+Application Binaries : https://drive.google.com/file/d/1bydi05P12hLZct6cqtX9vHpr3msIuyWF/view?usp=sharing
+
+ 
+
+ 
+
+A demonstration video of the UI is uploaded here
+
+Demo Video of the UX/UI : https://drive.google.com/file/d/1VxaNm_xsG6RpQ6APLwzJAUn5oQo_YeXR/view?usp=sharing
+
+ 
+
+ 
+
+Below are the most significant Features and Enhancements in this release
+
+[1] Abstract NMS Functionality based on Standard Models : IETF L1, L2 & L3 Types and Management Objects & IETF Topology Models
+
+[2] Altran Specific EMS Functionality based on ISS Models : All Models Required for Comprehensive MPLS Network Management
+
+[3] Complete REST API Documentation & Postman Collections for all Operations
+
+[4] Comprehensive Graph DB Schema & Edge Rule Definitions for EMS/NMS Functionality, Simplified PostgreSQL Schema for Time Series Data (Ex. Faults)
+
+[5] Performance Enhancement for GDB Queries
+
+[6] Enhanced RBAC
+
+GDB Model based Authentication
+Highly Comprehensive Privilege Definitions for RBAC
+Enhanced GDB Based Authorization Model
+[7] Complete Implementation of Documented User Experience for EMS, NMS & Platform Functionality
+
+[8] L2VPN & L3VPN Service Management : Comprehensive Integration of Element, Network Objects & Functions
+
+[9] Default Data Loader Solution
+
+[10] Complete Altran Specific Element, Network, Service Management Functionality : Back-end & Front-end
+
+[11] Topology Management :
+
+Global, Network & Service Specific Topologies View & Filters Components : Solution for Widget Rendering Over Topology
+
+[12] Configuration Rollback Feature
+
+[13] Audit Logging Feature
+
+[14] Numerous User Interface Enhancements/Fixes :
+
+Enhanced Routing of URI & UI Component Rendering
+
+REST Response Handling & Component State Management
+
+UI Widget Enhancements for Reusability
+
+Enhancements for Responsive UI
+
+Data Filtering at Backend
+
+Multiple Wizards for Simplified Input
+
+Global Data Filter & Pagination Components
+
+Comprehensive Graphs for Fault & Performance Insights
+
+[15] Completely Re-Structured Codebase & Refactored Build Framework
+
+ 
+
+Pending Implementation for Deployable Product
+
+UTL CSG Specific Glue-Logic : FCAPS for Element, Network & Service (Move from Mock Data)
+Integration of Fault/Event Processing & Aggregation
+Device Abstraction Layer : Implementation of Device Adapter
+Comprehensive Exception Handling
+Effective Privileges and RBAC Enforcement
+Further Improvements to GDB Client Performance : Persistent Connection Management, Complex Query Building
+Global Search
+Further UI Enhancements to Topology Components
+ 
+
+Regards
+
+KusaRam

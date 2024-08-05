@@ -1,0 +1,62 @@
+Dear Elias,
+
+Please follow the below.
+
+ 
+
+[1] Database Servers : PGSQL for Time Series Data and JanusGraph for the rest of the data
+
+You need to setup 2 DB servers on Ubuntu (we use 20.04.1). If you are planning to use the same machine for both, ensure that it has good configuration. Detailed instructions are in the links below.
+
+PostgreSQL on Ubuntu : we use 12.12; https://www.postgresql.org/download/linux/ubuntu/
+
+JanusGraph on Ubuntu :  https://docs.janusgraph.org/getting-started/installation/
+
+For JanusGraph, I suggest to avoid containers for now, although I tested it working, it takes more time to deal with configuration changes etc. Follow ‘Local Installation’ and use full distribution.
+
+ ////////////
+
+follow the janusgraph link to start janusgraph
+===============================================
+https://jointhegraph.github.io/
+
+
+gremlin> :plugin list
+            
+
+gremlin> : plugin use tinkerpop.server
+         : plugin use  tinkerpop.tikergraph
+         : plugin use tinkerpop.utilities 
+
+///////////////
+
+
+[2] Resources & Traversal Micro-services
+
+These two are the ONAP components that act as wrappers for GDB functionality. I realised that these were not shared earlier. You can download them from below location.
+
+https://drive.google.com/file/d/1I3xVIEFpfjfiLUlCrCEl2YbGs9U8gI-W/view?usp=sharing
+
+https://drive.google.com/file/d/1NNWCnPDZ3B1235d_HkJpBmUA5QP6wzEV/view?usp=sharing
+
+ 
+
+You can run both these micro-services (spring boot) in the same server as GDB.
+
+java -jar aai-resources-1.8.3-SNAPSHOT.jar > /dev/null 2>&1 &
+
+java -jar aai-traversal-1.9.0-SNAPSHOT.jar > /dev/null 2>&1 &
+
+ 
+
+[3] NOA Application
+
+You can run the binary that I shared (spring boot application) from any machine that has JDK 11 installed (Windows/Linux)
+
+Change the DB IP addresses and credentials in application.properties file
+
+ 
+
+You can also run the application from VS Code after build, instructions were shared in release note of earlier releases.
+
+   - "8182:8182"

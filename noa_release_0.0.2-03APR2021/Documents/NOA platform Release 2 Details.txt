@@ -1,0 +1,64 @@
+Dear Rajaram,
+
+As discussed yesterday, I am herewith sharing the link to the 2nd release of NOA platform.
+
+Please let me know once downloaded, so that I can remove the share.
+
+https://drive.google.com/file/d/1wFVRdgOcYxkzdQ-EKGCqn8rOhsQ1RLSA/view?usp=sharing
+
+ 
+
+Functionality Available :
+
+ODL Controller Integrated as a Spring Service
+NETCONF, OPENFLOW Southbound Plugins
+RESTCONF, Swagger Northbound Plugins
+Integrated Solution for Configuration of ODL Components : Controller, Built-In YANG Models, Clustering, RESTCONF, NETCONF & Swagger
+Multiple Enhancements & Fixes to the Front-End UI Components
+Integrated Cisco NeXt UI Framework for Topology Management and React Wrapper PoCs like Path Draw
+Foundational Element Management UI based on OVS Switch (OF-CONFIG)
+JSDoc Based Front-end Documentation Framework Integrated with Build Framework
+JavaDoc Based Backend-end Documentation Framework Integrated with Build Framework
+Documented Frontend & Backend Source Code
+Junit Jupiter and Spring Test Based Back-end Test Framework Integrated into the Build Framework
+Backend Unit and Integration Test Cases Implemented So Far.
+Jest Based Front-end Test Framework, RTL Integrated into the Build FrameworkJ
+In-development Solutions for Front-end Unit and Integration Test Cases
+Integration of Formik Input Validation Framework and Solutions Implemented So Far
+Updated DB/DAO Model for RBAC
+Integration of Netflix Zuul API Gateway/Proxy for Micro-Services
+ 
+
+Instructions for Build & Deployment :
+
+DB Schema is changed. It is Mandatory to Update it (pgsql_noa_schema_030421.sql) & Default Data (pgsql_noa_default-data_030421.sql)
+To Avoid Build Failure Doe to Failing Test Cases, Build the Application with : mvn "-DskipTests=true" "-Dskip.npm.test=true" install
+Login as ‘admin:admin’ Default User for Full Access to Functionality
+Access Service Endpoints
+UI Console at http://localhost:8080
+
+REST Endpoints @ http://localhost:8080/api
+
+RESTCONF Operations @ http://localhost:8888/restconf/operations
+
+Swagger Documentation @ http://localhost:8888/apidoc/explorer/index.html
+
+Connect to Any NETCONF Device from UI Console : Network Elements > Element Inventory > Attach; And Explore the Device’s YANG Models in Swagger UI
+YANG Models from the Device Get Downloaded to ‘Cache’ Directory
+Generate Back-End JavaDocs with : mvn Javadoc:Javadoc
+Generate Front-End Docs with : npm run doc
+Run Backend & Front-End Tests with : mvn test
+Run Back-End Only Tests with : mvn "-Dskip.npm.test=true" test
+Run Front-End Only Tests with : npm run test
+ 
+
+Knows Issues / Limitations :
+
+Logout from UI-Console, Doesn’t Invalidate the User Session & Expiry of Back-End Session, Doesn’t Reflect in Front-End
+Not all Back-End Tests Execute : Out off 62 Tests, 12 Have Error and 4 Fail
+Swagger Documentation Takes Long Time to Load
+User Accounts Get Created in Locked-Out State
+Front-End Tests Have not Been Properly Integrated Yet, They need to be Run Independently
+Topology UI is Generated with Mock Data
+Topology UI Issues with Layout & Resizing
+Input Validations are Un-Reviewed and Limited in validation Scope

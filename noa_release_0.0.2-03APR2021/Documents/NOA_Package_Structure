@@ -1,0 +1,501 @@
+noa-application_v0.1.0/
+│
+├── api/
+│   ├── ovs_netconf_openflow.postman_collection.json
+│   ├── Postman Collections/
+│   │   ├── 'NOA Production Resources API.postman_collection.json'
+│   │   └── NOA_REST_API_Production
+│   └── REST API Documentation/
+│       └── NOA_REST_Production.json
+│
+├── db_schema/
+│   ├── janusgraph/
+│   │   ├── janusgraph_groovy_data.groovy
+│   │   └── schema/
+│   │       ├── aai_schema/
+│   │       │   └── aai_schema_v23.xsd
+│   │       ├── dbedgerules/
+│   │       │   └── v23/
+│   │       │       └── DbEdgeRules_v23.json
+│   │       └── oxm/
+│   │           └── v23/
+│   │               └── aai_oxm_v23.xml
+│   └── postgresql/
+│       ├── pgsql_noa_default-data_030421.sql
+│       ├── pgsql_noa_schema_030421.sql
+│       ├── postgresql-spring-session-create.sql
+│       └── postgresql-spring-session-drop.sql
+│
+├── jest.setup.ts
+├── mvnw
+├── mvnw.bat
+├── node_modules/
+│   └── (Not required)
+├── package-lock.json
+├── package.json
+├── pom.xml
+├── README.md
+├── repo/
+│   └── in/
+│    |  └── utl/
+│    |      └── noa/
+│    |          └── netconf/
+│    |          |   └── device/
+│    |          |       └── models/
+│    |          |           ├── noa-altran-iss/
+│    |          |           │   └── 13.2.2-SNAPSHOT/ *C
+│    |          |           │       ├── maven-metadata.xml
+│    |          |           │       ├── maven-metadata.xml.md5
+│    |          |           │       ├── maven-metadata.xml.sha1
+│    |          |           │       ├── noa-altran-iss-13.2.2-20220902.084123-1.jar
+│    |          |           │       ├── noa-altran-iss-13.2.2-20220902.084123-1.jar.md5
+│    |          |           │       └── noa-altran-iss-13.2.2-20220902.084123-1.jar.sha1
+│    |          |           ├── noa-std-ietf-common/
+│    |          |           │   └── 13.2.1-SNAPSHOT/
+│    |          |           │       ├── maven-metadata.xml
+│    |          |           │       ├── maven-metadata.xml.md5
+│    |          |           │       ├── maven-metadata.xml.sha1
+│    |          |           │       ├── noa-std-ietf-common-13.2.1-20220902.085101-1.jar
+│    |          |           │       ├── noa-std-ietf-common-13.2.1-20220902.085101-1.jar.md5
+│    |          |           │       └── noa-std-ietf-common-13.2.1-20220902.085101-1.jar.sha1
+│    |          |           ├── noa-std-ietf-network-model/
+│    |          |           │   └── 13.2.1-SNAPSHOT/
+│    |          |           │       ├── maven-metadata.xml
+│    |          |           │       ├── maven-metadata.xml.md5
+│    |          |           │       ├── maven-metadata.xml.sha1
+│    |          |           │       ├── noa-std-ietf-network-model-13.2.1-20220902.085408-1.jar
+│    |          |           │       ├── noa-std-ietf-network-model-13.2.1-20220902.085408-1.jar.md5
+│    |          |           │       └── noa-std-ietf-network-model-13.2.1-20220902.085408-1.jar.sha1
+│    |          |           └── noa-std-ietf-topology-base-model/
+│    |          |               └── 13.2.1-SNAPSHOT/
+│    |          |                   ├── noa-std-ietf-topology-base-model-13.2.1-20220902.085503-1.jar
+│    |          |                   ├── noa-std-ietf-topology-base-model-13.2.1-20220902.085503-1.jar.md5
+│    |          |                   └── noa-std-ietf-topology-base-model-13.2.1-20220902.085503-1.jar.sha1
+|    |          |                   └── maven-metadata.xml
+|    |          |                   └── maven-metadata.xml.sha1 
+|    |          |                   └── maven-metadata.xml.md5 
+|    |          |
+|    |          ├── noa-netconf-sb/
+│    |          │   ├── 0.0.1-SNAPSHOT/
+│    |          │   │   ├── maven-metadata.xml
+│    |          │   │   ├── maven-metadata.xml.md5
+│    |          │   │   ├── maven-metadata.xml.sha1
+│    |          │   │   ├── noa-netconf-sb-0.0.1-20220903.062442-1.jar
+│    |          │   │   ├── noa-netconf-sb-0.0.1-20220903.062442-1.jar.md5
+|    |          │   │   └── noa-netconf-sb-0.0.1-20220903.062442-1.jar.sha1 
+|    |          │   ├── maven-metadata.xml 
+|    |          │   ├── maven-metadata.xml.md5
+|    |          │   └── maven-metadata.xml.sha1 
+|    |          │
+|    |          ├── noa-restconf-nb/
+|    |          |    └── maven-metadata.xml 
+|    |          |    └── maven-metadata.xml.md5
+|    |          |    └── maven-metadata.xml.sha1
+|    |          |    └── 0.0.1-SNAPSHOT/
+|    |          |       ├── maven-metadata.xml
+|    |          |       ├── maven-metadata.xml.md5
+|    |          |       ├── maven-metadata.xml.sha1
+|    |          |       ├── noa-restconf-nb-0.0.1-20220903.063024-1.jar 
+|    |          |       ├── noa-restconf-nb-0.0.1-20220903.063024-1.jar.md5
+|    |          |       └── noa-restconf-nb-0.0.1-20220903.063024-1.jar.sha1
+|    |          |
+|    |          └── noa-swagger-nb/
+|    |              └──--maven-metadata.xml 
+|    |               └──--maven-metadata.xml.md5
+|    |               └──--maven-metadata.xml.sha1
+|    |               └──--0.0.1-SNAPSHOT/
+|    |                  ├── maven-metadata.xml
+|    |                  ├── maven-metadata.xml.md5
+|    |                  ├── maven-metadata.xml.sha1
+|    |                  ├── noa-swagger-nb-0.0.1-20220903.063156-1.jar	 
+|    |                  ├── noa-swagger-nb-0.0.1-20220903.063156-1.jar.md5
+|    |                  └── noa-swagger-nb-0.0.1-20220903.063156-1.jar.sha1
+|    |
+|    └── org/
+|          └─ onap/
+|              ├── aai/
+|              |   ├── aai-common/
+|              |   |           ├── aai-aaf-auth/
+|              |   |           |           ├── 1.8.2/
+|              |   |           |           |       ├── aai-aaf-auth-1.8.2.jar 
+|              |   |           |           |       ├──  aai-aaf-auth-1.8.2.jar.md5 
+|              |   |           |           |       ├──  aai-aaf-auth-1.8.2.jar.sha1 
+|              |   |           |           |       ├── aai-aaf-auth-1.8.2.pom
+|              |   |           |           |       ├── aai-aaf-auth-1.8.2.pom.md5
+|              |   |           |           |       └── aai-aaf-auth-1.8.2.pom.sha1
+|              |   |           |           |
+|              |   |           |           ├── maven-metadata.xml
+|              |   |           |           ├── maven-metadata.xml.md5
+|              |   |           |           └── maven-metadata.xml.sha1
+|              |   |           |             
+|              |   |           ├── aai-annotations/
+|              |   |           |            ├── maven-metadata.xml
+|              |   |           |            ├── maven-metadata.xml.md5
+|              |   |           |            ├── maven-metadata.xml.sha1
+|              |   |           |            └── 1.8.2/
+|              |   |           |                   ├── aai-annotations-1.8.2.jar
+|              |   |           |                   ├── aai-annotations-1.8.2.jar.md5
+|              |   |           |                   ├── aai-annotations-1.8.2.jar.sha1
+|              |   |           |                   ├── aai-annotations-1.8.2.pom 
+|              |   |           |                   ├── aai-annotations-1.8.2.pom.md5 
+|              |   |           |                   └── aai-annotations-1.8.2.pom.sha1
+|              |   |           |
+|              |   |           ├── aai-auth/
+|              |   |           |        ├── maven-metadata.xml
+|              |   |           |        ├── maven-metadata.xml.md5
+|              |   |           |        ├── maven-metadata.xml.sha1
+|              |   |           |        └── 1.8.2/
+|              |   |           |               ├── aai-auth-1.8.2.jar
+|              |   |           |               ├── aai-auth-1.8.2.jar.md5
+|              |   |           |               ├── aai-auth-1.8.2.jar.sha1
+|              |   |           |               ├── aai-auth-1.8.2.pom 
+|              |   |           |               ├── aai-auth-1.8.2.pom.md5
+|              |   |           |               └── aai-auth-1.8.2.pom.sha1
+|              |   |           |                            
+|              |   |           ├── aai-common/
+|              |   |           |          ├── maven-metadata.xml
+|              |   |           |          ├── maven-metadata.xml.md5
+|              |   |           |          ├── maven-metadata.xml.sha1
+|              |   |           |          └── 1.8.2/           
+|              |   |           |               ├──  aai-common-1.8.2.pom.sha1
+|              |   |           |               ├── aai-common-1.8.2.pom.md5
+|              |   |           |               └── aai-common-1.8.2.pom
+|              |   |           ├── aai-core/
+|              |   |           |         ├── maven-metadata.xml
+|              |   |           |         ├── maven-metadata.xml.md5
+|              |   |           |         ├── maven-metadata.xml.sha1
+|              |   |           |         └── 1.8.2/           
+|              |   |           |               ├── aai-core-1.8.2.jar
+|              |   |           |               ├── aai-core-1.8.2.jar.md5
+|              |   |           |               ├── aai-core-1.8.2.jar.sha1
+|              |   |           |               ├── aai-core-1.8.2.pom
+|              |   |           |               ├── aai-core-1.8.2.pom.md5 
+|              |   |           |               └── aai-core-1.8.2.pom.sha1
+|              |   |           |
+|              |   |           ├── aai-els-onap-logging/
+|              |   |           |               ├── maven-metadata.xml
+|              |   |           |               ├── maven-metadata.xml.md5
+|              |   |           |               ├── maven-metadata.xml.sha1
+|              |   |           |               └── 1.8.2/           
+|              |   |           |                     ├── aai-els-onap-logging-1.8.2.jar
+|              |   |           |                     ├── aai-els-onap-logging-1.8.2.jar.sha1
+|              |   |           |                     ├── aai-els-onap-logging-1.8.2.jar.md5 
+|              |   |           |                     ├── aai-els-onap-logging-1.8.2.pom.md5
+|              |   |           |                     ├── aai-els-onap-logging-1.8.2.pom  
+|              |   |           |                     └── aai-els-onap-logging-1.8.2.pom.sha1
+|              |   |           |
+|              |   |           ├── aai-failover/
+|              |   |           |            ├── maven-metadata.xml
+|              |   |           |            ├── maven-metadata.xml.md5
+|              |   |           |            ├── maven-metadata.xml.sha1
+|              |   |           |            └── 1.8.2/           
+|              |   |           |                   ├── aai-failover-1.8.2.jar
+|              |   |           |                   ├── aai-failover-1.8.2.jar.md5 
+|              |   |           |                   ├── aai-failover-1.8.2.jar.sha1 
+|              |   |           |                   ├── aai-failover-1.8.2.pom
+|              |   |           |                   ├── aai-failover-1.8.2.pom.md5  
+|              |   |           |                   └── aai-failover-1.8.2.pom.sha1
+|              |   |           ├── aai-parent/
+|              |   |           |         ├── maven-metadata.xml
+|              |   |           |         ├── maven-metadata.xml.md5
+|              |   |           |         ├── maven-metadata.xml.sha1
+|              |   |           |         └── 1.8.2/           
+|              |   |           |                ├── aai-parent-1.8.2.pom
+|              |   |           |                ├── aai-parent-1.8.2.pom.md5 
+|              |   |           |                └── aai-parent-1.8.2.pom.sha1           
+|              |   |           |  
+|              |   |           ├── aai-rest/
+|              |   |           |         ├── maven-metadata.xml
+|              |   |           |         ├── maven-metadata.xml.md5
+|              |   |           |         ├── maven-metadata.xml.sha1
+|              |   |           |         └── 1.8.2/           
+|              |   |           |                ├── aai-rest-1.8.2.jar
+|              |   |           |                ├── aai-rest-1.8.2.jar.md5
+|              |   |           |                ├── aai-rest-1.8.2.jar.sha1
+|              |   |           |                ├── aai-rest-1.8.2.pom
+|              |   |           |                ├── aai-rest-1.8.2.pom.md5 
+|              |   |           |                └──  aai-rest-1.8.2.pom.sha1
+|              |   |           |
+|              |   |           ├── aai-schema-abstraction/
+|              |   |           |               ├── maven-metadata.xml
+|              |   |           |               ├── maven-metadata.xml.md5
+|              |   |           |               ├── maven-metadata.xml.sha1
+|              |   |           |               └── 1.8.2/           
+|              |   |           |                     ├── aai-schema-abstraction-1.8.2.jar 
+|              |   |           |                     ├── aai-schema-abstraction-1.8.2.jar.sha1 
+|              |   |           |                     ├── aai-schema-abstraction-1.8.2.pom.md5
+|              |   |           |                     ├── aai-schema-abstraction-1.8.2.jar.md5
+|              |   |           |                     ├── aai-schema-abstraction-1.8.2.pom  
+|              |   |           |                     └── aai-schema-abstraction-1.8.2.pom.sha1
+|              |   |           |
+|              |   |           |
+|              |   |           ├── aai-schema-ingest/
+|              |   |           |               ├── maven-metadata.xml
+|              |   |           |               ├── maven-metadata.xml.md5
+|              |   |           |               ├── maven-metadata.xml.sha1
+|              |   |           |               └── 1.8.2/           
+|              |   |           |                     ├── aai-schema-ingest-1.8.2.jar 
+|              |   |           |                     ├── aai-schema-ingest-1.8.2.jar.md5 
+|              |   |           |                     ├── aai-schema-ingest-1.8.2.jar.sha1
+|              |   |           |                     ├── aai-schema-ingest-1.8.2.pom
+|              |   |           |                     ├── aai-schema-ingest-1.8.2.pom.md5
+|              |   |           |                     └── aai-schema-ingest-1.8.2.pom.sha1
+|              |   |           |
+|              |   |           |  
+|              |   |           └── aai-utils/
+|              |   |                      ├── maven-metadata.xml
+|              |   |                      ├── maven-metadata.xml.md5
+|              |   |                      ├── maven-metadata.xml.sha1
+|              |   |                      └── 1.8.2/           
+|              |   |                             ├── aai-utils-1.8.2.jar
+|              |   |                             ├── aai-utils-1.8.2.jar.md5 
+|              |   |                             ├── aai-utils-1.8.2.jar.sha1
+|              |   |                             ├── aai-utils-1.8.2.pom
+|              |   |                             ├── aai-utils-1.8.2.pom.md5 
+|              |   |                             └── aai-utils-1.8.2.pom.sha1
+|              |   |           
+|              |   |           
+|              |   |
+|              |   └── schema-service /           
+|              |               ├── aai-annotations /
+|              |               ├── aai-queries /
+|              |               ├── aai-schema /
+|              |               ├── aai-schema-gen / 
+|              |               └── schema-service /
+|              |
+|              |  
+|              └── so/
+|                   ├── fluent-builder-maven-plugin /
+|                   ├── graph-inventory /
+|                   ├── noa-aai-client  /
+|                   ├── noa-common  / 
+|                   ├── noa-so /
+|                   ├── maven-metadata.xml 
+|                   ├── maven-metadata.xml.md5 
+|                   └──  maven-metadata.xml.sha1
+|
+|             
+├── src/
+│   ├── main/
+|   |     ├── java /
+|   |     |     └──in/
+|   |     |         └── utl/
+|   |     |              └── noa/
+|   |     |                   ├── account /
+|   |     |                   |       ├── group /
+|   |     |                   |       |      └── UserGroupController.java
+|   |     |                   |       └── user /
+|   |     |                   |            ├── model /
+|   |     |                   |            |     ├── UserAccount.java 
+|   |     |                   |            |     ├── UserAccountRepository.java 
+|   |     |                   |            |     └── User.java            
+|   |     |                   |            ├── password /
+|   |     |                   |            |        ├── PasswordPolicyController.java 
+|   |     |                   |            |        └── service /
+|   |     |                   |            |                 └── CustomPasswordValidator.java          
+|   |     |                   |            |
+|   |     |                   |            ├── profile /
+|   |     |                   |            |        ├── UserProfileContoller.java
+|   |     |                   |            |        └── dto /
+|   |     |                   |            |              └── UserProfile.java
+|   |     |                   |            └── UserController.java
+|   |     |                   |
+|   |     |                   ├── controller /
+|   |     |                   |           ├── ConfigMgmtController.java 
+|   |     |                   |           ├── DefaultDataController.java 
+|   |     |                   |           └──  RouteController.java
+|   |     |                   |            
+|   |     |                   ├── element /
+|   |     |                   |         ├── DeviceController.java 
+|   |     |                   |         ├── config /
+|   |     |                   |         |       ├── GeneralConfig.java 
+|   |     |                   |         |       ├── bridge /
+|   |     |                   |         |       |      └── Bridge.java
+|   |     |                   |         |       ├── mpls /
+|   |     |                   |         |       |     ├── MplsGeneralConfiguration.java 
+|   |     |                   |         |       |     ├── l2vpn /
+|   |     |                   |         |       |     |      └── MplsL2vpnConfiguration.java 
+|   |     |                   |         |       |     ├── l3vpn /
+|   |     |                   |         |       |     |      └── MplsL3vpnConfiguration.java 
+|   |     |                   |         |       |     ├── ldp /
+|   |     |                   |         |       |     |     └── LdpConfiguration.java 
+|   |     |                   |         |       |     └── tunnel /
+|   |     |                   |         |       |              └── TunnelsManagement.java
+|   |     |                   |         |       ├── resource /
+|   |     |                   |         |       |         └── port /
+|   |     |                   |         |       |                ├── PhysicalInterfaces.java
+|   |     |                   |         |       |                └── model /
+|   |     |                   |         |       |                      ├── InterfaceStats.java 
+|   |     |                   |         |       |                      └── InterfaceStatsRepository.java 
+|   |     |                   |         |       ├── route /
+|   |     |                   |         |       |       ├── bgp /
+|   |     |                   |         |       |       |     └── BgpInstanceManagement.java
+|   |     |                   |         |       |       └── ospf /
+|   |     |                   |         |       |              ├── OspfAreaController.java 
+|   |     |                   |         |       |              ├── OspfInstanceManagement.java
+|   |     |                   |         |       |              └── service /
+|   |     |                   |         |       |                       └── OspfServiceImpl.java.OMIT
+|   |     |                   |         |       ├── system /
+|   |     |                   |         |       |       ├── LogConfig.java      
+|   |     |                   |         |       |       └── SecurityConfig.java                      
+|   |     |                   |         |       └── vlan /
+|   |     |                   |         |             ├── VlanController.java
+|   |     |                   |         |             └── dto /
+|   |     |                   |         |                   └── VlanInterfaceDTO.java  
+|   |     |                   |         |                                               
+|   |     |                   |         |                             
+|   |     |                   |         ├── dto /
+|   |     |                   |         |     └── RouterConfigDTO.java
+|   |     |                   |         └── servces /
+|   |     |                   |                  ├── DeviceOperationServiceImpl.java 
+|   |     |                   |                  ├── DeviceOperationService.java
+|   |     |                   |                  ├── EdgeRouterServiceImpl.java 
+|   |     |                   |                  └── EdgeRouterService.java
+|   |     |                   |                
+|   |     |                   ├── global /
+|   |     |                   |       ├── dashboard /
+|   |     |                   |       |         └── DashboardController.java
+|   |     |                   |       ├── event /
+|   |     |                   |       |      ├── NoaEvents.java
+|   |     |                   |       |      └── controller /
+|   |     |                   |       |                 └── NotificationEventsController.java
+|   |     |                   |       ├── fault /
+|   |     |                   |       |      ├── config /
+|   |     |                   |       |      |       └── FaultIntegrationConfig.java
+|   |     |                   |       |      ├── controller /
+|   |     |                   |       |      |         ├── FaultConfigurations.java 
+|   |     |                   |       |      |         ├── FaultProcessingPoliciesController.java 
+|   |     |                   |       |      |         └── FaultsController.java   
+|   |     |                   |       |      ├── dto /
+|   |     |                   |       |      |     └── FaultDTO.java
+|   |     |                   |       |      ├── model /
+|   |     |                   |       |      |      ├── FaultConfig.java 
+|   |     |                   |       |      |      ├── FaultConfigRepositoryCustomImpl.java
+|   |     |                   |       |      |      ├── FaultConfigRepositoryCustom.java 
+|   |     |                   |       |      |      ├── FaultConfigRepository.java
+|   |     |                   |       |      |      ├── FaultEscalatePolicy.java 
+|   |     |                   |       |      |      ├── FaultEscRepository.java  
+|   |     |                   |       |      |      └── Fault.java
+|   |     |                   |       |      ├── repository /
+|   |     |                   |       |      |          ├── FaultRepositoryCustomImpl.java
+|   |     |                   |       |      |          ├── FaultRepositoryCustom.java
+|   |     |                   |       |      |          └── FaultRepository.java
+|   |     |                   |       |      ├── service /
+|   |     |                   |       |      |         └── FaultService.java 
+|   |     |                   |       |      └── util /
+|   |     |                   |       |            ├── FaultConstants.java
+|   |     |                   |       |            ├── FaultMessageCorrelator.java 
+|   |     |                   |       |            └── FaultMessageGroupProcessor.java
+|   |     |                   |       |
+|   |     |                   |       └── topology / 
+|   |     |                   |                 ├── TopologyController.java
+|   |     |                   |                 └── service /
+|   |     |                   |                         ├── TopologyServiceImpl.java   
+|   |     |                   |                         └── TopologyService.java                         
+|   |     |                   |                      
+|   |     |                   ├── inventory /
+|   |     |                   |          └── DefaultAAIPropertiesImpl.java.OMIT
+|   |     |                   ├── network /
+|   |     |                   |        ├── NetworksController.java
+|   |     |                   |        ├── l1 /
+|   |     |                   |        |    └── LinksManagement.java
+|   |     |                   |        ├── l2 /
+|   |     |                   |        |    └── LspManagement.java    
+|   |     |                   |        ├── l3 /
+|   |     |                   |        |    └── RouteManagement.java
+|   |     |                   |        ├── site /
+|   |     |                   |        |      └── SiteController.java 
+|   |     |                   |        └── topology /
+|   |     |                   |                  └── NetworkSpecificTopology.java
+|   |     |                   |                                                            
+|   |     |                   ├── platform / 
+|   |     |                   |         ├── config /
+|   |     |                   |         |       ├── controller /
+|   |     |                   |         |       |          └── RollbackController.java
+|   |     |                   |         |       └── service /
+|   |     |                   |         |               └── RollbackHandler.java  
+|   |     |                   |         └── security /
+|   |     |                   |                   └── web /
+|   |     |                   |                         ├── WebSecurityConfig.java
+|   |     |                   |                         ├── WebSocketConfig.java
+|   |     |                   |                         └── service /
+|   |     |                   |                                  └── WebSocketService.java
+|   |     |                   |                     
+|   |     |                   ├── service /
+|   |     |                   |        ├── ServiceController.java
+|   |     |                   |        ├── dto /
+|   |     |                   |        |     └── ServiceDTO.java
+|   |     |                   |        ├── l2vpn /
+|   |     |                   |        |      └── L2vpnService.java
+|   |     |                   |        ├── l3vpn /         
+|   |     |                   |        |      └── L3vpnService.java
+|   |     |                   |        └── topology /
+|   |     |                   |                 └── ServiceSpecificTopology.java               
+|   |     |                   ├── dto /
+|   |     |                   |     ├── NotificationDTO.java 
+|   |     |                   |     ├── RequestBodyDTO.java
+|   |     |                   |     └── ResponseDataDTO.java
+|   |     |                   |      
+|   |     |                   ├── exception /(Empty)
+|   |     |                   |            
+|   |     |                   ├── mdsal /
+|   |     |                   |      ├── DeviceDataTreeChangeListener.java 
+|   |     |                   |      ├── DeviceDOMDataTreeChangeListener.java
+|   |     |                   |      ├── service /
+|   |     |                   |      |        └── MDSALService.java
+|   |     |                   |      └── toster /
+|   |     |                   |              ├── GenericLoggingNotificationListener.java
+|   |     |                   |              ├── LoggingNotificationListener.java 
+|   |     |                   |              └── ToasterDeviceNotificationsListener.java
+|   |     |                   |     
+|   |     |                   ├── security /
+|   |     |                   |         ├── audit /
+|   |     |                   |         |      ├── AuditController.java
+|   |     |                   |         |      └── AuditLogger.java  
+|   |     |                   |         ├── rbac /
+|   |     |                   |         |      ├── authentication /
+|   |     |                   |         |      |             ├── AuthenticationEvents.java
+|   |     |                   |         |      |             ├── CustomAuthenticationEntryPoint.java
+|   |     |                   |         |      |             ├── GDBUserDetails.java
+|   |     |                   |         |      |             ├── NAuthenticationProvider.java
+|   |     |                   |         |      |             ├── NUserDetails.java
+|   |     |                   |         |      |             ├── UserPrincipal.java
+|   |     |                   |         |      |             ├── controller /
+|   |     |                   |         |      |             |          ├── BasicAuthLoginController.java
+|   |     |                   |         |      |             |          └── BasicAuthLogoutController.java
+|   |     |                   |         |      |             └── service /
+|   |     |                   |         |      |                      └── AuthenticationService.java
+|   |     |                   |         |      ├── authorization /
+|   |     |                   |         |      |              └── WebSecurityService.java
+|   |     |                   |         |      └── role /
+|   |     |                   |         |            ├── ActionController.java 
+|   |     |                   |         |            ├── RoleController.java 
+|   |     |                   |         |            └── model /
+|   |     |                   |         |                   ├── Feature.java
+|   |     |                   |         |                   ├── FeatureRepository.java
+|   |     |                   |         |                   ├── Role.java        
+|   |     |                   |         |                   └── RoleRepository.java 
+|   |     |                   |         └── session /
+|   |     |                   |                  └── UserSessionsController.java                                                                                                              
+|   |     |                   ├── util /
+|   |     |                   |     ├── GDBFilterService.java
+|   |     |                   |     ├── RestClientManager.java
+|   |     |                   |     └── SpringContext.java
+|   |     |                   |      
+|   |     |                   ├── DefaultDataLoader.java 
+|   |     |                   ├── DefaultFaults.json
+|   |     |                   ├── ChartsMockData.json
+|   |     |                   ├── DefaultData.json
+|   |     |                   ├── DefaultEvents.json
+|   |     |                   ├── InstallCert.java      
+|   |     ├── js /            └── NoaMain.java
+|   |     ├── resources /
+|   |     ├── yang /
+|   └── test/
+|
+├── tsconfig.json
+├── babel.config.js
+├── jest.config.js
+├── jsdoc.conf.json
+└── webpack.config.js
+

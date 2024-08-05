@@ -1,0 +1,87 @@
+Services, resources, tosca type definitions, users etc are all stored by SDC in a janusgraph DB in the sdctitan table in the cassandra DB. The following details how the information stored in the janusgraph can be viewed
+
+Run janusgraph server
+This docker-compose file​ can be used to start up a janusgraph server can then be used to read from the DB​​​
+​set your ip address in the docker-compose file​​
+If you are using a local DB use the following command to get your local ip
+ip route get 8.8.8.8 | awk '/src/{ print $7 }'
+​docker-compose -f docker-compose-cql-es.yml up
+​Start gemlin​​
+Login to the janusgraph server
+docker exec -it jce-janusgraph bash
+Start gremlin
+bin/gremlin.sh
+​Read
+Connect to the graph
+:remote connect tinkerpop.server conf/remote.yaml
+Use gremlin query commands to execute queries to the DB, for example (note the ":>" is part of the command):
+:> g.V() - list all vertices
+​​​​:> g.V().has('name', 'myService') - list vertices with name 'myService'
+:> g.V().has('name', 'myService').valueMap() - show details of vertices with name 'myService'
+:> g.V().has('name', 'myService').properties() - properties of vertices with name 'myService'
+:> g.V().has('name', 'myService').properties('metadata').value() - value of the property "metadata" of vertices with name 'myService'
+:> g.V().has('nodeLabel', 'dataType') - data type vertices
+:> g.V().has('nodeLabel', 'dataType').count() - total of data type vertices
+:> g.V().has('name', 'ericsson.datatypes.nfv.InstantiateVnfOperationAdditionalParameters').properties()
+node types (VFCs)
+All node types
+:> g.V().has('nodeLabel', 'node_type')
+All nodes that derives from tosca.nodes.Root
+:> g.V().has('nodeLabel', 'node_type').has('toscaResourceName', 'tosca.nodes.Root').in('DERIVED_FROM')
+​model
+Model with given name
+:> g.V().has('name', 'ETSI SOL001 v2.5.1')​​
+Model with given id
+:> g.V().has('uid', 'model.ETSI SOL001 v2.5.1')
+All models
+:> g.V().has('nodeLabel', 'model')
+All Service Templates (Service, VF, PNF, etc.) that is associated to the model​
+:> ​g.V().has('uid', 'model.ETSI SOL001 v2.5.1').out('MODEL_ELEMENT').has('nodeLabel', 'topology_template')
+Export
+The entire graph can be exported for viewing with a compatible tool by using the following gremlin command which exports to a file with the given name
+:> graph.io(graphml()).writeGraph("export.xml")​​
+View
+​Cytoscape can be used to view the exported graph. It can be downloded from:
+https://cytoscape.org/
+Once running, select the below to import the graph:
+​File -> Import -> Network From File ​
+No labels
+3 Comments
+User icon: usmankhanlfn
+Mohd Usman Khan
+Hi Michael Morris, 
+
+We are analysing SDC component and trying to perform few queries from "Janusgraph Database" for that, We have followed the instructions those you have mentioned in this page but while we are trying to connect graph remotely using mentioned command ":remote connect tinkerpop.server conf/remote.yaml" , We are getting this error "ERROR org.apache.tinkerpop.gremlin.jsr223.DefaultGremlinScriptEngineManager  - Could not create GremlinScriptEngine for gremlin-groovy" and after that while trying to run gremlin query's command ":> g.V()" for fetching list of all vertices then We are getting this error "gremlin-groovy is not an available GremlinScriptEngine".
+
+Could you please help us, As we are stuck due to this error. 
+
+Oct 07, 2022
+User icon: MichaelMorris
+Michael Morris
+Hi Mohd Usman Khan 
+
+I have never seen that error when trying to connect to the janusgraph so not sure what the problem could be. Perhaps the janusgraph community might be able to support: https://github.com/JanusGraph/janusgraph/issues
+
+Note the above instructions are based on running SDC locally on docker. If you are running SDC on OOM (or any other kubernetes deployment) then there may be other steps needed to provid connectivity to the JanusGraph DB
+
+Oct 10, 2022
+User icon: sangeeta.bellara
+Sangeeta Bellara
+Steps to install Janusgraph Server and Client to access SDC Data in Cassandra running in Kubernetes 
+
+
+kubectl -n onap run my-janusgraph --rm -i --tty --restart=Never --image=janusgraph/janusgraph:0.3.3 – /bin/sh
+This installs janusgraph as a kubernetes pod.
+Inside the pod : copy the attached janusgraph-cql.properties into /opt/janusgraph/conf/gremlin-server/
+Modify the file: /opt/janusgraph/conf/gremlin-server/gremlin-server.yaml to use the correct properties file:
+graphs: {
+graph: conf/gremlin-server/janusgraph-cql.properties
+}
+This can be done using sed -i 's/<old properties file>/janusgraph-cql.properties/g gremlin-server.yaml
+In /opt/janusgraph/bin, start gremlin-server.sh. This shold start witout error and listen on port 8182.
+From another terminal, you can access the same pod again, and from /opt/janugraph/bin , run the gremlin client: ./gremlin.sh
+Run these commands:
+:plugin use tinkerpop.server
+:remote connect tinkerpop.server conf/remote.yaml
+To get all vertexes: (include :> in all commands)
+:> g.V()

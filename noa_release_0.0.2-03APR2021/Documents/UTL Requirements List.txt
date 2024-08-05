@@ -1,0 +1,33 @@
+Please add to the list
+===========================
+Planning and Design
+Topology Management
+Auto Provision
+Transaction
+Inventories/Rollback
+Service Orchestration
+Alarms
+Performances
+Predictive Maintenance
+Diagnostic
+Fault Localization
+Ticket Generation
+Network Visualizer
+Metering
+GNPY
+Same Device Multiple Protocol  
+Network Management Datastore Architecture (NMDA)
+LDAP, AAA, OAuth
+TAI/TAPI
+Multi Vendor & Multi Tier
+Network Device Integration Schme
+NFV
+Automation/Ansible
+Template based Provisioning
+License based Feature Module
+User Management, Role Based Authentication/Authorization
+South bound protocol support for CLI, SSH, SNMP, NetConf, RESTCONF, GRPC, gNMI 
+
+Have you added the points Documentation, Fault Localization, Fault Correlation, Severity Management, etc.
+
+I think SNMPv3 is a must to have requirement as almost every tender asks for it.

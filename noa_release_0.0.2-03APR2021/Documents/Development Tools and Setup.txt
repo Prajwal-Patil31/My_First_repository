@@ -1,0 +1,105 @@
+Team,
+
+Please find below details of the development tools required and setting up the build and debug environment.
+
+ 
+
+Thanks
+
+KusaRam
+
+ 
+
+ 
+
+Install Prerequisites : JDK, VS Code, Node, Maven, Postman
+
+a.       Visual Studio Code
+
+https://code.visualstudio.com/download
+
+b.       Oracle JDK8
+
+https://www.oracle.com/in/java/technologies/javase/javase-jdk8-downloads.html
+
+c.       Node
+
+https://nodejs.org/en/download/
+
+d.       Maven
+
+https://maven.apache.org/download.cgi
+
+Installation Instructions : https://maven.apache.org/install.html
+
+ 
+
+Visual Studio Code : Extensions/Plugins
+
+[1] Name: Debugger for Java
+
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-debug
+
+ 	
+
+[2] Name: Java Extension Pack
+
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack
+
+ 
+
+[3] Name: Java Test Runner
+
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test
+
+ 
+
+[4] Name: Maven for Java
+
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-maven
+
+ 
+
+[5] Name: Project Manager for Java
+
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-dependency
+
+ 
+
+[6] Name: Spring Boot Dashboard
+
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-spring-boot-dashboard
+
+ 
+
+[7] Name: Spring Boot Tools
+
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=Pivotal.vscode-spring-boot
+
+ 
+
+Configure Maven in VS Code :
+
+a.       Goto File->Preferences->Settings
+
+b.       Under Settings, Goto Extensions-> Maven for Java
+
+c.       Under Maven > Executable: Path, enter 'mvn'
+
+ 
+
+Run NOA Application :
+
+a.       Open Project Folder in VS Code
+
+b.       Wait for Maven to download plugins and provide options for build under 'MAVEN PROJECTS' Accordion
+
+c.       Update DB host details in resources\applicaiton.properties
+
+d.       Right-click on 'noa' and select Intall
+
+e.       Click 'run' from the 'SPRING-BOOT DASHBOARD'
+
+f.        Access application at 'http://localhost:8080'; Access REST interface at 'http://localhost:8080/api/'
+
+g.       Login with as a user who has ADMIN role configured in DB for access to REST API work.
